@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>מרחב אישי עברי</title>
+  <style>
+    :root {
+      --bg-overlay: rgba(14, 19, 28, 0.88);
+      --card-bg: rgba(24, 32, 44, 0.75);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      --cat-plan: #3b82f6;
+      --cat-insight: #f59e0b;
+      --cat-memory: #10b981;
+      
+      --time-morning: rgba(245, 158, 11, 0.12);
+      --time-morning-border: #f59e0b;
+      --time-afternoon: rgba(59, 130, 246, 0.12);
+      --time-afternoon-border: #3b82f6;
+      --time-evening: rgba(139, 92, 246, 0.12);
+      --time-evening-border: #8b5cf6;
+
+      --holiday-bg: rgba(244, 63, 94, 0.18);
+      --holiday-border: rgba(244, 63, 94, 0.6);
+      --holiday-text: #fb7185;
+
+      --shabbat-bg: rgba(99, 102, 241, 0.18);
+      --shabbat-border: rgba(99, 102, 241, 0.6);
+      --shabbat-text: #a5b4fc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      min-height: 100vh;
+      background: #0b0f19 url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat fixed;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1240px;
+      background: var(--bg-overlay);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 14px;
+    }
+
+    .header-dates h1 { font-size: 1.45rem; font-weight: 700; }
+    .header-dates .hebrew-subtitle { color: #cbd5e1; font-size: 1rem; margin-top: 3px; font-weight: 500; }
+
+    .header-controls { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    button {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 6px 11px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+    button:hover { background: rgba(255,255,255,0.15); }
+    button.active { background: #3b82f6; border-color: #60a5fa; font-weight: 600; }
+    button.btn-primary { background: #2563eb; border: none; font-weight: 600; }
+    button.btn-highlight { background: #059669; border: none; font-weight: 600; }
+
+    .nav-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: rgba(0,0,0,0.3);
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    .view-switcher, .date-navigator { display: flex; gap: 6px; align-items: center; }
+    .current-focus-title { font-size: 1.15rem; font-weight: 700; min-width: 250px; text-align: center; }
+
+    .view-container { display: none; width: 100%; }
+    .view-container.active { display: block; }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    /* תצוגה יומית */
+    .daily-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 880px) { .daily-layout { grid-template-columns: 1fr; } }
+
+    .hourly-schedule {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 580px;
+      overflow-y: auto;
+      padding-left: 6px;
+    }
+    .hour-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+    .hour-row.morning { background: var(--time-morning); border-right: 4px solid var(--time-morning-border); }
+    .hour-row.afternoon { background: var(--time-afternoon); border-right: 4px solid var(--time-afternoon-border); }
+    .hour-row.evening { background: var(--time-evening); border-right: 4px solid var(--time-evening-border); }
+
+    .hour-label { width: 78px; font-size: 0.82rem; font-weight: 600; color: #e2e8f0; display: flex; align-items: center; gap: 4px; }
+    .hour-input { flex: 1; background: rgba(0,0,0,0.35); border: 1px solid var(--card-border); border-radius: 6px; padding: 5px 9px; color: white; font-size: 0.88rem; }
+    .hour-input:focus { border-color: #3b82f6; outline: none; background: rgba(0,0,0,0.6); }
+
+    .daily-tasks-window {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .goals-input-row { display: flex; gap: 8px; }
+    .goals-input-row input { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 8px; padding: 7px 11px; color: white; font-size: 0.88rem; }
+    .goals-list { list-style: none; display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; }
+    .goal-item { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 7px; font-size: 0.86rem; }
+    .goal-item.done span { text-decoration: line-through; color: var(--text-muted); }
+    .goal-item input[type="checkbox"] { accent-color: #3b82f6; cursor: pointer; }
+
+    .entry-card { border-right: 4px solid #fff; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+    .entry-card.cat-plan { border-right-color: var(--cat-plan); background: rgba(59, 130, 246, 0.08); }
+    .entry-card.cat-insight { border-right-color: var(--cat-insight); background: rgba(245, 158, 11, 0.08); }
+    .entry-card.cat-memory { border-right-color: var(--cat-memory); background: rgba(16, 185, 129, 0.08); }
+    .entry-badge { font-size: 0.75rem; padding: 2px 7px; border-radius: 4px; font-weight: 600; }
+    .entry-card.cat-plan .entry-badge { background: rgba(59, 130, 246, 0.25); color: #93c5fd; }
+    .entry-card.cat-insight .entry-badge { background: rgba(245, 158, 11, 0.25); color: #fcd34d; }
+    .entry-card.cat-memory .entry-badge { background: rgba(16, 185, 129, 0.25); color: #6ee7b7; }
+    .entry-card img { width: 100%; max-height: 160px; object-fit: cover; border-radius: 6px; margin-top: 6px; }
+
+    /* תצוגה שבועית: תיבות מודגשות */
+    .weekly-boxes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    @media (max-width: 800px) { .weekly-boxes-grid { grid-template-columns: 1fr; } }
+    .weekly-box-card { border-radius: 14px; padding: 15px; display: flex; flex-direction: column; gap: 9px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+    .weekly-box-card.card-core { background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(168, 85, 247, 0.22)); border: 1px solid rgba(168, 85, 247, 0.5); }
+    .weekly-box-card.card-tasks { background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(234, 88, 12, 0.22)); border: 1px solid rgba(245, 158, 11, 0.5); }
+    .weekly-box-card.card-habits { background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(20, 184, 166, 0.22)); border: 1px solid rgba(16, 185, 129, 0.5); }
+    .weekly-box-card h4 { font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+
+    .weekly-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    @media (max-width: 900px) { .weekly-grid { grid-template-columns: repeat(2, 1fr); } }
+    .week-day-col { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 380px; cursor: pointer; transition: all 0.2s; }
+    .week-day-col.today { border: 2px solid #3b82f6; }
+    .week-day-col.is-holiday { background: var(--holiday-bg); border-color: var(--holiday-border); }
+    .week-day-col.is-shabbat { background: var(--shabbat-bg); border-color: var(--shabbat-border); }
+    .week-day-col:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.4); }
+    .week-day-header { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; text-align: center; }
+
+    /* תצוגה חודשית עברית (א' עד כ"ט/ל') */
+    .month-names-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 700; color: var(--text-muted); font-size: 0.88rem; margin-bottom: 8px; }
+    .month-days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .month-day-cell { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 10px; min-height: 102px; padding: 7px; display: flex; flex-direction: column; cursor: pointer; transition: all 0.15s; }
+    .month-day-cell:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.3); }
+    .month-day-cell.today { border: 2px solid #3b82f6; }
+    .month-day-cell.has-holiday { background: var(--holiday-bg) !important; border: 1px solid var(--holiday-border) !important; }
+    .month-day-cell.has-shabbat { background: var(--shabbat-bg) !important; border: 1px solid var(--shabbat-border) !important; }
+    .month-day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
+
+    .cell-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .heb-num-main { font-size: 1.15rem; color: #f8fafc; font-weight: 800; }
+    .greg-num-sub { font-size: 0.74rem; color: var(--text-muted); font-weight: 500; }
+    .cell-holiday { font-size: 0.72rem; color: var(--holiday-text); font-weight: 600; margin-top: 3px; line-height: 1.15; }
+    .cell-shabbat { font-size: 0.72rem; color: var(--shabbat-text); font-weight: 600; margin-top: 3px; line-height: 1.15; }
+
+    .cell-entries-list { display: flex; flex-direction: column; gap: 3px; margin-top: auto; padding-top: 4px; }
+    .entry-pill-mini { font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; color: #fff; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .entry-pill-mini.cat-plan { background: #2563eb; }
+    .entry-pill-mini.cat-insight { background: #d97706; }
+    .entry-pill-mini.cat-memory { background: #059669; }
+
+    /* תצוגה שנתית */
+    .year-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    @media (max-width: 900px) { .year-grid { grid-template-columns: repeat(2, 1fr); } }
+    .year-month-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .year-month-card:hover { border-color: #3b82f6; transform: translateY(-3px); }
+    .year-hebrew-title { font-size: 1.4rem; font-weight: 800; color: #60a5fa; margin-bottom: 6px; }
+    .year-greg-sub { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
+
+    /* מודל */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); justify-content: center; align-items: center; padding: 16px; z-index: 1000; }
+    .modal-content { background: #1e293b; border: 1px solid var(--card-border); border-radius: 16px; width: 100%; max-width: 530px; padding: 22px; display: flex; flex-direction: column; gap: 13px; }
+    .modal-content input, .modal-content select, .modal-content textarea { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 8px; padding: 9px; color: white; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header>
+      <div class="header-dates">
+        <h1 id="headerGregorian">טוען תאריך...</h1>
+        <div class="hebrew-subtitle" id="headerHebrew">טוען תאריך עברי...</div>
+      </div>
+      <div class="header-controls">
+        <button class="btn-highlight" onclick="exportWeeklyMemoriesPDF()">📖 ספר PDF</button>
+        <button onclick="exportGoogleCalendarICS()">📅 ייצוא ליומן גוגל (ICS)</button>
+        <button class="btn-primary" onclick="exportStandaloneHTML()">💾 שמור הכל</button>
+        <button onclick="changeBackground()">🎨 רקע</button>
+        <button onclick="exportData()">💾 גיבוי</button>
+        <button onclick="document.getElementById('importFile').click()">📂 שחזור</button>
+        <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+      </div>
+    </header>
+
+    <div class="nav-toolbar">
+      <div class="view-switcher">
+        <button id="btnDaily" onclick="switchView('daily')">יומית</button>
+        <button id="btnWeekly" onclick="switchView('weekly')">שבועית</button>
+        <button id="btnMonthly" class="active" onclick="switchView('monthly')">חודשית</button>
+        <button id="btnYearly" onclick="switchView('yearly')">שנתית</button>
+      </div>
+
+      <div class="date-navigator">
+        <button onclick="navigateDate(-1)">‹ הקודם</button>
+        <button onclick="goToToday()">היום</button>
+        <div class="current-focus-title" id="currentFocusTitle">--</div>
+        <button onclick="navigateDate(1)">הבא ›</button>
+      </div>
+
+      <button class="btn-primary" onclick="openAddEntryModal()">+ רשומה חדשה</button>
+    </div>
+
+    <!-- 1. תצוגה יומית -->
+    <div id="viewDaily" class="view-container">
+      <div class="daily-layout">
+        <section class="panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <h3>⏰ לו"ז שעות מובנה</h3>
+            <span id="dailyBadge" style="display:none; padding:3px 8px; border-radius:6px; font-size:0.8rem; font-weight:600;"></span>
+          </div>
+          <div class="hourly-schedule" id="hourlyScheduleList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="daily-tasks-window">
+            <h3>🎯 חלון מטלות ויעדים להיום</h3>
+            <div class="goals-input-row">
+              <input type="text" id="dailyGoalInput" placeholder="הוסף משימה / יעד להיום...">
+              <button class="btn-primary" onclick="addDailyGoal()">הוסף</button>
+            </div>
+            <ul class="goals-list" id="dailyGoalsList"></ul>
+          </div>
+
+          <div style="margin-top: 16px;">
+            <h3>📝 רשומות, תובנות וזכרונות מהיום</h3>
+            <div id="dailyEntriesList"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- 2. תצוגה שבועית -->
+    <div id="viewWeekly" class="view-container">
+      <div class="weekly-boxes-grid">
+        <div class="weekly-box-card card-core">
+          <h4>🌟 יעדי שיא לשבוע זה</h4>
+          <div class="goals-input-row">
+            <input type="text" id="wGoal1Input" placeholder="הוסף יעד מרכזי...">
+            <button class="btn-primary" onclick="addWeeklyCardGoal('core')">+</button>
+          </div>
+          <ul class="goals-list" id="wList_core"></ul>
+        </div>
+        <div class="weekly-box-card card-tasks">
+          <h4>⚡ משימות ופרויקטים</h4>
+          <div class="goals-input-row">
+            <input type="text" id="wGoal2Input" placeholder="הוסף משימה...">
+            <button class="btn-primary" onclick="addWeeklyCardGoal('tasks')">+</button>
+          </div>
+          <ul class="goals-list" id="wList_tasks"></ul>
+        </div>
+        <div class="weekly-box-card card-habits">
+          <h4>🌱 הרגלים ובריאות</h4>
+          <div class="goals-input-row">
+            <input type="text" id="wGoal3Input" placeholder="הוסף הרגל יומי...">
+            <button class="btn-primary" onclick="addWeeklyCardGoal('habits')">+</button>
+          </div>
+          <ul class="goals-list" id="wList_habits"></ul>
+        </div>
+      </div>
+
+      <div class="weekly-grid" id="weeklyGrid"></div>
+    </div>
+
+    <!-- 3. תצוגה חודשית -->
+    <div id="viewMonthly" class="view-container active">
+      <div class="panel">
+        <div class="month-names-grid">
+          <div>ראשון</div><div>שני</div><div>שלישי</div><div>רביעי</div><div>חמישי</div><div>שישי</div><div>שבת</div>
+        </div>
+        <div class="month-days-grid" id="monthlyGrid"></div>
+      </div>
+    </div>
+
+    <!-- 4. תצוגה שנתית -->
+    <div id="viewYearly" class="view-container">
+      <div class="panel" style="margin-bottom: 16px;">
+        <h3>🌟 יעדים למחזור השנה</h3>
+        <div class="goals-input-row" style="margin-top: 8px;">
+          <input type="text" id="yearlyGoalInput" placeholder="הגדר יעד על לשנה זו...">
+          <button class="btn-primary" onclick="addYearlyGoal()">הוסף</button>
+        </div>
+        <ul class="goals-list" id="yearlyGoalsList" style="margin-top: 10px;"></ul>
+      </div>
+      <div class="year-grid" id="yearlyGrid"></div>
+    </div>
+  </div>
+
+  <!-- מודל רשומה -->
+  <div class="modal" id="entryModal">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 id="modalHeading">רשומה חדשה</h3>
+        <button onclick="closeModal()">✕</button>
+      </div>
+
+      <label>📅 תאריך הרשומה:</label>
+      <input type="date" id="modalDateInput">
+
+      <label>סוג הרשומה:</label>
+      <select id="modalCategory" onchange="toggleWeeklyCheckboxVisibility()">
+        <option value="plan">📅 1. תכנון יומי (כחול)</option>
+        <option value="insight">💡 2. תובנות וחידושים (זהב)</option>
+        <option value="memory">🌿 3. סיכום חוויות וזכרונות (ירוק)</option>
+      </select>
+
+      <label>כותרת:</label>
+      <input type="text" id="modalTitle" placeholder="כותרת קצרה...">
+
+      <label>פירוט מלא:</label>
+      <textarea id="modalText" rows="4" placeholder="כתוב כאן בהרחבה..."></textarea>
+
+      <div id="fullWeeklyOption" style="display:flex; align-items:center; gap:8px;">
+        <input type="checkbox" id="modalShowFullWeekly" style="width:auto; cursor:pointer;">
+        <label for="modalShowFullWeekly" style="cursor:pointer; font-size:0.88rem;">הצג את כל הפירוט בתצוגה השבועית</label>
+      </div>
+
+      <div>
+        <label>📸 תמונה (אופציונלי):</label>
+        <input type="file" id="modalPhoto" accept="image/*" onchange="previewImage(event)">
+        <img id="imagePreview" style="display:none; width:100%; max-height:160px; object-fit:cover; border-radius:8px; margin-top:8px;">
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
+        <button onclick="closeModal()">ביטול</button>
+        <button class="btn-primary" onclick="saveEntryForm()">שמור רשומה</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let db = JSON.parse(localStorage.getItem('hebrew_life_journal_v8')) || {
+      entries: {},
+      schedules: {},
+      dailyGoals: {},
+      weeklyBoxes: {},
+      yearlyGoals: {},
+      parshiotCache: {} // מאגר פרשות שבוע קבוע לכל השנים
+    };
+
+    let activeView = 'monthly';
+    let anchorDate = new Date();
+    let tempImageBase64 = null;
+    let editingContext = null;
+
+    function toHebrewNumeral(n) {
+      const map = {
+        1: "א׳", 2: "ב׳", 3: "ג׳", 4: "ד׳", 5: "ה׳", 6: "ו׳", 7: "ז׳", 8: "ח׳", 9: "ט׳", 10: "י׳",
+        11: "י״א", 12: "י״ב", 13: "י״ג", 14: "י״ד", 15: "ט״ו", 16: "ט״ז", 17: "י״ז", 18: "י״ח", 19: "י״ט", 20: "כ׳",
+        21: "כ״א", 22: "כ״ב", 23: "כ״ג", 24: "כ״ד", 25: "כ״ה", 26: "כ״ו", 27: "כ״ז", 28: "כ״ח", 29: "כ״ט", 30: "ל׳"
+      };
+      return map[n] || String(n);
+    }
+
+    // משיכת פרשות השבוע של כל השנה מה-API של Hebcal ושמירתן לנצח במאגר
+    async function fetchParshiotForYear(gregYear) {
+      if (db.parshiotCache && db.parshiotCache[`year_${gregYear}`]) return;
+      try {
+        const res = await fetch(`https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=${gregYear}&month=x&ss=on&s=on&i=on&lg=h`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.items) {
+          if (!db.parshiotCache) db.parshiotCache = {};
+          data.items.forEach(item => {
+            if (item.category === 'parashat' && item.date) {
+              db.parshiotCache[item.date] = item.hebrew.replace('פרשת ', '');
+            }
+          });
+          db.parshiotCache[`year_${gregYear}`] = true;
+          saveDB();
+          renderCurrentView();
+        }
+      } catch (e) {
+        // עובד בצורה שקטה גם ללא אינטרנט
+      }
+    }
+
+    function getHebrewDateInfo(date) {
+      const monthName = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(date);
+      const dayNum = parseInt(new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric' }).format(date), 10);
+      const yearStr = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { year: 'numeric' }).format(date);
+
+      const hebrewDay = toHebrewNumeral(dayNum);
+      const hebrewStr = `${hebrewDay} ב${monthName} ${yearStr}`;
+      const hebrewDayAndMonth = `${hebrewDay} ב${monthName}`;
+
+      let holiday = '';
+      if (monthName.includes('תשרי')) {
+        if (dayNum === 1 || dayNum === 2) holiday = 'ראש השנה 🍎';
+        else if (dayNum === 3) holiday = 'צום גדליה';
+        else if (dayNum === 9) holiday = 'ערב כיפור';
+        else if (dayNum === 10) holiday = 'יום כיפור 🕊️';
+        else if (dayNum === 14) holiday = 'ערב סוכות';
+        else if (dayNum === 15) holiday = 'סוכות 🌿';
+        else if (dayNum >= 16 && dayNum <= 20) holiday = 'חוה״מ סוכות';
+        else if (dayNum === 21) holiday = 'הושענא רבה';
+        else if (dayNum === 22) holiday = 'שמחת תורה 🎉';
+      } else if (monthName.includes('כסלו')) {
+        if (dayNum >= 25) holiday = 'חנוכה 🕎';
+      } else if (monthName.includes('טבת')) {
+        if (dayNum <= 2 || dayNum === 3) holiday = 'חנוכה 🕎';
+        else if (dayNum === 10) holiday = 'צום י׳ בטבת';
+      } else if (monthName.includes('שבט')) {
+        if (dayNum === 15) holiday = 'ט״ו בשבט 🌳';
+      } else if (monthName.includes('אדר')) {
+        if (dayNum === 13) holiday = 'תענית אסתר';
+        else if (dayNum === 14) holiday = 'פורים 🎭';
+        else if (dayNum === 15) holiday = 'שושן פורים 🎭';
+      } else if (monthName.includes('ניסן')) {
+        if (dayNum === 14) holiday = 'ערב פסח';
+        else if (dayNum === 15) holiday = 'פסח 🍷';
+        else if (dayNum >= 16 && dayNum <= 20) holiday = 'חוה״מ פסח';
+        else if (dayNum === 21) holiday = 'שביעי של פסח';
+      } else if (monthName.includes('אייר')) {
+        if (dayNum === 4) holiday = 'יום הזיכרון 🕯️️';
+        else if (dayNum === 5) holiday = 'יום העצמאות 🇮🇱';
+        else if (dayNum === 18) holiday = 'ל״ג בעומר 🔥';
+        else if (dayNum === 28) holiday = 'יום ירושלים';
+      } else if (monthName.includes('סיוון') || monthName.includes('סיון')) {
+        if (dayNum === 5) holiday = 'ערב שבועות';
+        else if (dayNum === 6) holiday = 'שבועות 🌾';
+      } else if (monthName.includes('תמוז')) {
+        if (dayNum === 17) holiday = 'צום י״ז בתמוז';
+      } else if (monthName.includes('אב')) {
+        if (dayNum === 9) holiday = 'צום ט׳ באב 🕯';
+        else if (dayNum === 15) holiday = 'ט״ו באב ❤️';
+      }
+
+      let shabbat = '';
+      if (date.getDay() === 6) {
+        const dKey = formatDateKey(date);
+        const parasha = (db.parshiotCache && db.parshiotCache[dKey]);
+        if (parasha) {
+          shabbat = `שבת • פרשת ${parasha}`;
+        } else {
+          shabbat = 'שבת קודש';
+          // משיכה אוטומטית ברקע
+          fetchParshiotForYear(date.getFullYear());
+        }
+      }
+
+      return { hebrewStr, hebrewDay, hebrewDayAndMonth, dayNum, holiday, shabbat, monthName, yearStr };
+    }
+
+    function formatDateKey(d) {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function getWeekKey(d) {
+      const onejan = new Date(d.getFullYear(), 0, 1);
+      const week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+      return `${d.getFullYear()}-W${week}`;
+    }
+
+    const hebrewYearCycle = [
+      { name: "אלול", targetDate: new Date(2026, 7, 18), gregSpan: "אוגוסט - ספטמבר 2026" },
+      { name: "תשרי", targetDate: new Date(2026, 8, 15), gregSpan: "ספטמבר - אוקטובר 2026" },
+      { name: "מרחשוון", targetDate: new Date(2026, 9, 15), gregSpan: "אוקטובר - נובמבר 2026" },
+      { name: "כסלו", targetDate: new Date(2026, 10, 15), gregSpan: "נובמבר - דצמבר 2026" },
+      { name: "טבת", targetDate: new Date(2026, 11, 15), gregSpan: "דצמבר 2026 - ינואר 2027" },
+      { name: "שבט", targetDate: new Date(2027, 0, 15), gregSpan: "ינואר - פברואר 2027" },
+      { name: "אדר א׳", targetDate: new Date(2027, 1, 15), gregSpan: "פברואר - מרץ 2027" },
+      { name: "אדר ב׳", targetDate: new Date(2027, 2, 15), gregSpan: "מרץ - אפריל 2027" },
+      { name: "ניסן", targetDate: new Date(2027, 3, 15), gregSpan: "אפריל - מאי 2027" },
+      { name: "אייר", targetDate: new Date(2027, 4, 15), gregSpan: "מאי - יוני 2027" },
+      { name: "סיוון", targetDate: new Date(2027, 5, 15), gregSpan: "יוני - יולי 2027" },
+      { name: "תמוז", targetDate: new Date(2027, 6, 15), gregSpan: "יולי - אוגוסט 2027" },
+      { name: "אב", targetDate: new Date(2027, 7, 15), gregSpan: "אוגוסט 2027" },
+      { name: "אלול", targetDate: new Date(2027, 8, 10), gregSpan: "ספטמבר 2027" }
+    ];
+
+    function init() {
+      fetchParshiotForYear(new Date().getFullYear());
+      fetchParshiotForYear(new Date().getFullYear() + 1);
+      renderHeaderToday();
+      renderCurrentView();
+    }
+
+    function renderHeaderToday() {
+      const now = new Date();
+      const gregStr = new Intl.DateTimeFormat('he-IL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(now);
+      const heb = getHebrewDateInfo(now);
+      const badge = heb.holiday || heb.shabbat;
+      document.getElementById('headerGregorian').innerText = gregStr;
+      document.getElementById('headerHebrew').innerText = `${heb.hebrewStr} ${badge ? '• ' + badge : ''}`;
+    }
+
+    function switchView(view) {
+      activeView = view;
+      ['daily', 'weekly', 'monthly', 'yearly'].forEach(v => {
+        document.getElementById(`view${v.charAt(0).toUpperCase() + v.slice(1)}`).classList.toggle('active', v === view);
+        document.getElementById(`btn${v.charAt(0).toUpperCase() + v.slice(1)}`).classList.toggle('active', v === view);
+      });
+      renderCurrentView();
+    }
+
+    function navigateDate(delta) {
+      if (activeView === 'daily') {
+        anchorDate.setDate(anchorDate.getDate() + delta);
+      } else if (activeView === 'weekly') {
+        anchorDate.setDate(anchorDate.getDate() + (delta * 7));
+      } else if (activeView === 'monthly') {
+        const currentMonthName = getHebrewDateInfo(anchorDate).monthName;
+        let idx = hebrewYearCycle.findIndex(m => currentMonthName.includes(m.name) || m.name.includes(currentMonthName));
+        if (idx !== -1 && hebrewYearCycle[idx + delta]) {
+          anchorDate = new Date(hebrewYearCycle[idx + delta].targetDate);
+        } else {
+          anchorDate.setDate(anchorDate.getDate() + (delta * 30));
+        }
+      } else if (activeView === 'yearly') {
+        anchorDate.setFullYear(anchorDate.getFullYear() + delta);
+      }
+      renderCurrentView();
+    }
+
+    function goToToday() {
+      anchorDate = new Date();
+      renderCurrentView();
+    }
+
+    function renderCurrentView() {
+      if (activeView === 'daily') renderDailyView();
+      else if (activeView === 'weekly') renderWeeklyView();
+      else if (activeView === 'monthly') renderMonthlyView();
+      else if (activeView === 'yearly') renderYearlyView();
+    }
+
+    /* 1. תצוגה יומית */
+    function renderDailyView() {
+      const dateKey = formatDateKey(anchorDate);
+      const greg = new Intl.DateTimeFormat('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' }).format(anchorDate);
+      const heb = getHebrewDateInfo(anchorDate);
+
+      document.getElementById('currentFocusTitle').innerText = `${greg} | ${heb.hebrewDay} ב${heb.monthName}`;
+
+      const dBadge = document.getElementById('dailyBadge');
+      if (heb.holiday) {
+        dBadge.style.display = 'inline-block';
+        dBadge.innerText = heb.holiday;
+        dBadge.style.background = 'var(--holiday-bg)';
+        dBadge.style.border = '1px solid var(--holiday-border)';
+        dBadge.style.color = 'var(--holiday-text)';
+      } else if (heb.shabbat) {
+        dBadge.style.display = 'inline-block';
+        dBadge.innerText = heb.shabbat;
+        dBadge.style.background = 'var(--shabbat-bg)';
+        dBadge.style.border = '1px solid var(--shabbat-border)';
+        dBadge.style.color = 'var(--shabbat-text)';
+      } else {
+        dBadge.style.display = 'none';
+      }
+
+      const scheduleContainer = document.getElementById('hourlyScheduleList');
+      scheduleContainer.innerHTML = '';
+      const daySchedule = db.schedules[dateKey] || {};
+
+      for (let h = 6; h <= 23; h++) {
+        const timeStr = `${String(h).padStart(2, '0')}:00`;
+        const val = daySchedule[timeStr] || '';
+        
+        let periodClass = 'morning';
+        let periodIcon = '☀️️';
+        if (h >= 12 && h <= 17) {
+          periodClass = 'afternoon';
+          periodIcon = '🌤️';
+        } else if (h >= 18) {
+          periodClass = 'evening';
+          periodIcon = '🌙';
+        }
+
+        const row = document.createElement('div');
+        row.className = `hour-row ${periodClass}`;
+        row.innerHTML = `
+          <div class="hour-label">${periodIcon} ${timeStr}</div>
+          <input type="text" class="hour-input" value="${val}" placeholder="משימה לשעה זו..." 
+                 onchange="saveScheduleHour('${dateKey}', '${timeStr}', this.value)">
+        `;
+        scheduleContainer.appendChild(row);
+      }
+
+      renderDailyGoals(dateKey);
+      renderDailyEntries(dateKey);
+    }
+
+    function saveScheduleHour(dateKey, hour, val) {
+      if (!db.schedules[dateKey]) db.schedules[dateKey] = {};
+      if (val.trim()) db.schedules[dateKey][hour] = val.trim();
+      else delete db.schedules[dateKey][hour];
+      saveDB();
+    }
+
+    function renderDailyGoals(dateKey) {
+      const list = document.getElementById('dailyGoalsList');
+      list.innerHTML = '';
+      const goals = db.dailyGoals[dateKey] || [];
+      goals.forEach((g, idx) => {
+        const li = document.createElement('li');
+        li.className = `goal-item ${g.done ? 'done' : ''}`;
+        li.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" ${g.done ? 'checked' : ''} onchange="toggleDailyGoal('${dateKey}', ${idx})">
+            <span>${g.text}</span>
+          </div>
+          <button onclick="removeDailyGoal('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem;">✕</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function addDailyGoal() {
+      const input = document.getElementById('dailyGoalInput');
+      const text = input.value.trim();
+      if (!text) return;
+      const dateKey = formatDateKey(anchorDate);
+      if (!db.dailyGoals[dateKey]) db.dailyGoals[dateKey] = [];
+      db.dailyGoals[dateKey].push({ text, done: false });
+      input.value = '';
+      saveDB();
+      renderDailyGoals(dateKey);
+    }
+
+    function toggleDailyGoal(dateKey, idx) {
+      db.dailyGoals[dateKey][idx].done = !db.dailyGoals[dateKey][idx].done;
+      saveDB();
+      renderDailyGoals(dateKey);
+    }
+
+    function removeDailyGoal(dateKey, idx) {
+      db.dailyGoals[dateKey].splice(idx, 1);
+      saveDB();
+      renderDailyGoals(dateKey);
+    }
+
+    function renderDailyEntries(dateKey) {
+      const container = document.getElementById('dailyEntriesList');
+      container.innerHTML = '';
+      const entries = db.entries[dateKey] || [];
+      if (entries.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-muted); font-size:0.85rem;">אין רשומות עדיין. לחץ למעלה על "+ רשומה חדשה".</div>';
+        return;
+      }
+      entries.forEach((e, idx) => {
+        const card = document.createElement('div');
+        card.className = `entry-card cat-${e.cat}`;
+        const catName = e.cat === 'plan' ? 'תכנון יומי' : (e.cat === 'insight' ? 'תובנה וחידוש' : 'חוויה וזיכרון');
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="entry-badge">${catName}</span>
+            <div style="display:flex; gap:6px;">
+              <button onclick="editEntry('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem;">ערוך ✏️</button>
+              <button onclick="deleteEntry('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem;">מחק</button>
+            </div>
+          </div>
+          <h4 style="font-size:0.95rem;">${e.title}</h4>
+          <p style="font-size:0.88rem; color:#cbd5e1; white-space:pre-wrap;">${e.text}</p>
+          ${e.img ? `<img src="${e.img}">` : ''}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function deleteEntry(dateKey, idx) {
+      db.entries[dateKey].splice(idx, 1);
+      if (db.entries[dateKey].length === 0) delete db.entries[dateKey];
+      saveDB();
+      renderDailyEntries(dateKey);
+      renderMonthlyView();
+    }
+
+    /* 2. תצוגה שבועית */
+    function renderWeeklyView() {
+      const startOfWeek = new Date(anchorDate);
+      startOfWeek.setDate(anchorDate.getDate() - anchorDate.getDay());
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+      const weekKey = getWeekKey(anchorDate);
+      const hebStart = getHebrewDateInfo(startOfWeek);
+      const hebEnd = getHebrewDateInfo(endOfWeek);
+
+      document.getElementById('currentFocusTitle').innerText = 
+        `${startOfWeek.getDate()}/${startOfWeek.getMonth()+1} - ${endOfWeek.getDate()}/${endOfWeek.getMonth()+1} | ${hebStart.hebrewDay}-${hebEnd.hebrewDay} ב${hebStart.monthName}`;
+
+      renderWeeklyCardList('core', weekKey);
+      renderWeeklyCardList('tasks', weekKey);
+      renderWeeklyCardList('habits', weekKey);
+
+      const grid = document.getElementById('weeklyGrid');
+      grid.innerHTML = '';
+      const todayStr = formatDateKey(new Date());
+
+      for (let i = 0; i < 7; i++) {
+        const day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + i);
+        const dKey = formatDateKey(day);
+        const heb = getHebrewDateInfo(day);
+        const dayEntries = db.entries[dKey] || [];
+
+        const col = document.createElement('div');
+        const isHol = !!heb.holiday;
+        const isShab = !!heb.shabbat;
+        col.className = `week-day-col ${dKey === todayStr ? 'today' : ''} ${isHol ? 'is-holiday' : ''} ${isShab ? 'is-shabbat' : ''}`;
+        col.onclick = () => { anchorDate = day; switchView('daily'); };
+        
+        col.innerHTML = `
+          <div class="week-day-header">
+            <div style="font-weight:700;">${['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'][i]}</div>
+            <div style="font-size:0.8rem; color:#cbd5e1; font-weight:600;">${day.getDate()}/${day.getMonth()+1} • ${heb.hebrewDay}</div>
+            ${heb.holiday ? `<div style="color:var(--holiday-text); font-size:0.75rem; font-weight:600; margin-top:2px;">${heb.holiday}</div>` : ''}
+            ${heb.shabbat ? `<div style="color:var(--shabbat-text); font-size:0.75rem; font-weight:600; margin-top:2px;">${heb.shabbat}</div>` : ''}
+          </div>
+          <div style="display:flex; flex-direction:column; gap:5px; margin-top:6px;">
+            ${dayEntries.map(e => {
+              if (e.cat === 'plan' && e.showFullWeekly) {
+                return `
+                  <div style="background:rgba(59,130,246,0.18); border-right:3px solid #3b82f6; padding:6px; border-radius:6px;">
+                    <div style="font-weight:700; font-size:0.8rem; color:#93c5fd;">${e.title}</div>
+                    <div style="font-size:0.74rem; color:#e2e8f0; white-space:pre-wrap; margin-top:3px;">${e.text}</div>
+                  </div>
+                `;
+              }
+              return `<div class="entry-pill-mini cat-${e.cat}">${e.title}</div>`;
+            }).join('')}
+          </div>
+        `;
+        grid.appendChild(col);
+      }
+    }
+
+    function renderWeeklyCardList(cardKey, weekKey) {
+      const list = document.getElementById(`wList_${cardKey}`);
+      list.innerHTML = '';
+      if (!db.weeklyBoxes[weekKey]) db.weeklyBoxes[weekKey] = { core: [], tasks: [], habits: [] };
+      const items = db.weeklyBoxes[weekKey][cardKey] || [];
+
+      items.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.className = `goal-item ${item.done ? 'done' : ''}`;
+        li.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleWeeklyCardGoal('${weekKey}', '${cardKey}', ${idx})">
+            <span>${item.text}</span>
+          </div>
+          <button onclick="removeWeeklyCardGoal('${weekKey}', '${cardKey}', ${idx})" style="padding:1px 5px; font-size:0.75rem;">✕</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function addWeeklyCardGoal(cardKey) {
+      const inputId = cardKey === 'core' ? 'wGoal1Input' : (cardKey === 'tasks' ? 'wGoal2Input' : 'wGoal3Input');
+      const input = document.getElementById(inputId);
+      const text = input.value.trim();
+      if (!text) return;
+      const weekKey = getWeekKey(anchorDate);
+      if (!db.weeklyBoxes[weekKey]) db.weeklyBoxes[weekKey] = { core: [], tasks: [], habits: [] };
+      if (!db.weeklyBoxes[weekKey][cardKey]) db.weeklyBoxes[weekKey][cardKey] = [];
+      db.weeklyBoxes[weekKey][cardKey].push({ text, done: false });
+      input.value = '';
+      saveDB();
+      renderWeeklyCardList(cardKey, weekKey);
+    }
+
+    function toggleWeeklyCardGoal(weekKey, cardKey, idx) {
+      db.weeklyBoxes[weekKey][cardKey][idx].done = !db.weeklyBoxes[weekKey][cardKey][idx].done;
+      saveDB();
+      renderWeeklyCardList(cardKey, weekKey);
+    }
+
+    function removeWeeklyCardGoal(weekKey, cardKey, idx) {
+      db.weeklyBoxes[weekKey][cardKey].splice(idx, 1);
+      saveDB();
+      renderWeeklyCardList(cardKey, weekKey);
+    }
+
+    /* 3. תצוגה חודשית עברית (א' עד כ"ט/ל') */
+    function renderMonthlyView() {
+      let startOfHebrewMonth = new Date(anchorDate);
+      while (getHebrewDateInfo(startOfHebrewMonth).dayNum > 1) {
+        startOfHebrewMonth.setDate(startOfHebrewMonth.getDate() - 1);
+      }
+
+      const hebMonthInfo = getHebrewDateInfo(startOfHebrewMonth);
+      const activeHebMonthName = hebMonthInfo.monthName;
+
+      const hebrewMonthDays = [];
+      let cur = new Date(startOfHebrewMonth);
+      while (getHebrewDateInfo(cur).monthName === activeHebMonthName) {
+        hebrewMonthDays.push(new Date(cur));
+        cur.setDate(cur.getDate() + 1);
+      }
+
+      const firstGreg = hebrewMonthDays[0];
+      const lastGreg = hebrewMonthDays[hebrewMonthDays.length - 1];
+      document.getElementById('currentFocusTitle').innerText = 
+        `חודש ${activeHebMonthName} ${hebMonthInfo.yearStr} (${firstGreg.getDate()}/${firstGreg.getMonth()+1} - ${lastGreg.getDate()}/${lastGreg.getMonth()+1})`;
+
+      const firstDayOfWeek = firstGreg.getDay();
+      const grid = document.getElementById('monthlyGrid');
+      grid.innerHTML = '';
+      const todayStr = formatDateKey(new Date());
+
+      for (let i = 0; i < firstDayOfWeek; i++) {
+        grid.innerHTML += `<div class="month-day-cell empty"></div>`;
+      }
+
+      hebrewMonthDays.forEach(curDate => {
+        const dKey = formatDateKey(curDate);
+        const heb = getHebrewDateInfo(curDate);
+        const entries = db.entries[dKey] || [];
+
+        const cell = document.createElement('div');
+        const isHol = !!heb.holiday;
+        const isShab = !!heb.shabbat;
+
+        cell.className = `month-day-cell ${dKey === todayStr ? 'today' : ''} ${isHol ? 'has-holiday' : ''} ${isShab ? 'has-shabbat' : ''}`;
+        cell.onclick = () => { anchorDate = curDate; switchView('daily'); };
+
+        const entriesPills = entries.slice(0, 3).map(e => `
+          <div class="entry-pill-mini cat-${e.cat}">${e.title}</div>
+        `).join('');
+
+        cell.innerHTML = `
+          <div class="cell-top">
+            <span class="heb-num-main">${heb.hebrewDay}</span>
+            <span class="greg-num-sub">${curDate.getDate()}/${curDate.getMonth()+1}</span>
+          </div>
+          ${heb.holiday ? `<div class="cell-holiday">${heb.holiday}</div>` : ''}
+          ${heb.shabbat ? `<div class="cell-shabbat">${heb.shabbat}</div>` : ''}
+          <div class="cell-entries-list">${entriesPills}</div>
+        `;
+        grid.appendChild(cell);
+      });
+    }
+
+    /* 4. תצוגה שנתית */
+    function renderYearlyView() {
+      document.getElementById('currentFocusTitle').innerText = `תשפ״ו - תשפ״ז`;
+      renderYearlyGoals();
+
+      const grid = document.getElementById('yearlyGrid');
+      grid.innerHTML = '';
+
+      hebrewYearCycle.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'year-month-card';
+        card.onclick = () => {
+          anchorDate = new Date(m.targetDate);
+          switchView('monthly');
+        };
+
+        card.innerHTML = `
+          <div class="year-hebrew-title">${m.name}</div>
+          <div class="year-greg-sub">${m.gregSpan}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderYearlyGoals() {
+      const list = document.getElementById('yearlyGoalsList');
+      list.innerHTML = '';
+      const goals = (db.yearlyGoals && Array.isArray(db.yearlyGoals)) ? db.yearlyGoals : [];
+      goals.forEach((g, idx) => {
+        const li = document.createElement('li');
+        li.className = `goal-item ${g.done ? 'done' : ''}`;
+        li.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" ${g.done ? 'checked' : ''} onchange="toggleYearlyGoal(${idx})">
+            <span>${g.text}</span>
+          </div>
+          <button onclick="removeYearlyGoal(${idx})" style="padding:2px 6px; font-size:0.75rem;">✕</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function addYearlyGoal() {
+      const input = document.getElementById('yearlyGoalInput');
+      const text = input.value.trim();
+      if (!text) return;
+      if (!db.yearlyGoals || !Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
+      db.yearlyGoals.push({ text, done: false });
+      input.value = '';
+      saveDB();
+      renderYearlyGoals();
+    }
+
+    function toggleYearlyGoal(idx) {
+      db.yearlyGoals[idx].done = !db.yearlyGoals[idx].done;
+      saveDB();
+      renderYearlyGoals();
+    }
+
+    function removeYearlyGoal(idx) {
+      db.yearlyGoals.splice(idx, 1);
+      saveDB();
+      renderYearlyGoals();
+    }
+
+    /* עריכה והוספה */
+    function toggleWeeklyCheckboxVisibility() {
+      const cat = document.getElementById('modalCategory').value;
+      const box = document.getElementById('fullWeeklyOption');
+      box.style.display = (cat === 'plan') ? 'flex' : 'none';
+    }
+
+    function openAddEntryModal() {
+      editingContext = null;
+      tempImageBase64 = null;
+      document.getElementById('modalHeading').innerText = 'הוספת רשומה חדשה';
+      document.getElementById('modalDateInput').value = formatDateKey(anchorDate);
+      document.getElementById('modalCategory').value = 'plan';
+      document.getElementById('modalTitle').value = '';
+      document.getElementById('modalText').value = '';
+      document.getElementById('modalShowFullWeekly').checked = false;
+      document.getElementById('imagePreview').style.display = 'none';
+      document.getElementById('modalPhoto').value = '';
+      toggleWeeklyCheckboxVisibility();
+      document.getElementById('entryModal').style.display = 'flex';
+    }
+
+    function editEntry(dateKey, idx) {
+      const entry = db.entries[dateKey][idx];
+      editingContext = { dateKey, idx };
+      tempImageBase64 = entry.img || null;
+
+      document.getElementById('modalHeading').innerText = 'עריכת רשומה';
+      document.getElementById('modalDateInput').value = dateKey;
+      document.getElementById('modalCategory').value = entry.cat;
+      document.getElementById('modalTitle').value = entry.title;
+      document.getElementById('modalText').value = entry.text;
+      document.getElementById('modalShowFullWeekly').checked = !!entry.showFullWeekly;
+
+      const img = document.getElementById('imagePreview');
+      if (tempImageBase64) {
+        img.src = tempImageBase64;
+        img.style.display = 'block';
+      } else {
+        img.style.display = 'none';
+      }
+      document.getElementById('modalPhoto').value = '';
+      toggleWeeklyCheckboxVisibility();
+      document.getElementById('entryModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('entryModal').style.display = 'none';
+    }
+
+    function previewImage(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        tempImageBase64 = event.target.result;
+        const img = document.getElementById('imagePreview');
+        img.src = tempImageBase64;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveEntryForm() {
+      const selectedDate = document.getElementById('modalDateInput').value || formatDateKey(anchorDate);
+      const cat = document.getElementById('modalCategory').value;
+      const title = document.getElementById('modalTitle').value.trim() || 'רשומה ללא כותרת';
+      const text = document.getElementById('modalText').value.trim();
+      const showFullWeekly = document.getElementById('modalShowFullWeekly').checked;
+
+      if (editingContext) {
+        const { dateKey, idx } = editingContext;
+        if (dateKey !== selectedDate) {
+          db.entries[dateKey].splice(idx, 1);
+          if (db.entries[dateKey].length === 0) delete db.entries[dateKey];
+          if (!db.entries[selectedDate]) db.entries[selectedDate] = [];
+          db.entries[selectedDate].push({ id: Date.now(), cat, title, text, showFullWeekly, img: tempImageBase64 });
+        } else {
+          db.entries[dateKey][idx] = { ...db.entries[dateKey][idx], cat, title, text, showFullWeekly, img: tempImageBase64 };
+        }
+      } else {
+        if (!db.entries[selectedDate]) db.entries[selectedDate] = [];
+        db.entries[selectedDate].push({
+          id: Date.now(),
+          cat,
+          title,
+          text,
+          showFullWeekly,
+          img: tempImageBase64
+        });
+      }
+
+      saveDB();
+      closeModal();
+      renderCurrentView();
+    }
+
+    function saveDB() {
+      localStorage.setItem('hebrew_life_journal_v8', JSON.stringify(db));
+    }
+
+    function changeBackground() {
+      const url = prompt("הדבק כתובת לתמונת רקע חדשה:");
+      if (url) {
+        document.body.style.backgroundImage = `url('${url}')`;
+        localStorage.setItem('journal_bg_v8', url);
+      }
+    }
+
+    function exportData() {
+      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `life_journal_backup_${formatDateKey(new Date())}.json`;
+      a.click();
+    }
+
+    function importData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          db = JSON.parse(event.target.result);
+          saveDB();
+          init();
+          alert("הנתונים שוחזרו בהצלחה!");
+        } catch(err) {
+          alert("קובץ לא תקין.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function exportStandaloneHTML() {
+      const currentDocHtml = document.documentElement.outerHTML;
+      const serializedDB = JSON.stringify(db);
+      
+      const regex = /let db = JSON\.parse\(localStorage\.getItem\('[^']+'\)\) \|\| \{[\s\S]*?\};/;
+      const replacement = `let db = ${serializedDB}; // מידע שמור`;
+      
+      const updatedHtml = "<!DOCTYPE html>\n" + currentDocHtml.replace(regex, replacement);
+      const blob = new Blob([updatedHtml], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `יומן_חיים_מלא_${formatDateKey(new Date())}.html`;
+      a.click();
+      alert("קובץ ה-HTML המלא ירד בהצלחה!\nפתח אותו ישירות בכל מכשיר או שמור כגיבוי ב-Drive.");
+    }
+
+    function exportGoogleCalendarICS() {
+      let icsLines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Hebrew Life Journal//HE",
+        "CALSCALE:GREGORIAN"
+      ];
+
+      Object.keys(db.schedules || {}).forEach(dKey => {
+        const hoursObj = db.schedules[dKey];
+        Object.keys(hoursObj).forEach(h => {
+          const title = hoursObj[h];
+          const [hourStr] = h.split(':');
+          const startIso = dKey.replace(/-/g, '') + 'T' + hourStr + '0000';
+          const endIso = dKey.replace(/-/g, '') + 'T' + String(Number(hourStr)+1).padStart(2,'0') + '0000';
+
+          icsLines.push("BEGIN:VEVENT");
+          icsLines.push(`SUMMARY:${title}`);
+          icsLines.push(`DTSTART:${startIso}`);
+          icsLines.push(`DTEND:${endIso}`);
+          icsLines.push(`DESCRIPTION:לו"ז מתוך יומן החיים`);
+          icsLines.push("END:VEVENT");
+        });
+      });
+
+      Object.keys(db.entries || {}).forEach(dKey => {
+        db.entries[dKey].forEach(e => {
+          const startIso = dKey.replace(/-/g, '');
+          icsLines.push("BEGIN:VEVENT");
+          icsLines.push(`SUMMARY:${e.title}`);
+          icsLines.push(`DTSTART;VALUE=DATE:${startIso}`);
+          icsLines.push(`DESCRIPTION:${e.text.replace(/\n/g, '\\n')}`);
+          icsLines.push("END:VEVENT");
+        });
+      });
+
+      icsLines.push("END:VCALENDAR");
+
+      const blob = new Blob([icsLines.join("\r\n")], { type: 'text/calendar;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `יומן_לגוגל_${formatDateKey(new Date())}.ics`;
+      a.click();
+      alert("קובץ ה-ICS ירד בהצלחה!\nכנס ליומן גוגל > הגדרות > ייבוא וייצוא > ובחר בקובץ שירד.");
+    }
+
+    function exportWeeklyMemoriesPDF() {
+      const allDates = Object.keys(db.entries).sort();
+      const hasMemories = allDates.some(dKey => 
+        db.entries[dKey].some(e => e.cat === 'memory' || e.cat === 'insight')
+      );
+
+      if (!hasMemories) {
+        alert("עדיין לא נרשמו זכרונות או תובנות לספר.\nהוסף רשומה חדשה וסמן אותה כ'סיכום חוויות וזכרונות' או 'תובנה'!");
+        return;
+      }
+
+      const monthsData = {};
+
+      allDates.forEach(dKey => {
+        const [y, m, d] = dKey.split('-').map(Number);
+        const curDate = new Date(y, m - 1, d);
+        const heb = getHebrewDateInfo(curDate);
+        
+        const validEntries = db.entries[dKey].filter(e => e.cat === 'memory' || e.cat === 'insight');
+        if (validEntries.length === 0) return;
+
+        const mKey = heb.monthName;
+        if (!monthsData[mKey]) monthsData[mKey] = { weeks: { 1: {}, 2: {}, 3: {}, 4: {} } };
+
+        let weekNum = 1;
+        if (heb.dayNum > 7 && heb.dayNum <= 14) weekNum = 2;
+        else if (heb.dayNum > 14 && heb.dayNum <= 21) weekNum = 3;
+        else if (heb.dayNum > 21) weekNum = 4;
+
+        if (!monthsData[mKey].weeks[weekNum][dKey]) {
+          monthsData[mKey].weeks[weekNum][dKey] = {
+            date: curDate,
+            heb: heb,
+            entries: []
+          };
+        }
+        monthsData[mKey].weeks[weekNum][dKey].entries.push(...validEntries);
+      });
+
+      let printContent = `
+        <!DOCTYPE html>
+        <html lang="he" dir="rtl">
+        <head>
+          <meta charset="UTF-8">
+          <title>ספר זכרונות ותובנות</title>
+          <style>
+            @page { size: A4; margin: 1.6cm; }
+            body { font-family: system-ui, sans-serif; color: #1e293b; background: #fff; margin: 0; padding: 0; }
+            .cover-page { text-align: center; padding-top: 130px; page-break-after: always; break-after: page; }
+            .cover-page h1 { font-size: 2.5rem; color: #0f172a; margin-bottom: 12px; }
+            .cover-page p { font-size: 1.15rem; color: #64748b; }
+            .month-chapter { page-break-before: always; break-before: page; padding-top: 10px; }
+            .month-header { font-size: 1.8rem; font-weight: 800; color: #1e3a8a; border-bottom: 2px solid #3b82f6; padding-bottom: 6px; margin-bottom: 20px; }
+            .week-section { margin-bottom: 22px; }
+            .week-badge { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; font-size: 0.92rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px; }
+            .day-group { margin-bottom: 16px; padding-right: 4px; }
+            .day-header { font-size: 1rem; font-weight: 700; color: #334155; border-bottom: 1px dashed #cbd5e1; padding-bottom: 4px; margin-bottom: 8px; }
+            .entry-card-print { background: #f8fafc; border: 1px solid #e2e8f0; border-right: 4px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; page-break-inside: avoid; break-inside: avoid; }
+            .entry-card-print.insight { border-right-color: #d97706; }
+            .entry-card-print.memory { border-right-color: #059669; }
+            .entry-tag { font-size: 0.72rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 4px; }
+            .entry-tag.insight { background: #fef3c7; color: #b45309; }
+            .entry-tag.memory { background: #d1fae5; color: #047857; }
+            .entry-title { font-size: 0.98rem; font-weight: 700; margin: 2px 0 4px; color: #0f172a; }
+            .entry-text { font-size: 0.9rem; line-height: 1.55; color: #334155; white-space: pre-wrap; }
+            .entry-img { max-width: 100%; max-height: 230px; object-fit: cover; border-radius: 6px; margin-top: 8px; display: block; }
+          </style>
+        </head>
+        <body>
+          <div class="cover-page">
+            <h1>📖 ספר זכרונות, חוויות ותובנות</h1>
+            <p>תיעוד שבועי • מחזור שנת תשפ״ו - תשפ״ז</p>
+          </div>
+      `;
+
+      Object.keys(monthsData).forEach(mName => {
+        const mInfo = monthsData[mName];
+        let hasMonthEntries = false;
+        for (let w = 1; w <= 4; w++) {
+          if (Object.keys(mInfo.weeks[w]).length > 0) hasMonthEntries = true;
+        }
+        if (!hasMonthEntries) return;
+
+        printContent += `<div class="month-chapter"><div class="month-header">חודש ${mName}</div>`;
+
+        for (let w = 1; w <= 4; w++) {
+          const daysObj = mInfo.weeks[w];
+          const daysKeys = Object.keys(daysObj);
+          if (daysKeys.length === 0) continue;
+
+          printContent += `<div class="week-section"><span class="week-badge">שבוע ${w}/4</span>`;
+
+          daysKeys.forEach(dKey => {
+            const dayData = daysObj[dKey];
+            const heb = dayData.heb;
+            const gregDayName = new Intl.DateTimeFormat('he-IL', { weekday: 'long' }).format(dayData.date);
+            const badgeExtra = heb.holiday || heb.shabbat;
+
+            printContent += `
+              <div class="day-group">
+                <div class="day-header">${gregDayName} • ${heb.hebrewDayAndMonth} ${badgeExtra ? '• ' + badgeExtra : ''}</div>
+            `;
+
+            dayData.entries.forEach(e => {
+              const isIns = e.cat === 'insight';
+              const tagLabel = isIns ? '💡 תובנה וחידוש' : '🌿 חוויה וזיכרון';
+              const tagClass = isIns ? 'insight' : 'memory';
+
+              printContent += `
+                <div class="entry-card-print ${tagClass}">
+                  <span class="entry-tag ${tagClass}">${tagLabel}</span>
+                  <div class="entry-title">${e.title}</div>
+                  <div class="entry-text">${e.text}</div>
+                  ${e.img ? `<img src="${e.img}" class="entry-img">` : ''}
+                </div>
+              `;
+            });
+
+            printContent += `</div>`;
+          });
+
+          printContent += `</div>`;
+        }
+
+        printContent += `</div>`;
+      });
+
+      printContent += `</body></html>`;
+
+      const win = window.open('', '_blank');
+      win.document.write(printContent);
+      win.document.close();
+      win.focus();
+      setTimeout(() => { win.print(); }, 400);
+    }
+
+    const savedBg = localStorage.getItem('journal_bg_v8');
+    if (savedBg) document.body.style.backgroundImage = `url('${savedBg}')`;
+
+    init();
+  </script>
+</body>
+</html>
