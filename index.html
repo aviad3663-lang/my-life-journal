@@ -29,19 +29,33 @@
       --cat-insight: #f59e0b;
       --cat-memory: #10b981;
       
-      --time-morning: rgba(245, 158, 11, 0.12);
+      /* זמני יום מובחנים */
+      --time-morning: rgba(245, 158, 11, 0.16);
       --time-morning-border: #f59e0b;
-      --time-afternoon: rgba(59, 130, 246, 0.12);
-      --time-afternoon-border: #3b82f6;
-      --time-evening: rgba(139, 92, 246, 0.12);
-      --time-evening-border: #8b5cf6;
+      --time-afternoon: rgba(2, 132, 199, 0.22);
+      --time-afternoon-border: #38bdf8;
+      --time-evening: rgba(139, 92, 246, 0.22);
+      --time-evening-border: #a855f7;
 
-      --holiday-bg: rgba(244, 63, 94, 0.18);
-      --holiday-border: rgba(244, 63, 94, 0.6);
-      --holiday-text: #fb7185;
+      /* מועדים עבריים */
+      --holiday-bg: rgba(244, 63, 94, 0.22);
+      --holiday-border: #f43f5e;
+      --holiday-text: #fda4af;
 
-      --shabbat-bg: rgba(99, 102, 241, 0.18);
-      --shabbat-border: rgba(99, 102, 241, 0.6);
+      --fast-bg: rgba(234, 88, 12, 0.22);
+      --fast-border: #ea580c;
+      --fast-text: #fdba74;
+
+      --memorial-bg: rgba(100, 116, 139, 0.25);
+      --memorial-border: #94a3b8;
+      --memorial-text: #cbd5e1;
+
+      --celebration-bg: rgba(13, 148, 136, 0.22);
+      --celebration-border: #14b8a6;
+      --celebration-text: #5eead4;
+
+      --shabbat-bg: rgba(79, 70, 229, 0.22);
+      --shabbat-border: #6366f1;
       --shabbat-text: #a5b4fc;
     }
 
@@ -71,7 +85,6 @@
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
     }
 
-    /* כותרת עליונה וחלוקת כפתורים */
     header {
       display: flex;
       justify-content: space-between;
@@ -99,15 +112,14 @@
       flex-wrap: wrap;
     }
 
-    /* כפתורי ניהול צדדיים ומאופקים (רקע, גיבוי וכו') */
     .secondary-tools-row {
       display: flex;
-      gap: 4px;
+      gap: 5px;
       flex-wrap: wrap;
     }
 
     .btn-tool {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: #94a3b8;
       padding: 3px 8px;
@@ -117,7 +129,7 @@
       transition: all 0.2s;
     }
     .btn-tool:hover {
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.14);
       color: #f1f5f9;
     }
 
@@ -220,11 +232,10 @@
     .hour-row.afternoon { background: var(--time-afternoon); border-right: 4px solid var(--time-afternoon-border); }
     .hour-row.evening { background: var(--time-evening); border-right: 4px solid var(--time-evening-border); }
 
-    /* הדגשת השעה הנוכחית */
     .hour-row.current-hour {
       border: 1.5px solid #38bdf8 !important;
-      background: rgba(56, 189, 248, 0.16) !important;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+      background: rgba(56, 189, 248, 0.22) !important;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
     }
     .current-hour-tag {
       font-size: 0.68rem;
@@ -249,12 +260,22 @@
       padding: 14px;
     }
     .goals-input-row { display: flex; gap: 8px; }
-    .goals-input-row input { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 8px; padding: 7px 11px; color: white; font-size: 0.88rem; outline: none; }
-    .goals-input-row input:focus { border-color: #3b82f6; }
+    .fast-textarea {
+      flex: 1;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 7px 11px;
+      color: white;
+      font-size: 0.88rem;
+      resize: none;
+      outline: none;
+      line-height: 1.4;
+    }
+    .fast-textarea:focus { border-color: #3b82f6; }
     
     .goals-list { list-style: none; display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; }
     
-    /* פריט צ'ק-ליסט עם קו מחיקה ודהייה */
     .goal-item {
       display: flex;
       align-items: center;
@@ -316,7 +337,7 @@
     }
     .reflection-input:focus { border-color: #3b82f6; }
 
-    /* רשומות, תובנות ותמונות ממוזערות */
+    /* רשומות ותמונות ממוזערות */
     .entry-card { border-right: 4px solid #fff; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
     .entry-card.cat-plan { border-right-color: var(--cat-plan); background: rgba(59, 130, 246, 0.08); }
     .entry-card.cat-insight { border-right-color: var(--cat-insight); background: rgba(245, 158, 11, 0.08); }
@@ -338,6 +359,22 @@
     }
     .entry-img-thumb:hover { transform: scale(1.05); }
 
+    .doc-link-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      align-self: flex-start;
+      margin-top: 4px;
+    }
+
     /* 2. תצוגה שבועית */
     .weekly-boxes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
     @media (max-width: 800px) { .weekly-boxes-grid { grid-template-columns: 1fr; } }
@@ -356,21 +393,30 @@
     .week-day-col:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.4); }
     .week-day-header { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; text-align: center; }
 
-    /* 3. תצוגה חודשית עברית */
+    /* 3. תצוגה חודשית עברית צבעונית */
     .month-names-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 700; color: var(--text-muted); font-size: 0.88rem; margin-bottom: 8px; }
     .month-days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
     .month-day-cell { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 10px; min-height: 102px; padding: 7px; display: flex; flex-direction: column; cursor: pointer; transition: all 0.15s; }
     .month-day-cell:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.3); }
-    .month-day-cell.today { border: 2px solid #3b82f6; }
+    .month-day-cell.today { border: 2px solid #38bdf8; }
+    
     .month-day-cell.has-holiday { background: var(--holiday-bg) !important; border: 1px solid var(--holiday-border) !important; }
+    .month-day-cell.has-fast { background: var(--fast-bg) !important; border: 1px solid var(--fast-border) !important; }
+    .month-day-cell.has-memorial { background: var(--memorial-bg) !important; border: 1px solid var(--memorial-border) !important; }
+    .month-day-cell.has-celebration { background: var(--celebration-bg) !important; border: 1px solid var(--celebration-border) !important; }
     .month-day-cell.has-shabbat { background: var(--shabbat-bg) !important; border: 1px solid var(--shabbat-border) !important; }
     .month-day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
 
     .cell-top { display: flex; justify-content: space-between; align-items: flex-start; }
     .heb-num-main { font-size: 1.15rem; color: #f8fafc; font-weight: 800; }
     .greg-num-sub { font-size: 0.74rem; color: var(--text-muted); font-weight: 500; }
-    .cell-holiday { font-size: 0.72rem; color: var(--holiday-text); font-weight: 600; margin-top: 3px; line-height: 1.15; }
-    .cell-shabbat { font-size: 0.72rem; color: var(--shabbat-text); font-weight: 600; margin-top: 3px; line-height: 1.15; }
+    
+    .cell-holiday { font-size: 0.72rem; font-weight: 700; margin-top: 3px; line-height: 1.15; }
+    .cell-holiday.holiday { color: var(--holiday-text); }
+    .cell-holiday.fast { color: var(--fast-text); }
+    .cell-holiday.memorial { color: var(--memorial-text); }
+    .cell-holiday.celebration { color: var(--celebration-text); }
+    .cell-shabbat { font-size: 0.72rem; color: var(--shabbat-text); font-weight: 700; margin-top: 3px; line-height: 1.15; }
 
     .cell-entries-list { display: flex; flex-direction: column; gap: 3px; margin-top: auto; padding-top: 4px; }
     .entry-pill-mini { font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; color: #fff; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -391,7 +437,6 @@
     .modal-content { background: #1e293b; border: 1px solid var(--card-border); border-radius: 16px; width: 100%; max-width: 530px; padding: 22px; display: flex; flex-direction: column; gap: 13px; }
     .modal-content input, .modal-content select, .modal-content textarea { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 8px; padding: 9px; color: white; font-size: 0.9rem; }
 
-    /* חלון הגדלת תמונה (Lightbox) */
     .lightbox-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
     .lightbox-img { max-width: 90vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; }
   </style>
@@ -406,7 +451,6 @@
       </div>
 
       <div class="header-controls">
-        <!-- אזור ראשי: סנכרון Google ומפתח הצפנה -->
         <div class="primary-auth-row">
           <button id="btnEncKey" class="btn-lock" onclick="promptEncryptionKey()" title="הגדרת סיסמת הצפנה פרטית להגנה מפני צפייה בענן">
             🔒 <span id="encStatusLabel">מפתח הצפנה</span>
@@ -419,7 +463,6 @@
           </span>
         </div>
 
-        <!-- כפתורי כלים, ייצוא וגיבוי - מסודרים בקטן ובצד -->
         <div class="secondary-tools-row">
           <button class="btn-tool" onclick="exportWeeklyMemoriesPDF()">📖 ספר PDF</button>
           <button class="btn-tool" onclick="exportGoogleCalendarICS()">📅 ייצוא ליומן</button>
@@ -462,17 +505,15 @@
         </section>
 
         <section class="panel">
-          <!-- מטרות יומיות -->
           <div class="daily-tasks-window">
-            <h3>🎯 חלון מטלות ויעדים להיום <small style="font-size:0.75rem; color:#94a3b8;">(Enter להוספה)</small></h3>
+            <h3>🎯 חלון מטלות ויעדים להיום <small style="font-size:0.75rem; color:#94a3b8;">(Enter להוספה | Shift+Enter שורה)</small></h3>
             <div class="goals-input-row">
-              <input type="text" id="dailyGoalInput" placeholder="הוסף משימה / יעד להיום...">
+              <textarea id="dailyGoalInput" class="fast-textarea" rows="1" placeholder="הוסף משימה / יעד להיום..."></textarea>
               <button class="btn-primary" onclick="addDailyGoal()">הוסף</button>
             </div>
             <ul class="goals-list" id="dailyGoalsList"></ul>
           </div>
 
-          <!-- חלון סיכום והערכה יומית -->
           <div class="daily-reflection-box">
             <div class="reflection-rating-row">
               <h4 style="font-size:0.95rem; color:#38bdf8;">🌟 סיכום והערכת היום</h4>
@@ -496,7 +537,6 @@
             <input type="text" id="refImprove" class="reflection-input" placeholder="איך אשתפר מחר?" onchange="saveDailyReflection()">
           </div>
 
-          <!-- רשומות ותובנות -->
           <div style="margin-top: 16px;">
             <h3>📝 רשומות, תובנות וזכרונות מהיום</h3>
             <div id="dailyEntriesList"></div>
@@ -511,7 +551,7 @@
         <div class="weekly-box-card card-core">
           <h4>🌟 יעדי שיא לשבוע זה</h4>
           <div class="goals-input-row">
-            <input type="text" id="wGoal1Input" placeholder="הוסף יעד מרכזי...">
+            <textarea id="wGoal1Input" class="fast-textarea" rows="1" placeholder="הוסף יעד מרכזי..."></textarea>
             <button class="btn-primary" onclick="addWeeklyCardGoal('core')">+</button>
           </div>
           <ul class="goals-list" id="wList_core"></ul>
@@ -519,7 +559,7 @@
         <div class="weekly-box-card card-tasks">
           <h4>⚡ משימות ופרויקטים</h4>
           <div class="goals-input-row">
-            <input type="text" id="wGoal2Input" placeholder="הוסף משימה...">
+            <textarea id="wGoal2Input" class="fast-textarea" rows="1" placeholder="הוסף משימה..."></textarea>
             <button class="btn-primary" onclick="addWeeklyCardGoal('tasks')">+</button>
           </div>
           <ul class="goals-list" id="wList_tasks"></ul>
@@ -527,7 +567,7 @@
         <div class="weekly-box-card card-habits">
           <h4>🌱 הרגלים ובריאות</h4>
           <div class="goals-input-row">
-            <input type="text" id="wGoal3Input" placeholder="הוסף הרגל יומי...">
+            <textarea id="wGoal3Input" class="fast-textarea" rows="1" placeholder="הוסף הרגל יומי..."></textarea>
             <button class="btn-primary" onclick="addWeeklyCardGoal('habits')">+</button>
           </div>
           <ul class="goals-list" id="wList_habits"></ul>
@@ -552,7 +592,7 @@
       <div class="panel" style="margin-bottom: 16px;">
         <h3>🌟 יעדים למחזור השנה</h3>
         <div class="goals-input-row" style="margin-top: 8px;">
-          <input type="text" id="yearlyGoalInput" placeholder="הגדר יעד על לשנה זו...">
+          <textarea id="yearlyGoalInput" class="fast-textarea" rows="1" placeholder="הגדר יעד על לשנה זו..."></textarea>
           <button class="btn-primary" onclick="addYearlyGoal()">הוסף</button>
         </div>
         <ul class="goals-list" id="yearlyGoalsList" style="margin-top: 10px;"></ul>
@@ -585,6 +625,13 @@
       <label>פירוט מלא:</label>
       <textarea id="modalText" rows="4" placeholder="כתוב כאן בהרחבה..."></textarea>
 
+      <!-- חיבור למסמך מורחב / Google Docs -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+        <label style="font-size:0.85rem; color:#38bdf8;">📝 קישור למסמך חיצוני (Google Docs / Word):</label>
+        <button type="button" class="btn-tool" onclick="window.open('https://docs.new', '_blank')">פתח מסמך חדש ↗</button>
+      </div>
+      <input type="url" id="modalExternalUrl" placeholder="הדבק כאן קישור למסמך מלא...">
+
       <div id="fullWeeklyOption" style="display:flex; align-items:center; gap:8px;">
         <input type="checkbox" id="modalShowFullWeekly" style="width:auto; cursor:pointer;">
         <label for="modalShowFullWeekly" style="cursor:pointer; font-size:0.88rem;">הצג את כל הפירוט בתצוגה השבועית</label>
@@ -593,7 +640,7 @@
       <div>
         <label>📸 תמונה (אופציונלי):</label>
         <input type="file" id="modalPhoto" accept="image/*" onchange="previewImage(event)">
-        <img id="imagePreview" style="display:none; width:100px; height:75px; object-fit:cover; border-radius:8px; margin-top:8px;">
+        <img id="imagePreview" style="display:none; width:85px; height:65px; object-fit:cover; border-radius:8px; margin-top:8px;">
       </div>
 
       <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
@@ -609,7 +656,6 @@
   </div>
 
   <script>
-    /* הגדרות Firebase */
     const firebaseConfig = {
       apiKey: "AIzaSyA1V94eeVVDcl4LRWpDaQlLY2F02cpe6B8",
       authDomain: "my-life-journal-3dcb6.firebaseapp.com",
@@ -692,45 +738,47 @@
       const hebrewDayAndMonth = `${hebrewDay} ב${monthName}`;
 
       let holiday = '';
+      let holidayType = '';
+
       if (monthName.includes('תשרי')) {
-        if (dayNum === 1 || dayNum === 2) holiday = 'ראש השנה 🍎';
-        else if (dayNum === 3) holiday = 'צום גדליה';
-        else if (dayNum === 9) holiday = 'ערב כיפור';
-        else if (dayNum === 10) holiday = 'יום כיפור 🕊️';
-        else if (dayNum === 14) holiday = 'ערב סוכות';
-        else if (dayNum === 15) holiday = 'סוכות 🌿';
-        else if (dayNum >= 16 && dayNum <= 20) holiday = 'חוה״מ סוכות';
-        else if (dayNum === 21) holiday = 'הושענא רבה';
-        else if (dayNum === 22) holiday = 'שמחת תורה 🎉';
+        if (dayNum === 1 || dayNum === 2) { holiday = 'ראש השנה 🍎'; holidayType = 'holiday'; }
+        else if (dayNum === 3) { holiday = 'צום גדליה'; holidayType = 'fast'; }
+        else if (dayNum === 9) { holiday = 'ערב כיפור'; holidayType = 'memorial'; }
+        else if (dayNum === 10) { holiday = 'יום כיפור 🕊️'; holidayType = 'memorial'; }
+        else if (dayNum === 14) { holiday = 'ערב סוכות'; holidayType = 'holiday'; }
+        else if (dayNum === 15) { holiday = 'סוכות 🌿'; holidayType = 'holiday'; }
+        else if (dayNum >= 16 && dayNum <= 20) { holiday = 'חוה״מ סוכות'; holidayType = 'holiday'; }
+        else if (dayNum === 21) { holiday = 'הושענא רבה'; holidayType = 'holiday'; }
+        else if (dayNum === 22) { holiday = 'שמחת תורה 🎉'; holidayType = 'celebration'; }
       } else if (monthName.includes('כסלו')) {
-        if (dayNum >= 25) holiday = 'חנוכה 🕎';
+        if (dayNum >= 25) { holiday = 'חנוכה 🕎'; holidayType = 'celebration'; }
       } else if (monthName.includes('טבת')) {
-        if (dayNum <= 2 || dayNum === 3) holiday = 'חנוכה 🕎';
-        else if (dayNum === 10) holiday = 'צום י׳ בטבת';
+        if (dayNum <= 2 || dayNum === 3) { holiday = 'חנוכה 🕎'; holidayType = 'celebration'; }
+        else if (dayNum === 10) { holiday = 'צום י׳ בטבת'; holidayType = 'fast'; }
       } else if (monthName.includes('שבט')) {
-        if (dayNum === 15) holiday = 'ט״ו בשבט 🌳';
+        if (dayNum === 15) { holiday = 'ט״ו בשבט 🌳'; holidayType = 'celebration'; }
       } else if (monthName.includes('אדר')) {
-        if (dayNum === 13) holiday = 'תענית אסתר';
-        else if (dayNum === 14) holiday = 'פורים 🎭';
-        else if (dayNum === 15) holiday = 'שושן פורים 🎭';
+        if (dayNum === 13) { holiday = 'תענית אסתר'; holidayType = 'fast'; }
+        else if (dayNum === 14) { holiday = 'פורים 🎭'; holidayType = 'celebration'; }
+        else if (dayNum === 15) { holiday = 'שושן פורים 🎭'; holidayType = 'celebration'; }
       } else if (monthName.includes('ניסן')) {
-        if (dayNum === 14) holiday = 'ערב פסח';
-        else if (dayNum === 15) holiday = 'פסח 🍷';
-        else if (dayNum >= 16 && dayNum <= 20) holiday = 'חוה״מ פסח';
-        else if (dayNum === 21) holiday = 'שביעי של פסח';
+        if (dayNum === 14) { holiday = 'ערב פסח'; holidayType = 'holiday'; }
+        else if (dayNum === 15) { holiday = 'פסח 🍷'; holidayType = 'holiday'; }
+        else if (dayNum >= 16 && dayNum <= 20) { holiday = 'חוה״מ פסח'; holidayType = 'holiday'; }
+        else if (dayNum === 21) { holiday = 'שביעי של פסח'; holidayType = 'holiday'; }
       } else if (monthName.includes('אייר')) {
-        if (dayNum === 4) holiday = 'יום הזיכרון 🕯';
-        else if (dayNum === 5) holiday = 'יום העצמאות 🇮🇱';
-        else if (dayNum === 18) holiday = 'ל״ג בעומר 🔥';
-        else if (dayNum === 28) holiday = 'יום ירושלים';
+        if (dayNum === 4) { holiday = 'יום הזיכרון 🕯'; holidayType = 'memorial'; }
+        else if (dayNum === 5) { holiday = 'יום העצמאות 🇮🇱'; holidayType = 'celebration'; }
+        else if (dayNum === 18) { holiday = 'ל״ג בעומר 🔥'; holidayType = 'celebration'; }
+        else if (dayNum === 28) { holiday = 'יום ירושלים'; holidayType = 'celebration'; }
       } else if (monthName.includes('סיוון') || monthName.includes('סיון')) {
-        if (dayNum === 5) holiday = 'ערב שבועות';
-        else if (dayNum === 6) holiday = 'שבועות 🌾';
+        if (dayNum === 5) { holiday = 'ערב שבועות'; holidayType = 'holiday'; }
+        else if (dayNum === 6) { holiday = 'שבועות 🌾'; holidayType = 'holiday'; }
       } else if (monthName.includes('תמוז')) {
-        if (dayNum === 17) holiday = 'צום י״ז בתמוז';
+        if (dayNum === 17) { holiday = 'צום י״ז בתמוז'; holidayType = 'fast'; }
       } else if (monthName.includes('אב')) {
-        if (dayNum === 9) holiday = 'צום ט׳ באב 🕯';
-        else if (dayNum === 15) holiday = 'ט״ו באב ❤️';
+        if (dayNum === 9) { holiday = 'צום ט׳ באב 🕯'; holidayType = 'memorial'; }
+        else if (dayNum === 15) { holiday = 'ט״ו באב ❤️'; holidayType = 'celebration'; }
       }
 
       let shabbat = '';
@@ -745,7 +793,7 @@
         }
       }
 
-      return { hebrewStr, hebrewDay, hebrewDayAndMonth, dayNum, holiday, shabbat, monthName, yearStr };
+      return { hebrewStr, hebrewDay, hebrewDayAndMonth, dayNum, holiday, holidayType, shabbat, monthName, yearStr };
     }
 
     function formatDateKey(d) {
@@ -785,7 +833,7 @@
       renderCurrentView();
     }
 
-    /* הוספה מהירה עם Enter */
+    /* Enter מוסיף משימה, Shift+Enter יורד שורה */
     function initEnterKeyListeners() {
       const attachEnter = (inputId, callback) => {
         const el = document.getElementById(inputId);
@@ -928,7 +976,6 @@
       saveDB();
     }
 
-    /* צ'ק-ליסט מטרות יומיות */
     function renderDailyGoals(dateKey) {
       const list = document.getElementById('dailyGoalsList');
       list.innerHTML = '';
@@ -942,7 +989,7 @@
         li.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" ${g.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleDailyGoal('${dateKey}', ${idx})">
-            <span>${g.text}</span>
+            <span style="white-space:pre-wrap;">${g.text}</span>
           </div>
           <button onclick="removeDailyGoal('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem;">✕</button>
         `;
@@ -974,7 +1021,6 @@
       renderDailyGoals(dateKey);
     }
 
-    /* סיכום והערכה יומית */
     function loadDailyReflection(dateKey) {
       const ref = (db.dailyReflections && db.dailyReflections[dateKey]) || {};
       document.getElementById('refRating').value = ref.rating || '';
@@ -995,7 +1041,6 @@
       saveDB();
     }
 
-    /* רשומות יומיות ותמונות ממוזערות */
     function renderDailyEntries(dateKey) {
       const container = document.getElementById('dailyEntriesList');
       container.innerHTML = '';
@@ -1018,6 +1063,7 @@
           </div>
           <h4 style="font-size:0.95rem;">${e.title}</h4>
           <p style="font-size:0.88rem; color:#cbd5e1; white-space:pre-wrap;">${e.text}</p>
+          ${e.externalUrl ? `<a href="${e.externalUrl}" target="_blank" class="doc-link-pill">🔗 פתח מסמך מורחב (Docs) ↗</a>` : ''}
           ${e.img ? `<img src="${e.img}" class="entry-img-thumb" onclick="openLightbox('${e.img}')" title="לחץ להגדלה">` : ''}
         `;
         container.appendChild(card);
@@ -1032,7 +1078,6 @@
       renderMonthlyView();
     }
 
-    /* הגדלת תמונה (Lightbox) */
     function openLightbox(src) {
       const modal = document.getElementById('imageLightboxModal');
       const img = document.getElementById('lightboxImgTarget');
@@ -1119,7 +1164,7 @@
         li.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" ${item.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleWeeklyCardGoal('${weekKey}', '${cardKey}', ${idx})">
-            <span>${item.text}</span>
+            <span style="white-space:pre-wrap;">${item.text}</span>
           </div>
           <button onclick="removeWeeklyCardGoal('${weekKey}', '${cardKey}', ${idx})" style="padding:1px 5px; font-size:0.75rem;">✕</button>
         `;
@@ -1153,7 +1198,7 @@
       renderWeeklyCardList(cardKey, weekKey);
     }
 
-    /* 3. תצוגה חודשית עברית */
+    /* 3. תצוגה חודשית עברית צבעונית */
     function renderMonthlyView() {
       let startOfHebrewMonth = new Date(anchorDate);
       while (getHebrewDateInfo(startOfHebrewMonth).dayNum > 1) {
@@ -1190,10 +1235,13 @@
         const entries = db.entries[dKey] || [];
 
         const cell = document.createElement('div');
-        const isHol = !!heb.holiday;
         const isShab = !!heb.shabbat;
+        let holidayClass = '';
+        if (heb.holidayType) {
+          holidayClass = `has-${heb.holidayType}`;
+        }
 
-        cell.className = `month-day-cell ${dKey === todayStr ? 'today' : ''} ${isHol ? 'has-holiday' : ''} ${isShab ? 'has-shabbat' : ''}`;
+        cell.className = `month-day-cell ${dKey === todayStr ? 'today' : ''} ${holidayClass} ${isShab ? 'has-shabbat' : ''}`;
         cell.onclick = () => { anchorDate = curDate; switchView('daily'); };
 
         const entriesPills = entries.slice(0, 3).map(e => `
@@ -1205,7 +1253,7 @@
             <span class="heb-num-main">${heb.hebrewDay}</span>
             <span class="greg-num-sub">${curDate.getDate()}/${curDate.getMonth()+1}</span>
           </div>
-          ${heb.holiday ? `<div class="cell-holiday">${heb.holiday}</div>` : ''}
+          ${heb.holiday ? `<div class="cell-holiday ${heb.holidayType}">${heb.holiday}</div>` : ''}
           ${heb.shabbat ? `<div class="cell-shabbat">${heb.shabbat}</div>` : ''}
           <div class="cell-entries-list">${entriesPills}</div>
         `;
@@ -1250,7 +1298,7 @@
         li.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" ${g.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleYearlyGoal(${idx})">
-            <span>${g.text}</span>
+            <span style="white-space:pre-wrap;">${g.text}</span>
           </div>
           <button onclick="removeYearlyGoal(${idx})" style="padding:2px 6px; font-size:0.75rem;">✕</button>
         `;
@@ -1296,6 +1344,7 @@
       document.getElementById('modalCategory').value = 'plan';
       document.getElementById('modalTitle').value = '';
       document.getElementById('modalText').value = '';
+      document.getElementById('modalExternalUrl').value = '';
       document.getElementById('modalShowFullWeekly').checked = false;
       document.getElementById('imagePreview').style.display = 'none';
       document.getElementById('modalPhoto').value = '';
@@ -1313,6 +1362,7 @@
       document.getElementById('modalCategory').value = entry.cat;
       document.getElementById('modalTitle').value = entry.title;
       document.getElementById('modalText').value = entry.text;
+      document.getElementById('modalExternalUrl').value = entry.externalUrl || '';
       document.getElementById('modalShowFullWeekly').checked = !!entry.showFullWeekly;
 
       const img = document.getElementById('imagePreview');
@@ -1349,6 +1399,7 @@
       const cat = document.getElementById('modalCategory').value;
       const title = document.getElementById('modalTitle').value.trim() || 'רשומה ללא כותרת';
       const text = document.getElementById('modalText').value.trim();
+      const externalUrl = document.getElementById('modalExternalUrl').value.trim();
       const showFullWeekly = document.getElementById('modalShowFullWeekly').checked;
 
       if (editingContext) {
@@ -1357,9 +1408,9 @@
           db.entries[dateKey].splice(idx, 1);
           if (db.entries[dateKey].length === 0) delete db.entries[dateKey];
           if (!db.entries[selectedDate]) db.entries[selectedDate] = [];
-          db.entries[selectedDate].push({ id: Date.now(), cat, title, text, showFullWeekly, img: tempImageBase64 });
+          db.entries[selectedDate].push({ id: Date.now(), cat, title, text, externalUrl, showFullWeekly, img: tempImageBase64 });
         } else {
-          db.entries[dateKey][idx] = { ...db.entries[dateKey][idx], cat, title, text, showFullWeekly, img: tempImageBase64 };
+          db.entries[dateKey][idx] = { ...db.entries[dateKey][idx], cat, title, text, externalUrl, showFullWeekly, img: tempImageBase64 };
         }
       } else {
         if (!db.entries[selectedDate]) db.entries[selectedDate] = [];
@@ -1368,6 +1419,7 @@
           cat,
           title,
           text,
+          externalUrl,
           showFullWeekly,
           img: tempImageBase64
         });
@@ -1378,7 +1430,7 @@
       renderCurrentView();
     }
 
-    /* ================= הצפנה וסנכרון Firebase ================= */
+    /* הצפנה וסנכרון ענן */
     function promptEncryptionKey() {
       const entered = prompt("הזן סיסמת הצפנה אישית (המידע יוצפן במכשירך בלבד לפני שליחתו לענן):", encryptionKey);
       if (entered !== null) {
