@@ -29,7 +29,6 @@
       --cat-insight: #f59e0b;
       --cat-memory: #10b981;
       
-      /* זמני יום מובחנים */
       --time-morning: rgba(245, 158, 11, 0.16);
       --time-morning-border: #f59e0b;
       --time-afternoon: rgba(2, 132, 199, 0.22);
@@ -37,7 +36,6 @@
       --time-evening: rgba(139, 92, 246, 0.22);
       --time-evening-border: #a855f7;
 
-      /* מועדים עבריים */
       --holiday-bg: rgba(244, 63, 94, 0.22);
       --holiday-border: #f43f5e;
       --holiday-text: #fda4af;
@@ -297,7 +295,6 @@
       color: var(--text-muted);
     }
 
-    /* חלון סיכום והערכה יומית */
     .daily-reflection-box {
       background: rgba(0,0,0,0.25);
       border: 1px solid var(--card-border);
@@ -337,7 +334,6 @@
     }
     .reflection-input:focus { border-color: #3b82f6; }
 
-    /* רשומות ותמונות ממוזערות */
     .entry-card { border-right: 4px solid #fff; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
     .entry-card.cat-plan { border-right-color: var(--cat-plan); background: rgba(59, 130, 246, 0.08); }
     .entry-card.cat-insight { border-right-color: var(--cat-insight); background: rgba(245, 158, 11, 0.08); }
@@ -348,16 +344,16 @@
     .entry-card.cat-memory .entry-badge { background: rgba(16, 185, 129, 0.25); color: #6ee7b7; }
     
     .entry-img-thumb {
-      width: 85px;
-      height: 65px;
+      width: 80px;
+      height: 60px;
       object-fit: cover;
       border-radius: 6px;
       margin-top: 6px;
       cursor: pointer;
       border: 1px solid var(--card-border);
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .entry-img-thumb:hover { transform: scale(1.05); }
+    .entry-img-thumb:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
 
     .doc-link-pill {
       display: inline-flex;
@@ -393,12 +389,58 @@
     .week-day-col:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.4); }
     .week-day-header { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; text-align: center; }
 
-    /* 3. תצוגה חודשית עברית צבעונית */
+    /* 3. תצוגה חודשית - פס תצוגה מקדימה ליום שנבחר בלחיצה בודדת */
+    .month-day-preview-bar {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .preview-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 5px;
+    }
+    .preview-bar-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      font-size: 0.84rem;
+    }
+    @media (max-width: 700px) { .preview-bar-content { grid-template-columns: 1fr; } }
+    .preview-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 4px;
+    }
+    .preview-chip {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 0.78rem;
+    }
+    .preview-chip.done {
+      text-decoration: line-through;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
     .month-names-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 700; color: var(--text-muted); font-size: 0.88rem; margin-bottom: 8px; }
     .month-days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
     .month-day-cell { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 10px; min-height: 102px; padding: 7px; display: flex; flex-direction: column; cursor: pointer; transition: all 0.15s; }
     .month-day-cell:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.3); }
     .month-day-cell.today { border: 2px solid #38bdf8; }
+    .month-day-cell.selected-day { border: 2px solid #f59e0b !important; background: rgba(245, 158, 11, 0.12) !important; }
     
     .month-day-cell.has-holiday { background: var(--holiday-bg) !important; border: 1px solid var(--holiday-border) !important; }
     .month-day-cell.has-fast { background: var(--fast-bg) !important; border: 1px solid var(--fast-border) !important; }
@@ -437,6 +479,7 @@
     .modal-content { background: #1e293b; border: 1px solid var(--card-border); border-radius: 16px; width: 100%; max-width: 530px; padding: 22px; display: flex; flex-direction: column; gap: 13px; }
     .modal-content input, .modal-content select, .modal-content textarea { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 8px; padding: 9px; color: white; font-size: 0.9rem; }
 
+    /* Lightbox להגדלת תמונה */
     .lightbox-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
     .lightbox-img { max-width: 90vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; }
   </style>
@@ -466,7 +509,6 @@
         <div class="secondary-tools-row">
           <button class="btn-tool" onclick="exportWeeklyMemoriesPDF()">📖 ספר PDF</button>
           <button class="btn-tool" onclick="exportGoogleCalendarICS()">📅 ייצוא ליומן</button>
-          <button class="btn-tool" onclick="exportStandaloneHTML()">💾 שמור HTML</button>
           <button class="btn-tool" onclick="changeBackground()">🎨 רקע</button>
           <button class="btn-tool" onclick="exportData()">💾 גיבוי</button>
           <button class="btn-tool" onclick="document.getElementById('importFile').click()">📂 שחזור</button>
@@ -580,6 +622,27 @@
     <!-- 3. תצוגה חודשית -->
     <div id="viewMonthly" class="view-container active">
       <div class="panel">
+        <!-- פס תצוגה מקדימה ליום שנבחר בלחיצה בודדת -->
+        <div id="monthDayPreviewBar" class="month-day-preview-bar" style="display:none;">
+          <div class="preview-bar-header">
+            <div>
+              <strong id="prevBarDateTitle" style="color:#38bdf8;">--</strong>
+              <span id="prevBarHebrewTitle" style="color:#94a3b8; font-size:0.8rem; margin-right:6px;"></span>
+            </div>
+            <button class="btn-primary" style="padding:3px 9px; font-size:0.75rem;" onclick="openSelectedDayDailyView()">פתח לו״ז יומי מלא ↗</button>
+          </div>
+          <div class="preview-bar-content">
+            <div>
+              <span style="font-weight:700; color:#fbbf24;">🌟 יעדי השבוע:</span>
+              <div id="prevBarWeeklyGoals" class="preview-chip-list"></div>
+            </div>
+            <div>
+              <span style="font-weight:700; color:#38bdf8;">🎯 משימות היום:</span>
+              <div id="prevBarDailyTasks" class="preview-chip-list"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="month-names-grid">
           <div>ראשון</div><div>שני</div><div>שלישי</div><div>רביעי</div><div>חמישי</div><div>שישי</div><div>שבת</div>
         </div>
@@ -625,7 +688,6 @@
       <label>פירוט מלא:</label>
       <textarea id="modalText" rows="4" placeholder="כתוב כאן בהרחבה..."></textarea>
 
-      <!-- חיבור למסמך מורחב / Google Docs -->
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
         <label style="font-size:0.85rem; color:#38bdf8;">📝 קישור למסמך חיצוני (Google Docs / Word):</label>
         <button type="button" class="btn-tool" onclick="window.open('https://docs.new', '_blank')">פתח מסמך חדש ↗</button>
@@ -640,7 +702,13 @@
       <div>
         <label>📸 תמונה (אופציונלי):</label>
         <input type="file" id="modalPhoto" accept="image/*" onchange="previewImage(event)">
-        <img id="imagePreview" style="display:none; width:85px; height:65px; object-fit:cover; border-radius:8px; margin-top:8px;">
+        
+        <div id="imagePreviewContainer" style="display:none; align-items:center; gap:8px; margin-top:8px;">
+          <img id="imagePreview" style="width:75px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer; border:1px solid var(--card-border);" 
+               onclick="openLightbox(this.src)" title="לחץ להגדלת התמונה">
+          <span style="font-size:0.75rem; color:#94a3b8;">(לחץ על התמונה להגדלה)</span>
+          <button type="button" onclick="removeSelectedImage()" style="padding:2px 6px; font-size:0.75rem; color:#ef4444;">מחק תמונה ✕</button>
+        </div>
       </div>
 
       <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
@@ -696,6 +764,7 @@
 
     let activeView = 'monthly';
     let anchorDate = new Date();
+    let selectedPreviewDate = null;
     let tempImageBase64 = null;
     let editingContext = null;
 
@@ -833,7 +902,6 @@
       renderCurrentView();
     }
 
-    /* Enter מוסיף משימה, Shift+Enter יורד שורה */
     function initEnterKeyListeners() {
       const attachEnter = (inputId, callback) => {
         const el = document.getElementById(inputId);
@@ -1198,7 +1266,7 @@
       renderWeeklyCardList(cardKey, weekKey);
     }
 
-    /* 3. תצוגה חודשית עברית צבעונית */
+    /* 3. תצוגה חודשית - לחיצה בודדת לתצוגה מקדימה, כפולה לכניסה ליום */
     function renderMonthlyView() {
       let startOfHebrewMonth = new Date(anchorDate);
       while (getHebrewDateInfo(startOfHebrewMonth).dayNum > 1) {
@@ -1241,8 +1309,20 @@
           holidayClass = `has-${heb.holidayType}`;
         }
 
-        cell.className = `month-day-cell ${dKey === todayStr ? 'today' : ''} ${holidayClass} ${isShab ? 'has-shabbat' : ''}`;
-        cell.onclick = () => { anchorDate = curDate; switchView('daily'); };
+        const isSelected = selectedPreviewDate && (formatDateKey(selectedPreviewDate) === dKey);
+
+        cell.className = `month-day-cell ${dKey === todayStr ? 'today' : ''} ${isSelected ? 'selected-day' : ''} ${holidayClass} ${isShab ? 'has-shabbat' : ''}`;
+        
+        // לחיצה בודדת מציגה את התקציר בפס העליון
+        cell.onclick = () => {
+          selectMonthDayForPreview(curDate);
+        };
+
+        // לחיצה כפולה עוברת ישירות ללו"ז היומי המלא
+        cell.ondblclick = () => {
+          anchorDate = curDate;
+          switchView('daily');
+        };
 
         const entriesPills = entries.slice(0, 3).map(e => `
           <div class="entry-pill-mini cat-${e.cat}">${e.title}</div>
@@ -1259,6 +1339,56 @@
         `;
         grid.appendChild(cell);
       });
+
+      if (selectedPreviewDate) {
+        updateMonthPreviewBar(selectedPreviewDate);
+      }
+    }
+
+    function selectMonthDayForPreview(date) {
+      selectedPreviewDate = date;
+      document.querySelectorAll('.month-day-cell').forEach(c => c.classList.remove('selected-day'));
+      renderMonthlyView();
+      updateMonthPreviewBar(date);
+    }
+
+    function updateMonthPreviewBar(date) {
+      const bar = document.getElementById('monthDayPreviewBar');
+      const dKey = formatDateKey(date);
+      const weekKey = getWeekKey(date);
+      const heb = getHebrewDateInfo(date);
+      const gregName = new Intl.DateTimeFormat('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' }).format(date);
+
+      document.getElementById('prevBarDateTitle').textContent = gregName;
+      document.getElementById('prevBarHebrewTitle').textContent = `• ${heb.hebrewDayAndMonth} ${heb.holiday ? '('+heb.holiday+')' : ''}`;
+
+      // הצגת יעדי שבוע
+      const weeklyBox = (db.weeklyBoxes && db.weeklyBoxes[weekKey]) || { core: [], tasks: [] };
+      const weekGoals = [...(weeklyBox.core || []), ...(weeklyBox.tasks || [])];
+      const wContainer = document.getElementById('prevBarWeeklyGoals');
+      if (weekGoals.length === 0) {
+        wContainer.innerHTML = '<span style="color:#64748b; font-size:0.75rem;">אין יעדים מוגדרים לשבוע זה</span>';
+      } else {
+        wContainer.innerHTML = weekGoals.map(g => `<span class="preview-chip ${g.done ? 'done' : ''}">${g.text}</span>`).join('');
+      }
+
+      // הצגת משימות יומיות
+      const dGoals = (db.dailyGoals && db.dailyGoals[dKey]) || [];
+      const dContainer = document.getElementById('prevBarDailyTasks');
+      if (dGoals.length === 0) {
+        dContainer.innerHTML = '<span style="color:#64748b; font-size:0.75rem;">אין מטלות ליום זה</span>';
+      } else {
+        dContainer.innerHTML = dGoals.map(g => `<span class="preview-chip ${g.done ? 'done' : ''}">${g.text}</span>`).join('');
+      }
+
+      bar.style.display = 'flex';
+    }
+
+    function openSelectedDayDailyView() {
+      if (selectedPreviewDate) {
+        anchorDate = new Date(selectedPreviewDate);
+        switchView('daily');
+      }
     }
 
     /* 4. תצוגה שנתית */
@@ -1346,7 +1476,7 @@
       document.getElementById('modalText').value = '';
       document.getElementById('modalExternalUrl').value = '';
       document.getElementById('modalShowFullWeekly').checked = false;
-      document.getElementById('imagePreview').style.display = 'none';
+      document.getElementById('imagePreviewContainer').style.display = 'none';
       document.getElementById('modalPhoto').value = '';
       toggleWeeklyCheckboxVisibility();
       document.getElementById('entryModal').style.display = 'flex';
@@ -1365,12 +1495,13 @@
       document.getElementById('modalExternalUrl').value = entry.externalUrl || '';
       document.getElementById('modalShowFullWeekly').checked = !!entry.showFullWeekly;
 
+      const container = document.getElementById('imagePreviewContainer');
       const img = document.getElementById('imagePreview');
       if (tempImageBase64) {
         img.src = tempImageBase64;
-        img.style.display = 'block';
+        container.style.display = 'flex';
       } else {
-        img.style.display = 'none';
+        container.style.display = 'none';
       }
       document.getElementById('modalPhoto').value = '';
       toggleWeeklyCheckboxVisibility();
@@ -1387,11 +1518,18 @@
       const reader = new FileReader();
       reader.onload = (event) => {
         tempImageBase64 = event.target.result;
+        const container = document.getElementById('imagePreviewContainer');
         const img = document.getElementById('imagePreview');
         img.src = tempImageBase64;
-        img.style.display = 'block';
+        container.style.display = 'flex';
       };
       reader.readAsDataURL(file);
+    }
+
+    function removeSelectedImage() {
+      tempImageBase64 = null;
+      document.getElementById('imagePreviewContainer').style.display = 'none';
+      document.getElementById('modalPhoto').value = '';
     }
 
     function saveEntryForm() {
@@ -1594,22 +1732,6 @@
         }
       };
       reader.readAsText(file);
-    }
-
-    function exportStandaloneHTML() {
-      const currentDocHtml = document.documentElement.outerHTML;
-      const serializedDB = JSON.stringify(db);
-      
-      const regex = /let db = JSON\.parse\(localStorage\.getItem\('[^']+'\)\) \|\| \{[\s\S]*?\};/;
-      const replacement = `let db = ${serializedDB}; // מידע שמור`;
-      
-      const updatedHtml = "<!DOCTYPE html>\n" + currentDocHtml.replace(regex, replacement);
-      const blob = new Blob([updatedHtml], { type: 'text/html;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `יומן_חיים_מלא_${formatDateKey(new Date())}.html`;
-      a.click();
-      alert("קובץ ה-HTML המלא ירד בהצלחה!\nפתח אותו ישירות בכל מכשיר או שמור כגיבוי ב-Drive.");
     }
 
     function exportGoogleCalendarICS() {
