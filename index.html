@@ -503,8 +503,7 @@
           <button class="btn-tool" onclick="exportWeeklyMemoriesPDF()">📖 ספר PDF</button>
           <button class="btn-tool" onclick="exportGoogleCalendarICS()">📅 ייצוא ליומן</button>
           <button class="btn-tool" onclick="changeBackground()">🎨 רקע</button>
-          <button class="btn-tool" onclick="exportData()">💾 גיבוי לקובץ</button>
-          <button class="btn-tool" onclick="document.getElementById('importFile').click()">📂 שחזור מקובץ</button>
+<button class="btn-tool" onclick="saveToFixedFile()" title="שמור ועדכן קובץ קבוע במחשב">💾 עדכן קובץ קבוע</button>          <button class="btn-tool" onclick="document.getElementById('importFile').click()">📂 שחזור מקובץ</button>
           <input type="file" id="importFile" style="display:none" onchange="importData(event)">
         </div>
       </div>
@@ -1799,6 +1798,39 @@
       a.click();
     }
 
+let fixedFileHandle = null;
+
+async function saveToFixedFile() {
+  try {
+    // בדיקה האם הדפדפן תומך בשמירה ישירה לקובץ (Chrome / Edge / Opera)
+    if ('showSaveFilePicker' in window) {
+      if (!fixedFileHandle) {
+        fixedFileHandle = await window.showSaveFilePicker({
+          suggestedName: 'יומן_אישי_גיבוי_קבוע.json',
+          types: [{
+            description: 'קובץ גיבוי JSON',
+            accept: { 'application/json': ['.json'] }
+          }]
+        });
+      }
+      
+      // כתיבה ודריסה ישירה של אותו הקובץ
+      const writable = await fixedFileHandle.createWritable();
+      await writable.write(JSON.stringify(db, null, 2));
+      await writable.close();
+      
+      alert("הקובץ הקבוע עודכן בהצלחה במחשבך!");
+    } else {
+      // דפדפן שאינו תומך בגישה לקבצים - הורדה רגילה כחלופה
+      exportData();
+    }
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      console.error("שגיאה בעדכון הקובץ:", err);
+    }
+  }
+}
+    
     function importData(e) {
       const file = e.target.files[0];
       if (!file) return;
