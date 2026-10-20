@@ -488,6 +488,9 @@
           <button class="btn-tool" style="background:#0284c7; color:#fff; font-weight:700; padding:5px 10px; font-size:0.8rem;" onclick="copyBackupToDocs()" title="העתק קוד גיבוי מלא ללוח להדבקה במסמך Google Docs">
             📋 גיבוי ל-Docs
           </button>
+          <button class="btn-tool" style="background:#475569; color:#fff; font-weight:700; padding:5px 10px; font-size:0.8rem;" onclick="saveToFixedFile()" title="שמור ועדכן קובץ גיבוי קבוע במחשב">
+            💾 עדכן קובץ קבוע
+          </button>
           <button class="btn-tool" style="background:#16a34a; color:#fff; font-weight:700; padding:5px 10px; font-size:0.8rem;" onclick="restoreFromBackupCode()" title="שחזור יומן מקוד גיבוי שהעתקת מ-Google Docs">
             🔄 שחזור מקוד
           </button>
@@ -503,7 +506,8 @@
           <button class="btn-tool" onclick="exportWeeklyMemoriesPDF()">📖 ספר PDF</button>
           <button class="btn-tool" onclick="exportGoogleCalendarICS()">📅 ייצוא ליומן</button>
           <button class="btn-tool" onclick="changeBackground()">🎨 רקע</button>
-<button class="btn-tool" onclick="saveToFixedFile()" title="שמור ועדכן קובץ קבוע במחשב">💾 עדכן קובץ קבוע</button>          <button class="btn-tool" onclick="document.getElementById('importFile').click()">📂 שחזור מקובץ</button>
+          <button class="btn-tool" onclick="exportData()">💾 הורד קובץ חדש</button>
+          <button class="btn-tool" onclick="document.getElementById('importFile').click()">📂 שחזור מקובץ</button>
           <input type="file" id="importFile" style="display:none" onchange="importData(event)">
         </div>
       </div>
@@ -767,6 +771,7 @@
     let isCloudConfigured = false;
     let cloudSyncUnsubscribe = null;
     let isRegisterMode = false;
+    let fixedFileHandle = null;
 
     try {
       firebase.initializeApp(firebaseConfig);
@@ -1111,7 +1116,9 @@
     }
 
     function removeDailyGoal(dateKey, idx) {
+      if (!db.dailyGoals || !db.dailyGoals[dateKey]) return;
       db.dailyGoals[dateKey].splice(idx, 1);
+      if (db.dailyGoals[dateKey].length === 0) delete db.dailyGoals[dateKey];
       saveDB();
       renderDailyGoals(dateKey);
     }
@@ -1152,8 +1159,8 @@
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <span class="entry-badge">${catName}</span>
             <div style="display:flex; gap:6px;">
-              <button onclick="editEntry('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem;">ערוך ✏️</button>
-              <button onclick="deleteEntry('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem;">מחק</button>
+              <button type="button" onclick="editEntry('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem;">ערוך ✏️</button>
+              <button type="button" onclick="deleteEntry('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem; color:#ef4444;">מחק ✕</button>
             </div>
           </div>
           <h4 style="font-size:0.95rem;">${e.title}</h4>
@@ -1165,12 +1172,20 @@
       });
     }
 
+    /* תיקון מחיקת רשומה – מחיקה מיידית וסופית ללא שחזור בענן */
     function deleteEntry(dateKey, idx) {
+      if (!confirm("האם אתה בטוח שברצונך למחוק רשומה זו?")) return;
+      if (!db.entries || !db.entries[dateKey]) return;
+
       db.entries[dateKey].splice(idx, 1);
-      if (db.entries[dateKey].length === 0) delete db.entries[dateKey];
+      if (db.entries[dateKey].length === 0) {
+        delete db.entries[dateKey];
+      }
+
       saveDB();
       renderDailyEntries(dateKey);
       renderMonthlyView();
+      if (activeView === 'weekly') renderWeeklyView();
     }
 
     function openLightbox(src) {
@@ -1288,6 +1303,7 @@
     }
 
     function removeWeeklyCardGoal(weekKey, cardKey, idx) {
+      if (!db.weeklyBoxes || !db.weeklyBoxes[weekKey] || !db.weeklyBoxes[weekKey][cardKey]) return;
       db.weeklyBoxes[weekKey][cardKey].splice(idx, 1);
       saveDB();
       renderWeeklyCardList(cardKey, weekKey);
@@ -1477,6 +1493,7 @@
     }
 
     function removeYearlyGoal(idx) {
+      if (!db.yearlyGoals) return;
       db.yearlyGoals.splice(idx, 1);
       saveDB();
       renderYearlyGoals();
@@ -1690,6 +1707,9 @@
 
         if (user) {
           cloudSyncUnsubscribe = firestoreDb.collection('users').doc(user.uid).onSnapshot(doc => {
+            // התעלמות מהד מקומי של פעולות כתיבה
+            if (doc.metadata && doc.metadata.hasPendingWrites) return;
+
             if (doc.exists) {
               const cloudDoc = doc.data();
               const cloudData = cloudDoc.journalData || null;
@@ -1699,12 +1719,14 @@
                 const localStr = JSON.stringify(db);
 
                 if (cloudStr !== localStr) {
-                  db = Object.assign(db, cloudData);
+                  // החלפה נקייה ומלאה – מבטיחה שמחיקות נכנסות לתוקף
+                  db = JSON.parse(JSON.stringify(cloudData));
                   if (!db.dailyReflections) db.dailyReflections = {};
+                  if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
                   localStorage.setItem('hebrew_life_journal_v8', JSON.stringify(db));
                   renderHeaderToday();
                   renderCurrentView();
-                  console.log("סנכרון ענן התקבל בהצלחה ממכשיר אחר!");
+                  console.log("סנכרון ענן התקבל בהצלחה!");
                 }
               }
             } else {
@@ -1742,13 +1764,14 @@
       syncStateToCloud();
     }
 
+    /* שמירה נקייה בענן ללא merge שמשחזר נתונים שנמחקו */
     function syncStateToCloud() {
       if (isCloudConfigured && currentUser && firestoreDb) {
         firestoreDb.collection('users').doc(currentUser.uid).set({
           journalData: db,
           lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
           userEmail: currentUser.email || ''
-        }, { merge: true }).catch(err => console.error("Cloud Save Error:", err));
+        }).catch(err => console.error("Cloud Save Error:", err));
       }
     }
 
@@ -1762,14 +1785,42 @@
       });
     }
 
+    /* שמירה ישירה לקובץ קבוע ללא הורדות כפולות */
+    async function saveToFixedFile() {
+      try {
+        if ('showSaveFilePicker' in window) {
+          if (!fixedFileHandle) {
+            fixedFileHandle = await window.showSaveFilePicker({
+              suggestedName: 'יומן_אישי_גיבוי_קבוע.json',
+              types: [{
+                description: 'קובץ גיבוי JSON',
+                accept: { 'application/json': ['.json'] }
+              }]
+            });
+          }
+          const writable = await fixedFileHandle.createWritable();
+          await writable.write(JSON.stringify(db, null, 2));
+          await writable.close();
+          alert("הקובץ הקבוע עודכן בהצלחה במחשבך!");
+        } else {
+          exportData();
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error("שגיאה בעדכון הקובץ:", err);
+        }
+      }
+    }
+
     function restoreFromBackupCode() {
       const input = prompt("הדבק כאן את קוד הגיבוי (מתוך מסמך ה-Google Docs או קובץ הגיבוי):");
       if (!input) return;
       try {
         const parsed = JSON.parse(input.trim());
         if (parsed && typeof parsed === 'object') {
-          db = Object.assign(db, parsed);
+          db = JSON.parse(JSON.stringify(parsed));
           if (!db.dailyReflections) db.dailyReflections = {};
+          if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
           saveDB();
           renderHeaderToday();
           renderCurrentView();
@@ -1798,39 +1849,6 @@
       a.click();
     }
 
-let fixedFileHandle = null;
-
-async function saveToFixedFile() {
-  try {
-    // בדיקה האם הדפדפן תומך בשמירה ישירה לקובץ (Chrome / Edge / Opera)
-    if ('showSaveFilePicker' in window) {
-      if (!fixedFileHandle) {
-        fixedFileHandle = await window.showSaveFilePicker({
-          suggestedName: 'יומן_אישי_גיבוי_קבוע.json',
-          types: [{
-            description: 'קובץ גיבוי JSON',
-            accept: { 'application/json': ['.json'] }
-          }]
-        });
-      }
-      
-      // כתיבה ודריסה ישירה של אותו הקובץ
-      const writable = await fixedFileHandle.createWritable();
-      await writable.write(JSON.stringify(db, null, 2));
-      await writable.close();
-      
-      alert("הקובץ הקבוע עודכן בהצלחה במחשבך!");
-    } else {
-      // דפדפן שאינו תומך בגישה לקבצים - הורדה רגילה כחלופה
-      exportData();
-    }
-  } catch (err) {
-    if (err.name !== 'AbortError') {
-      console.error("שגיאה בעדכון הקובץ:", err);
-    }
-  }
-}
-    
     function importData(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -1839,6 +1857,7 @@ async function saveToFixedFile() {
         try {
           db = JSON.parse(event.target.result);
           if (!db.dailyReflections) db.dailyReflections = {};
+          if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
           saveDB();
           init();
           alert("הנתונים שוחזרו בהצלחה מהקובץ!");
