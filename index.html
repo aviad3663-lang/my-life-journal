@@ -167,6 +167,25 @@
     }
     .user-badge img { width: 18px; height: 18px; border-radius: 50%; }
 
+    /* באנר משפט מחזק */
+    .time-quote-banner {
+      background: linear-gradient(90deg, rgba(234, 179, 8, 0.12), rgba(56, 189, 248, 0.12));
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 10px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: #fef08a;
+    }
+    .time-quote-text {
+      font-style: italic;
+      line-height: 1.4;
+      flex: 1;
+    }
+
     .nav-toolbar {
       display: flex;
       justify-content: space-between;
@@ -192,7 +211,7 @@
       padding: 16px;
     }
 
-    /* תצוגה יומית */
+    /* 1. תצוגה יומית */
     .daily-layout {
       display: grid;
       grid-template-columns: 1.1fr 1fr;
@@ -362,7 +381,7 @@
       margin-top: 4px;
     }
 
-    /* תצוגה שבועית */
+    /* 2. תצוגה שבועית */
     .weekly-boxes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
     @media (max-width: 800px) { .weekly-boxes-grid { grid-template-columns: 1fr; } }
     .weekly-box-card { border-radius: 14px; padding: 15px; display: flex; flex-direction: column; gap: 9px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
@@ -380,7 +399,7 @@
     .week-day-col:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.4); }
     .week-day-header { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; text-align: center; }
 
-    /* תצוגה חודשית */
+    /* 3. תצוגה חודשית */
     .month-day-preview-bar {
       background: rgba(0, 0, 0, 0.35);
       border: 1px solid var(--card-border);
@@ -457,7 +476,7 @@
     .entry-pill-mini.cat-insight { background: #d97706; }
     .entry-pill-mini.cat-memory { background: #059669; }
 
-    /* תצוגה שנתית */
+    /* 4. תצוגה שנתית */
     .year-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     @media (max-width: 900px) { .year-grid { grid-template-columns: repeat(2, 1fr); } }
     .year-month-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
@@ -472,6 +491,87 @@
 
     .lightbox-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
     .lightbox-img { max-width: 90vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; }
+
+    /* פנקס מטלות מהיר צף */
+    #btnQuickNotesToggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 9999;
+      background: #eab308;
+      color: #1c1917;
+      border: 2px solid #facc15;
+      border-radius: 50px;
+      padding: 10px 18px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(234, 179, 8, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #btnQuickNotesToggle:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 12px 28px rgba(234, 179, 8, 0.6);
+    }
+    .quick-badge {
+      background: #1c1917;
+      color: #fef08a;
+      border-radius: 12px;
+      padding: 1px 7px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    #quickNotesDrawer {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      left: 24px;
+      z-index: 10000;
+      width: 340px;
+      max-width: 92vw;
+      background: #1c1917;
+      border: 2px solid #eab308;
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.85);
+      overflow: hidden;
+      font-family: system-ui, sans-serif;
+      direction: rtl;
+    }
+    .quick-drawer-header {
+      background: #eab308;
+      color: #1c1917;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+    .quick-task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #292524;
+      border: 1px solid #44403c;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      color: #f5f5f4;
+      transition: all 0.15s;
+    }
+    .quick-task-item.done {
+      opacity: 0.5;
+      background: #1c1917;
+    }
+    .quick-task-item.done span {
+      text-decoration: line-through;
+      color: #a8a29e;
+    }
   </style>
 </head>
 <body>
@@ -512,6 +612,17 @@
         </div>
       </div>
     </header>
+
+    <!-- באנר משפטים מחזקים בניצול זמנים -->
+    <div class="time-quote-banner">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.1rem;">⏳</span>
+        <span class="time-quote-text" id="timeQuoteDisplay">טוען משפט מעצים...</span>
+      </div>
+      <button onclick="rotateTimeQuote()" title="החלף משפט" style="background:rgba(255,255,255,0.1); border:none; color:#fef08a; padding:4px 8px; font-size:0.75rem; border-radius:6px; cursor:pointer;">
+        הבא ↻
+      </button>
+    </div>
 
     <div class="nav-toolbar">
       <div class="view-switcher">
@@ -659,6 +770,27 @@
     </div>
   </div>
 
+  <!-- כפתור פנקס מטלות מהיר צף -->
+  <button id="btnQuickNotesToggle" onclick="toggleQuickNotesModal()" title="פנקס מטלות מהיר">
+    <span>📝 פנקס מהיר</span>
+    <span class="quick-badge" id="quickNotesBadge" style="display:none;">0</span>
+  </button>
+
+  <!-- חלונית פנקס מטלות מהיר -->
+  <div id="quickNotesDrawer">
+    <div class="quick-drawer-header">
+      <span>📝 פנקס מטלות מהיר</span>
+      <button onclick="toggleQuickNotesModal()" style="background:none; border:none; font-size:1.15rem; color:#1c1917; cursor:pointer; font-weight:bold; padding:0 4px;">✕</button>
+    </div>
+    <div style="padding:12px;">
+      <div style="display:flex; gap:6px; margin-bottom:10px;">
+        <input type="text" id="quickTaskInput" placeholder="משימה קצרה לפנקס..." style="flex:1; background:#292524; border:1px solid #57534e; border-radius:8px; padding:7px 10px; color:#fef08a; font-size:0.88rem; outline:none;">
+        <button onclick="addQuickTask()" style="background:#eab308; color:#1c1917; border:none; border-radius:8px; padding:7px 12px; font-weight:800; cursor:pointer;">הוסף</button>
+      </div>
+      <div id="quickTasksList" style="display:flex; flex-direction:column; gap:6px; max-height:260px; overflow-y:auto;"></div>
+    </div>
+  </div>
+
   <!-- מודל רשומה -->
   <div class="modal" id="entryModal">
     <div class="modal-content">
@@ -789,17 +921,38 @@
       dailyReflections: {},
       weeklyBoxes: {},
       yearlyGoals: [],
+      quickTasks: [],
       parshiotCache: {}
     };
 
     if (!db.dailyReflections) db.dailyReflections = {};
     if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
+    if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
 
     let activeView = 'monthly';
     let anchorDate = new Date();
     let selectedPreviewDate = null;
     let tempImageBase64 = null;
     let editingContext = null;
+
+    // מאגר משפטים מעצימים בניצול זמן
+    const timeQuotes = [
+      "הזמן הוא המשאב היחיד שלא ניתן לקנות או להחזיר – כל דקה היא השקעה בעתידך.",
+      "מי שמתכנן את יומו שולט בחייו; מי שאינו מתכנן – יומו שולט בו.",
+      "אל תספור את הימים, גרום לכל יום להיספר.",
+      "רגע אחד של ריכוז ויישוב הדעת שווה שעות של פיזור נפש.",
+      "סדר ומיקוד חיצוני מביאים לשלווה ולהספק מרבי.",
+      "ההבדל בין חלום למציאות הוא תוכנית פעולה ונחישות של הרגע הנוכחי.",
+      "דחיינות גוזלת לא רק זמן, אלא בעיקר שלוות נפש.",
+      "מי שמנצח את הבוקר, מנצח את כל היום כולו.",
+      "אל תחכה לרגע המושלם; קח את הרגע והפוך אותו למושלם."
+    ];
+    let currentQuoteIndex = 0;
+
+    function rotateTimeQuote() {
+      currentQuoteIndex = (currentQuoteIndex + 1) % timeQuotes.length;
+      document.getElementById('timeQuoteDisplay').textContent = timeQuotes[currentQuoteIndex];
+    }
 
     function toHebrewNumeral(n) {
       const map = {
@@ -932,6 +1085,11 @@
       fetchParshiotForYear(new Date().getFullYear() + 1);
       renderHeaderToday();
       renderCurrentView();
+      renderQuickTasks();
+
+      // בחירת משפט ראשוני לפי יום בחודש
+      currentQuoteIndex = new Date().getDate() % timeQuotes.length;
+      document.getElementById('timeQuoteDisplay').textContent = timeQuotes[currentQuoteIndex];
     }
 
     function initEnterKeyListeners() {
@@ -948,6 +1106,7 @@
       };
 
       attachEnter('dailyGoalInput', addDailyGoal);
+      attachEnter('quickTaskInput', addQuickTask);
       attachEnter('wGoal1Input', () => addWeeklyCardGoal('core'));
       attachEnter('wGoal2Input', () => addWeeklyCardGoal('tasks'));
       attachEnter('wGoal3Input', () => addWeeklyCardGoal('habits'));
@@ -1003,7 +1162,7 @@
       else if (activeView === 'yearly') renderYearlyView();
     }
 
-    /* 1. תצוגה יומית */
+    /* 1. תצוגה יומית - מתוקנת עבור גרשיים (") ללא מחיקה */
     function renderDailyView() {
       const dateKey = formatDateKey(anchorDate);
       const isToday = (dateKey === formatDateKey(new Date()));
@@ -1053,14 +1212,23 @@
 
         const row = document.createElement('div');
         row.className = `hour-row ${periodClass} ${isCurrentSlot ? 'current-hour' : ''}`;
-        row.innerHTML = `
-          <div class="hour-label">
-            ${periodIcon} ${timeStr}
-            ${isCurrentSlot ? '<span class="current-hour-tag">עכשיו</span>' : ''}
-          </div>
-          <input type="text" class="hour-input" value="${val}" placeholder="משימה לשעה זו..." 
-                 onchange="saveScheduleHour('${dateKey}', '${timeStr}', this.value)">
-        `;
+
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'hour-label';
+        labelDiv.innerHTML = `${periodIcon} ${timeStr} ${isCurrentSlot ? '<span class="current-hour-tag">עכשיו</span>' : ''}`;
+
+        // יצירת תיבת הטקסט באמצעות DOM property – מונע מחיקת גרשיים לחלוטין!
+        const inputEl = document.createElement('input');
+        inputEl.type = 'text';
+        inputEl.className = 'hour-input';
+        inputEl.value = val;
+        inputEl.placeholder = 'משימה לשעה זו...';
+        inputEl.addEventListener('change', () => {
+          saveScheduleHour(dateKey, timeStr, inputEl.value);
+        });
+
+        row.appendChild(labelDiv);
+        row.appendChild(inputEl);
         scheduleContainer.appendChild(row);
       }
 
@@ -1172,7 +1340,6 @@
       });
     }
 
-    /* תיקון מחיקת רשומה – מחיקה מיידית וסופית ללא שחזור בענן */
     function deleteEntry(dateKey, idx) {
       if (!confirm("האם אתה בטוח שברצונך למחוק רשומה זו?")) return;
       if (!db.entries || !db.entries[dateKey]) return;
@@ -1499,6 +1666,76 @@
       renderYearlyGoals();
     }
 
+    /* פנקס מטלות מהיר צף (Floating Tasks) */
+    function toggleQuickNotesModal() {
+      const drawer = document.getElementById('quickNotesDrawer');
+      const isVisible = drawer.style.display === 'block';
+      drawer.style.display = isVisible ? 'none' : 'block';
+      if (!isVisible) {
+        document.getElementById('quickTaskInput').focus();
+      }
+    }
+
+    function renderQuickTasks() {
+      const list = document.getElementById('quickTasksList');
+      const badge = document.getElementById('quickNotesBadge');
+      list.innerHTML = '';
+      
+      const tasks = db.quickTasks || [];
+      const pendingCount = tasks.filter(t => !t.done).length;
+
+      if (pendingCount > 0) {
+        badge.style.display = 'inline-block';
+        badge.textContent = pendingCount;
+      } else {
+        badge.style.display = 'none';
+      }
+
+      if (tasks.length === 0) {
+        list.innerHTML = '<div style="color:#a8a29e; font-size:0.8rem; text-align:center; padding:12px 0;">אין משימות בפנקס. הקלד משימה למעלה!</div>';
+        return;
+      }
+
+      tasks.forEach((t, idx) => {
+        const item = document.createElement('div');
+        item.className = `quick-task-item ${t.done ? 'done' : ''}`;
+        item.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px; flex:1; cursor:pointer;" onclick="toggleQuickTask(${idx})">
+            <input type="checkbox" ${t.done ? 'checked' : ''} style="cursor:pointer;" onclick="event.stopPropagation(); toggleQuickTask(${idx})">
+            <span style="white-space:pre-wrap; word-break:break-word;">${t.text}</span>
+          </div>
+          <button type="button" onclick="deleteQuickTask(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.85rem; padding:2px 4px;">✕</button>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function addQuickTask() {
+      const input = document.getElementById('quickTaskInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
+      db.quickTasks.unshift({ text, done: false, id: Date.now() });
+      input.value = '';
+      saveDB();
+      renderQuickTasks();
+    }
+
+    function toggleQuickTask(idx) {
+      if (!db.quickTasks || !db.quickTasks[idx]) return;
+      db.quickTasks[idx].done = !db.quickTasks[idx].done;
+      saveDB();
+      renderQuickTasks();
+    }
+
+    function deleteQuickTask(idx) {
+      if (!db.quickTasks || !db.quickTasks[idx]) return;
+      db.quickTasks.splice(idx, 1);
+      saveDB();
+      renderQuickTasks();
+    }
+
     /* מודל רשומה */
     function toggleWeeklyCheckboxVisibility() {
       const cat = document.getElementById('modalCategory').value;
@@ -1707,7 +1944,6 @@
 
         if (user) {
           cloudSyncUnsubscribe = firestoreDb.collection('users').doc(user.uid).onSnapshot(doc => {
-            // התעלמות מהד מקומי של פעולות כתיבה
             if (doc.metadata && doc.metadata.hasPendingWrites) return;
 
             if (doc.exists) {
@@ -1719,13 +1955,14 @@
                 const localStr = JSON.stringify(db);
 
                 if (cloudStr !== localStr) {
-                  // החלפה נקייה ומלאה – מבטיחה שמחיקות נכנסות לתוקף
                   db = JSON.parse(JSON.stringify(cloudData));
                   if (!db.dailyReflections) db.dailyReflections = {};
                   if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
+                  if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
                   localStorage.setItem('hebrew_life_journal_v8', JSON.stringify(db));
                   renderHeaderToday();
                   renderCurrentView();
+                  renderQuickTasks();
                   console.log("סנכרון ענן התקבל בהצלחה!");
                 }
               }
@@ -1764,7 +2001,6 @@
       syncStateToCloud();
     }
 
-    /* שמירה נקייה בענן ללא merge שמשחזר נתונים שנמחקו */
     function syncStateToCloud() {
       if (isCloudConfigured && currentUser && firestoreDb) {
         firestoreDb.collection('users').doc(currentUser.uid).set({
@@ -1785,7 +2021,6 @@
       });
     }
 
-    /* שמירה ישירה לקובץ קבוע ללא הורדות כפולות */
     async function saveToFixedFile() {
       try {
         if ('showSaveFilePicker' in window) {
@@ -1821,10 +2056,12 @@
           db = JSON.parse(JSON.stringify(parsed));
           if (!db.dailyReflections) db.dailyReflections = {};
           if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
+          if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
           saveDB();
           renderHeaderToday();
           renderCurrentView();
-          alert("כל הנתונים, הלו\"ז והרשומות שוחזרו בהצלחה!");
+          renderQuickTasks();
+          alert("כל הנתונים, הלו\"ז, הרשומות והפנקס שוחזרו בהצלחה!");
         } else {
           throw new Error();
         }
@@ -1858,6 +2095,7 @@
           db = JSON.parse(event.target.result);
           if (!db.dailyReflections) db.dailyReflections = {};
           if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
+          if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
           saveDB();
           init();
           alert("הנתונים שוחזרו בהצלחה מהקובץ!");
