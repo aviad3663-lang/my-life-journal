@@ -98,6 +98,10 @@
       flex-direction: column;
       align-items: flex-end;
       gap: 8px;
+      margin-left: 175px; /* מרווח עבור כפתור היעדים הצף בצד שמאל למעלה */
+    }
+    @media (max-width: 768px) {
+      .header-controls { margin-left: 0; margin-top: 45px; }
     }
 
     .primary-auth-row {
@@ -476,14 +480,14 @@
     .entry-pill-mini.cat-insight { background: #d97706; }
     .entry-pill-mini.cat-memory { background: #059669; }
 
-    /* 4. תצוגת סמסטר א׳ תשפ״ז */
+    /* 4. תצוגת סמסטר א׳ תשפ״ז - לוח שנה מלא */
     .semester-dashboard {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
       border: 1px solid #38bdf8;
       border-radius: 16px;
       padding: 18px;
       margin-bottom: 18px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
     }
     .semester-stats-grid {
       display: grid;
@@ -517,47 +521,97 @@
       transition: width 0.5s ease;
     }
 
-    .semester-weeks-stream {
+    .sem-legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.78rem;
+    }
+    .sem-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .sem-legend-dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+    /* רשת חודשי הסמסטר */
+    .sem-calendar-months-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) { .sem-calendar-months-grid { grid-template-columns: 1fr; } }
+
+    .sem-month-block {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .sem-month-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #60a5fa;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sem-month-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: 0.8rem;
+    }
+    .sem-month-table th {
+      color: #94a3b8;
+      font-weight: 700;
+      padding: 4px 2px;
+      font-size: 0.75rem;
+    }
+    .sem-month-table td {
+      padding: 4px 2px;
+      vertical-align: middle;
+    }
+    .sem-day-cell-num {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      max-height: 650px;
-      overflow-y: auto;
-      padding-left: 6px;
-    }
-    .sem-week-row {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px 16px;
-      display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      transition: all 0.2s;
-    }
-    .sem-week-row:hover {
-      border-color: rgba(56, 189, 248, 0.5);
-      background: rgba(30, 41, 59, 0.85);
-    }
-    .sem-week-row.current-sem-week {
-      border: 2px solid #22c55e !important;
-      background: rgba(34, 197, 94, 0.12) !important;
-      box-shadow: 0 0 16px rgba(34, 197, 94, 0.25);
-    }
-    .sem-week-row.exam-period {
-      border-right: 5px solid #a855f7;
-      background: rgba(168, 85, 247, 0.12);
-    }
-    .sem-week-row.holiday-period {
-      border-right: 5px solid #eab308;
-      background: rgba(234, 179, 8, 0.12);
-    }
-    .sem-week-badge {
-      font-size: 0.75rem;
-      padding: 3px 8px;
+      justify-content: center;
+      min-height: 38px;
       border-radius: 6px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .sem-day-cell-num.empty { opacity: 0; pointer-events: none; }
+    .sem-day-cell-num.before-sem { opacity: 0.35; color: #64748b; }
+    .sem-day-cell-num.regular-sem { background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.15); }
+    .sem-day-cell-num.is-holiday { background: rgba(234, 179, 8, 0.22); border-color: #eab308; color: #fef08a; font-weight: 800; }
+    .sem-day-cell-num.is-fast { background: rgba(234, 88, 12, 0.25); border-color: #ea580c; color: #fdba74; font-weight: 800; }
+    .sem-day-cell-num.is-celebration { background: rgba(16, 185, 129, 0.22); border-color: #10b981; color: #a7f3d0; font-weight: 800; }
+    .sem-day-cell-num.is-exam-a { background: rgba(168, 85, 247, 0.22); border-color: #a855f7; color: #e9d5ff; font-weight: 800; }
+    .sem-day-cell-num.is-exam-b { background: rgba(225, 29, 72, 0.22); border-color: #e11d48; color: #fecdd3; font-weight: 800; }
+    .sem-day-cell-num.is-today {
+      border: 2px solid #22c55e !important;
+      background: rgba(34, 197, 94, 0.25) !important;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+    }
+    .sem-week-badge-col {
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      padding: 3px 5px;
+      font-size: 0.68rem;
       font-weight: 700;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+    .sem-week-badge-col.is-cur-week {
+      background: #22c55e;
+      color: #052e16;
+      font-weight: 900;
     }
 
     /* 5. תצוגה שנתית */
@@ -568,7 +622,7 @@
     .year-hebrew-title { font-size: 1.4rem; font-weight: 800; color: #60a5fa; margin-bottom: 6px; }
     .year-greg-sub { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
 
-    /* פנקס מהיר צהוב צף (שמאל) */
+    /* פנקס מהיר צהוב צף (שמאל למטה) */
     #btnQuickNotesToggle {
       position: fixed;
       bottom: 24px;
@@ -649,21 +703,21 @@
       color: #a8a29e;
     }
 
-    /* כפתור יעדי סמסטר ומעקב צעדים (ימין) */
+    /* כפתור יעדי סמסטר - פינה שמאלית עליונה (Top-Left) */
     #btnSemesterGoalsToggle {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      top: 18px;
+      left: 18px;
       z-index: 9999;
       background: linear-gradient(135deg, #f97316, #ef4444);
       color: #ffffff;
-      border: 2px solid #fdba74;
+      border: 2px solid #fed7aa;
       border-radius: 50px;
-      padding: 10px 18px;
+      padding: 9px 18px;
       font-weight: 800;
       font-size: 0.92rem;
       cursor: pointer;
-      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.45);
+      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.55);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -671,21 +725,21 @@
     }
     #btnSemesterGoalsToggle:hover {
       transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 12px 30px rgba(239, 68, 68, 0.65);
+      box-shadow: 0 12px 30px rgba(239, 68, 68, 0.75);
     }
 
     #semesterGoalsDrawer {
       display: none;
       position: fixed;
-      bottom: 80px;
-      right: 24px;
+      top: 68px;
+      left: 18px;
       z-index: 10000;
-      width: 440px;
+      width: 450px;
       max-width: 94vw;
       background: #18181b;
       border: 2px solid #f97316;
       border-radius: 18px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.92);
       overflow: hidden;
       font-family: system-ui, sans-serif;
       direction: rtl;
@@ -705,10 +759,15 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
       padding-bottom: 10px;
     }
-    .sem-cat-title {
-      font-size: 0.9rem;
-      font-weight: 700;
+    .sem-cat-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 8px;
+    }
+    .sem-cat-title {
+      font-size: 0.92rem;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -737,11 +796,10 @@
       color: #fff;
       border: none;
       border-radius: 6px;
-      padding: 2px 7px;
+      padding: 3px 8px;
       font-size: 0.75rem;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.15s;
     }
     .btn-step-plus:hover { background: #0369a1; }
     .steps-pill {
@@ -749,10 +807,47 @@
       color: #4ade80;
       border: 1px solid rgba(34, 197, 94, 0.4);
       border-radius: 12px;
-      padding: 1px 6px;
+      padding: 2px 7px;
       font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
+    }
+
+    /* חלון צף להצגת צעדי יעד (Steps Log Modal) */
+    #stepsLogModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      z-index: 100001;
+      direction: rtl;
+      font-family: system-ui, sans-serif;
+    }
+    .steps-modal-box {
+      background: #18181b;
+      border: 2px solid #38bdf8;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 480px;
+      padding: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      color: #fff;
+    }
+    .step-log-item {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      border-right: 4px solid #38bdf8;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      font-size: 0.88rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
     }
 
     /* מודלים כלליים */
@@ -765,6 +860,12 @@
   </style>
 </head>
 <body>
+
+  <!-- כפתור יעדי סמסטר צף (בפינה השמאלית העליונה) -->
+  <button id="btnSemesterGoalsToggle" onclick="toggleSemesterGoalsDrawer()" title="יעדי סמסטר ומעקב צעדים">
+    <span>🎯 יעדי סמסטר</span>
+    <span class="quick-badge" id="semGoalsBadge" style="background:#fff; color:#ef4444; font-weight:800; display:none;">0</span>
+  </button>
 
   <div class="app-container">
     <header>
@@ -947,15 +1048,15 @@
       </div>
     </div>
 
-    <!-- 4. תצוגת סמסטר א׳ תשפ״ז -->
+    <!-- 4. תצוגת סמסטר א׳ תשפ״ז - לוח שנה מלא -->
     <div id="viewSemester" class="view-container">
       <div class="semester-dashboard">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
             <h2 style="font-size:1.35rem; color:#38bdf8; margin:0;">🎓 סמסטר א׳ • תשפ״ז (2026-2027)</h2>
-            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:3px;">המרכז האקדמי לב • מעקב שבועות, הגשות ותקופת מבחנים</div>
+            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:3px;">המרכז האקדמי לב • נפתח ב-11.10.2026 • 14 שבועות הוראה ותקופת בחינות</div>
           </div>
-          <span id="semesterCurrentStatusBadge" class="sem-week-badge" style="background:#22c55e; color:#fff; font-size:0.85rem;">חישוב סטטוס...</span>
+          <span id="semesterCurrentStatusBadge" class="sem-week-badge-col" style="background:#22c55e; color:#052e16; font-size:0.85rem; padding:4px 10px; font-weight:bold;">חישוב סטטוס...</span>
         </div>
 
         <div class="sem-progress-bar-wrap">
@@ -964,30 +1065,37 @@
 
         <div class="semester-stats-grid">
           <div class="sem-stat-card">
-            <div class="sem-stat-val" id="semStatCurWeek">--</div>
-            <div class="sem-stat-label">השבוע הנוכחי</div>
+            <div class="sem-stat-val" id="semStatCurWeek">שבוע 3</div>
+            <div class="sem-stat-label">השבוע הנוכחי בסמסטר</div>
           </div>
           <div class="sem-stat-card">
-            <div class="sem-stat-val" id="semStatRemainingWeeks">--</div>
-            <div class="sem-stat-label">שבועות לימוד נותרו</div>
+            <div class="sem-stat-val" id="semStatRemainingWeeks">11</div>
+            <div class="sem-stat-label">שבועות לימוד שנותרו</div>
           </div>
           <div class="sem-stat-card">
             <div class="sem-stat-val" id="semStatDaysToExams">--</div>
-            <div class="sem-stat-label">ימים לתקופת מבחנים</div>
+            <div class="sem-stat-label">ימים למועדי א׳ (24.01)</div>
           </div>
           <div class="sem-stat-card">
-            <div class="sem-stat-val" id="semStatProgressPct">0%</div>
-            <div class="sem-stat-label">הושלם מהסמסטר</div>
+            <div class="sem-stat-val" id="semStatProgressPct">--%</div>
+            <div class="sem-stat-label">התקדמות סמסטר א׳</div>
           </div>
+        </div>
+
+        <!-- מקרא צבעים ללוח השנה -->
+        <div class="sem-legend-bar">
+          <span class="sem-legend-item"><span class="sem-legend-dot" style="background:#22c55e; border:1px solid #fff;"></span> <strong>היום / שבוע נוכחי</strong></span>
+          <span class="sem-legend-item"><span class="sem-legend-dot" style="background:rgba(56,189,248,0.3); border:1px solid #38bdf8;"></span> שבועות הוראה</span>
+          <span class="sem-legend-item"><span class="sem-legend-dot" style="background:#eab308;"></span> חג חנוכה 🕎</span>
+          <span class="sem-legend-item"><span class="sem-legend-dot" style="background:#ea580c;"></span> צום י׳ בטבת</span>
+          <span class="sem-legend-item"><span class="sem-legend-dot" style="background:#10b981;"></span> ט״ו בשבט / סיום הוראה 🌳</span>
+          <span class="sem-legend-item"><span class="sem-legend-dot" style="background:#a855f7;"></span> בחינות מועדי א׳ 📝</span>
+          <span class="sem-legend-item"><span class="sem-legend-dot" style="background:#e11d48;"></span> מועדי ב׳ / חופשת סמסטר</span>
         </div>
       </div>
 
       <div class="panel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <h3 style="font-size:1.05rem;">🗓️ פריסת שבועות הסמסטר (נתונים נשמרים בסמסטר בלבד)</h3>
-          <span style="font-size:0.8rem; color:#94a3b8;">Enter להוספת משימה לשבוע</span>
-        </div>
-        <div class="semester-weeks-stream" id="semesterWeeksList"></div>
+        <div class="sem-calendar-months-grid" id="semCalendarMonthsContainer"></div>
       </div>
     </div>
 
@@ -1005,7 +1113,7 @@
     </div>
   </div>
 
-  <!-- כפתור פנקס מטלות מהיר צף (שמאל) -->
+  <!-- כפתור פנקס מטלות מהיר צף (שמאל למטה) -->
   <button id="btnQuickNotesToggle" onclick="toggleQuickNotesModal()" title="פנקס מטלות מהיר">
     <span>📝 פנקס מהיר</span>
     <span class="quick-badge" id="quickNotesBadge" style="display:none;">0</span>
@@ -1026,22 +1134,40 @@
     </div>
   </div>
 
-  <!-- כפתור יעדי סמסטר ומעקב צעדים (ימין) -->
-  <button id="btnSemesterGoalsToggle" onclick="toggleSemesterGoalsDrawer()" title="יעדי סמסטר ומעקב צעדים">
-    <span>🎯 יעדי סמסטר</span>
-    <span class="quick-badge" id="semGoalsBadge" style="background:#fff; color:#ef4444; font-weight:800; display:none;">0</span>
-  </button>
-
-  <!-- חלונית יעדי סמסטר ומעקב צעדים -->
+  <!-- חלונית יעדי סמסטר ומעקב צעדים (צד שמאל למעלה) -->
   <div id="semesterGoalsDrawer">
     <div class="sem-goals-header">
       <div style="display:flex; align-items:center; gap:6px;">
-        <span>🎯 יעדי סמסטר א׳ ומעקב צעדים</span>
+        <span>🎯 יעדי סמסטר ומעקב צעדים</span>
       </div>
       <button onclick="toggleSemesterGoalsDrawer()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer; font-weight:bold;">✕</button>
     </div>
+    <div style="padding:10px 14px; background:#27272a; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:0.8rem; color:#a1a1aa;">ניהול נושאים ויעדים אישיים</span>
+      <button onclick="promptAddNewCategory()" style="background:#f97316; color:#fff; border:none; border-radius:6px; padding:3px 8px; font-size:0.75rem; font-weight:bold; cursor:pointer;">+ נושא חדש</button>
+    </div>
     <div style="padding:14px; max-height:500px; overflow-y:auto;" id="semGoalsListContainer">
       <!-- קטגוריות ויעדים ייטענו כאן -->
+    </div>
+  </div>
+
+  <!-- חלון צף מעוצב לרשימת הצעדים (Steps Modal) -->
+  <div id="stepsLogModal" onclick="if(event.target===this) closeStepsModal()">
+    <div class="steps-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
+        <div>
+          <h3 style="margin:0; color:#38bdf8; font-size:1.1rem;">📋 היסטוריית צעדים והתקדמות</h3>
+          <div id="stepsModalGoalTitle" style="font-size:0.85rem; color:#cbd5e1; margin-top:2px;"></div>
+        </div>
+        <button onclick="closeStepsModal()" style="background:none; border:none; color:#94a3b8; font-size:1.3rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div id="stepsModalList" style="max-height:280px; overflow-y:auto; margin-bottom:14px;"></div>
+
+      <div style="display:flex; gap:6px;">
+        <input type="text" id="stepsModalNewInput" placeholder="רשום צעד או הישג ביניים שהשלמת..." style="flex:1; background:#27272a; border:1px solid #3f3f46; border-radius:8px; padding:8px 12px; color:#fff; font-size:0.88rem; outline:none;" onkeydown="if(event.key==='Enter') addStepFromModal()">
+        <button onclick="addStepFromModal()" style="background:#0284c7; color:#fff; border:none; border-radius:8px; padding:8px 14px; font-weight:bold; cursor:pointer;">הוסף צעד</button>
+      </div>
     </div>
   </div>
 
@@ -1168,7 +1294,6 @@
       console.warn("Firebase Init Error:", err);
     }
 
-    // תבנית ברירת מחדל של יעדי הסמסטר על בסיס המסמך שלך
     const defaultSemesterGoals = [
       {
         id: "cat_studies",
@@ -1178,8 +1303,7 @@
           { id: "s1", text: "הגשת כל תרגילי הבית והמטלות בזמן (ללא פיגורים)", done: false, steps: [] },
           { id: "s2", text: "חזרות שבועיות ותרגול עמוק להבנת החומר", done: false, steps: [] },
           { id: "s3", text: "נוכחות מלאה והקשבה פעילה בהרצאות ובמעבדות", done: false, steps: [] },
-          { id: "s4", text: "הכנה מוקדמת ופתרון מבחני עבר לקראת מועדי א׳", done: false, steps: [] },
-          { id: "s5", text: "השגת ממוצע ציונים גבוה והצלחה בכל הקורסים", done: false, steps: [] }
+          { id: "s4", text: "הכנה מוקדמת ופתרון מבחני עבר לקראת מועדי א׳", done: false, steps: [] }
         ]
       },
       {
@@ -1188,9 +1312,7 @@
         color: "#10b981",
         items: [
           { id: "t1", text: "קביעת עתים לתורה: לימוד יומי קבוע בהלכה ומוסר", done: false, steps: [] },
-          { id: "t2", text: "הקפדה על 3 תפילות ביום במניין ובכוונה", done: false, steps: [] },
-          { id: "t3", text: "ניצול זמנים בקדושה ושמירת העיניים והמחשבה", done: false, steps: [] },
-          { id: "t4", text: "הכנה ראויה ולימוד מעמיק לקראת שבת קודש", done: false, steps: [] }
+          { id: "t2", text: "הקפדה על 3 תפילות ביום במניין ובכוונה", done: false, steps: [] }
         ]
       },
       {
@@ -1199,8 +1321,7 @@
         color: "#f59e0b",
         items: [
           { id: "h1", text: "שגרת אימונים קבועה (3-4 פעמים בשבוע: ריצה/כוח)", done: false, steps: [] },
-          { id: "h2", text: "הקפדה על תזונה בריאה, מאוזנת ושתיית מים מרובה", done: false, steps: [] },
-          { id: "h3", text: "שינה מסודרת: לפחות 7 שעות שינה בלילה והשכמה בזמן", done: false, steps: [] }
+          { id: "h2", text: "שינה מסודרת: לפחות 7 שעות שינה בלילה והשכמה בזמן", done: false, steps: [] }
         ]
       },
       {
@@ -1209,18 +1330,7 @@
         color: "#8b5cf6",
         items: [
           { id: "p1", text: "תכנון שבועי ויומי עקבי במרחב האישי", done: false, steps: [] },
-          { id: "p2", text: "מלחמה נחושה בדחיינות וחיזוק המיקוד והמשמעת", done: false, steps: [] },
-          { id: "p3", text: "סדר וניקיון מופתי בסביבת העבודה ובמחשב", done: false, steps: [] }
-        ]
-      },
-      {
-        id: "cat_relationships",
-        title: "💍 זוגיות, דייטים וכישורי חיים",
-        color: "#ec4899",
-        items: [
-          { id: "r1", text: "פתיחות, קלילות וביטחון עצמי בדייטים ובקשר", done: false, steps: [] },
-          { id: "r2", text: "עבודה על המידות: סבלנות, הקשבה ועין טובה", done: false, steps: [] },
-          { id: "r3", text: "יוזמה, התקדמות ושמחה בדרך לבניית בית נאמן", done: false, steps: [] }
+          { id: "p2", text: "מלחמה נחושה בדחיינות וחיזוק המיקוד והמשמעת", done: false, steps: [] }
         ]
       }
     ];
@@ -1233,7 +1343,6 @@
       weeklyBoxes: {},
       yearlyGoals: [],
       quickTasks: [],
-      semesterData: {},
       semesterGoals: defaultSemesterGoals,
       parshiotCache: {}
     };
@@ -1241,7 +1350,6 @@
     if (!db.dailyReflections) db.dailyReflections = {};
     if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
     if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
-    if (!db.semesterData) db.semesterData = {};
     if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
 
     let activeView = 'monthly';
@@ -1249,8 +1357,9 @@
     let selectedPreviewDate = null;
     let tempImageBase64 = null;
     let editingContext = null;
+    let currentStepsGoalContext = null; // עבור החלון הצף של הצעדים
 
-    // מאגר משפטים מעצימים בניצול זמן
+    // משפטים מחזקים
     const timeQuotes = [
       "הזמן הוא המשאב היחיד שלא ניתן לקנות או להחזיר – כל דקה היא השקעה בעתידך.",
       "מי שמתכנן את יומו שולט בחייו; מי שאינו מתכנן – יומו שולט בו.",
@@ -1259,8 +1368,7 @@
       "סדר ומיקוד חיצוני מביאים לשלווה ולהספק מרבי.",
       "ההבדל בין חלום למציאות הוא תוכנית פעולה ונחישות של הרגע הנוכחי.",
       "דחיינות גוזלת לא רק זמן, אלא בעיקר שלוות נפש.",
-      "מי שמנצח את הבוקר, מנצח את כל היום כולו.",
-      "אל תחכה לרגע המושלם; קח את הרגע והפוך אותו למושלם."
+      "מי שמנצח את הבוקר, מנצח את כל היום כולו."
     ];
     let currentQuoteIndex = 0;
 
@@ -1331,36 +1439,14 @@
         if (dayNum === 13) { holiday = 'תענית אסתר'; holidayType = 'fast'; }
         else if (dayNum === 14) { holiday = 'פורים 🎭'; holidayType = 'celebration'; }
         else if (dayNum === 15) { holiday = 'שושן פורים 🎭'; holidayType = 'celebration'; }
-      } else if (monthName.includes('ניסן')) {
-        if (dayNum === 14) { holiday = 'ערב פסח'; holidayType = 'holiday'; }
-        else if (dayNum === 15) { holiday = 'פסח 🍷'; holidayType = 'holiday'; }
-        else if (dayNum >= 16 && dayNum <= 20) { holiday = 'חוה״מ פסח'; holidayType = 'holiday'; }
-        else if (dayNum === 21) { holiday = 'שביעי של פסח'; holidayType = 'holiday'; }
-      } else if (monthName.includes('אייר')) {
-        if (dayNum === 4) { holiday = 'יום הזיכרון 🕯'; holidayType = 'memorial'; }
-        else if (dayNum === 5) { holiday = 'יום העצמאות 🇮🇱'; holidayType = 'celebration'; }
-        else if (dayNum === 18) { holiday = 'ל״ג בעומר 🔥'; holidayType = 'celebration'; }
-        else if (dayNum === 28) { holiday = 'יום ירושלים'; holidayType = 'celebration'; }
-      } else if (monthName.includes('סיוון') || monthName.includes('סיון')) {
-        if (dayNum === 5) { holiday = 'ערב שבועות'; holidayType = 'holiday'; }
-        else if (dayNum === 6) { holiday = 'שבועות 🌾'; holidayType = 'holiday'; }
-      } else if (monthName.includes('תמוז')) {
-        if (dayNum === 17) { holiday = 'צום י״ז בתמוז'; holidayType = 'fast'; }
-      } else if (monthName.includes('אב')) {
-        if (dayNum === 9) { holiday = 'צום ט׳ באב 🕯'; holidayType = 'memorial'; }
-        else if (dayNum === 15) { holiday = 'ט״ו באב ❤️'; holidayType = 'celebration'; }
       }
 
       let shabbat = '';
       if (date.getDay() === 6) {
         const dKey = formatDateKey(date);
         const parasha = (db.parshiotCache && db.parshiotCache[dKey]);
-        if (parasha) {
-          shabbat = `שבת • פרשת ${parasha}`;
-        } else {
-          shabbat = 'שבת קודש';
-          fetchParshiotForYear(date.getFullYear());
-        }
+        if (parasha) shabbat = `שבת • פרשת ${parasha}`;
+        else { shabbat = 'שבת קודש'; fetchParshiotForYear(date.getFullYear()); }
       }
 
       return { hebrewStr, hebrewDay, hebrewDayAndMonth, dayNum, holiday, holidayType, shabbat, monthName, yearStr };
@@ -1384,35 +1470,7 @@
       { name: "טבת", targetDate: new Date(2026, 11, 15), gregSpan: "דצמבר 2026 - ינואר 2027" },
       { name: "שבט", targetDate: new Date(2027, 0, 15), gregSpan: "ינואר - פברואר 2027" },
       { name: "אדר א׳", targetDate: new Date(2027, 1, 15), gregSpan: "פברואר - מרץ 2027" },
-      { name: "אדר ב׳", targetDate: new Date(2027, 2, 15), gregSpan: "מרץ - אפריל 2027" },
-      { name: "ניסן", targetDate: new Date(2027, 3, 15), gregSpan: "אפריל - מאי 2027" },
-      { name: "אייר", targetDate: new Date(2027, 4, 15), gregSpan: "מאי - יוני 2027" },
-      { name: "סיוון", targetDate: new Date(2027, 5, 15), gregSpan: "יוני - יולי 2027" },
-      { name: "תמוז", targetDate: new Date(2027, 6, 15), gregSpan: "יולי - אוגוסט 2027" },
-      { name: "אב", targetDate: new Date(2027, 7, 15), gregSpan: "אוגוסט 2027" },
-      { name: "אלול", targetDate: new Date(2027, 8, 10), gregSpan: "ספטמבר 2027" }
-    ];
-
-    // לו"ז שבועות סמסטר א׳ תשפ״ז (לפי לו"ז לב)[cite: 14]
-    const semesterWeeksConfig = [
-      { id: "sem_w1", num: 1, type: "lecture", start: "2026-10-25", end: "2026-10-30", heb: "י״ד חשוון - י״ט חשוון", note: "פתיחת סמסטר א׳ • שבוע 1" },
-      { id: "sem_w2", num: 2, type: "lecture", start: "2026-11-01", end: "2026-11-06", heb: "כ״א חשוון - כ״ו חשוון", note: "שבוע 2" },
-      { id: "sem_w3", num: 3, type: "lecture", start: "2026-11-08", end: "2026-11-13", heb: "כ״ח חשוון - ג׳ כסלו", note: "שבוע 3 • ראש חודש כסלו" },
-      { id: "sem_w4", num: 4, type: "lecture", start: "2026-11-15", end: "2026-11-20", heb: "ה׳ כסלו - י׳ כסלו", note: "שבוע 4" },
-      { id: "sem_w5", num: 5, type: "lecture", start: "2026-11-22", end: "2026-11-27", heb: "י״ב כסלו - י״ז כסלו", note: "שבוע 5" },
-      { id: "sem_w6", num: 6, type: "lecture", start: "2026-11-29", end: "2026-12-04", heb: "י״ט כסלו - כ״ד כסלו", note: "שבוע 6" },
-      { id: "sem_w7", num: 7, type: "holiday", start: "2026-12-06", end: "2026-12-11", heb: "כ״ו כסלו - א׳ טבת", note: "שבוע 7 • חג חנוכה 🕎" },
-      { id: "sem_w8", num: 8, type: "lecture", start: "2026-12-13", end: "2026-12-18", heb: "ג׳ טבת - ח׳ טבת", note: "שבוע 8" },
-      { id: "sem_w9", num: 9, type: "fast", start: "2026-12-20", end: "2026-12-25", heb: "י׳ טבת - ט״ו טבת", note: "שבוע 9 • צום י׳ בטבת" },
-      { id: "sem_w10", num: 10, type: "lecture", start: "2026-12-27", end: "2027-01-01", heb: "י״ז טבת - כ״ב טבת", note: "שבוע 10" },
-      { id: "sem_w11", num: 11, type: "lecture", start: "2027-01-03", end: "2027-01-08", heb: "כ״ד טבת - כ״ט טבת", note: "שבוע 11" },
-      { id: "sem_w12", num: 12, type: "lecture", start: "2027-01-10", end: "2027-01-15", heb: "ב׳ שבט - ז׳ שבט", note: "שבוע 12 • ראש חודש שבט" },
-      { id: "sem_w13", num: 13, type: "lecture", start: "2027-01-17", end: "2027-01-22", heb: "ט׳ שבט - י״ד שבט", note: "שבוע 13" },
-      { id: "sem_w14", num: 14, type: "celebration", start: "2027-01-24", end: "2027-01-29", heb: "ט״ז שבט - כ״א שבט", note: "שבוע 14 • ט״ו בשבט 🌳 • סיום הוראה" },
-      { id: "sem_exam1", num: 15, type: "exam", start: "2027-01-31", end: "2027-02-05", heb: "כ״ג שבט - כ״ח שבט", note: "תקופת בחינות מועדי א׳ • שבוע 1" },
-      { id: "sem_exam2", num: 16, type: "exam", start: "2027-02-07", end: "2027-02-12", heb: "ל׳ שבט - ה׳ אדר א׳", note: "תקופת בחינות מועדי א׳ • שבוע 2" },
-      { id: "sem_exam3", num: 17, type: "exam", start: "2027-02-14", end: "2027-02-19", heb: "ז׳ אדר א׳ - י״ב אדר א׳", note: "תקופת בחינות מועדי א׳ • שבוע 3" },
-      { id: "sem_exam4", num: 18, type: "exam", start: "2027-02-21", end: "2027-02-26", heb: "י״ד אדר א׳ - י״ט אדר א׳", note: "סיום מועדי א׳ • היערכות לסמסטר ב׳" }
+      { name: "אדר ב׳", targetDate: new Date(2027, 2, 15), gregSpan: "מרץ - אפריל 2027" }
     ];
 
     function init() {
@@ -1471,21 +1529,14 @@
     }
 
     function navigateDate(delta) {
-      if (activeView === 'daily') {
-        anchorDate.setDate(anchorDate.getDate() + delta);
-      } else if (activeView === 'weekly') {
-        anchorDate.setDate(anchorDate.getDate() + (delta * 7));
-      } else if (activeView === 'monthly') {
+      if (activeView === 'daily') anchorDate.setDate(anchorDate.getDate() + delta);
+      else if (activeView === 'weekly') anchorDate.setDate(anchorDate.getDate() + (delta * 7));
+      else if (activeView === 'monthly') {
         const currentMonthName = getHebrewDateInfo(anchorDate).monthName;
         let idx = hebrewYearCycle.findIndex(m => currentMonthName.includes(m.name) || m.name.includes(currentMonthName));
-        if (idx !== -1 && hebrewYearCycle[idx + delta]) {
-          anchorDate = new Date(hebrewYearCycle[idx + delta].targetDate);
-        } else {
-          anchorDate.setDate(anchorDate.getDate() + (delta * 30));
-        }
-      } else if (activeView === 'yearly') {
-        anchorDate.setFullYear(anchorDate.getFullYear() + delta);
-      }
+        if (idx !== -1 && hebrewYearCycle[idx + delta]) anchorDate = new Date(hebrewYearCycle[idx + delta].targetDate);
+        else anchorDate.setDate(anchorDate.getDate() + (delta * 30));
+      } else if (activeView === 'yearly') anchorDate.setFullYear(anchorDate.getFullYear() + delta);
       renderCurrentView();
     }
 
@@ -1498,7 +1549,7 @@
       if (activeView === 'daily') renderDailyView();
       else if (activeView === 'weekly') renderWeeklyView();
       else if (activeView === 'monthly') renderMonthlyView();
-      else if (activeView === 'semester') renderSemesterView();
+      else if (activeView === 'semester') renderSemesterCalendarView();
       else if (activeView === 'yearly') renderYearlyView();
     }
 
@@ -1510,7 +1561,6 @@
 
       const greg = new Intl.DateTimeFormat('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' }).format(anchorDate);
       const heb = getHebrewDateInfo(anchorDate);
-
       document.getElementById('currentFocusTitle').innerText = `${greg} | ${heb.hebrewDay} ב${heb.monthName}`;
 
       const dBadge = document.getElementById('dailyBadge');
@@ -1540,16 +1590,10 @@
         
         let periodClass = 'morning';
         let periodIcon = '☀';
-        if (h >= 12 && h <= 17) {
-          periodClass = 'afternoon';
-          periodIcon = '🌤️';
-        } else if (h >= 18) {
-          periodClass = 'evening';
-          periodIcon = '🌙';
-        }
+        if (h >= 12 && h <= 17) { periodClass = 'afternoon'; periodIcon = '🌤️'; }
+        else if (h >= 18) { periodClass = 'evening'; periodIcon = '🌙'; }
 
         const isCurrentSlot = isToday && (h === currentHourNow);
-
         const row = document.createElement('div');
         row.className = `hour-row ${periodClass} ${isCurrentSlot ? 'current-hour' : ''}`;
 
@@ -1562,9 +1606,7 @@
         inputEl.className = 'hour-input';
         inputEl.value = val;
         inputEl.placeholder = 'משימה לשעה זו...';
-        inputEl.addEventListener('change', () => {
-          saveScheduleHour(dateKey, timeStr, inputEl.value);
-        });
+        inputEl.addEventListener('change', () => saveScheduleHour(dateKey, timeStr, inputEl.value));
 
         row.appendChild(labelDiv);
         row.appendChild(inputEl);
@@ -1590,9 +1632,7 @@
       goals.forEach((g, idx) => {
         const li = document.createElement('li');
         li.className = `goal-item ${g.done ? 'done' : ''}`;
-        li.onclick = (e) => {
-          if (e.target.tagName !== 'BUTTON') toggleDailyGoal(dateKey, idx);
-        };
+        li.onclick = (e) => { if (e.target.tagName !== 'BUTTON') toggleDailyGoal(dateKey, idx); };
         li.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" ${g.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleDailyGoal('${dateKey}', ${idx})">
@@ -1682,10 +1722,8 @@
     function deleteEntry(dateKey, idx) {
       if (!confirm("האם אתה בטוח שברצונך למחוק רשומה זו?")) return;
       if (!db.entries || !db.entries[dateKey]) return;
-
       db.entries[dateKey].splice(idx, 1);
       if (db.entries[dateKey].length === 0) delete db.entries[dateKey];
-
       saveDB();
       renderDailyEntries(dateKey);
       renderMonthlyView();
@@ -1694,8 +1732,7 @@
 
     function openLightbox(src) {
       const modal = document.getElementById('imageLightboxModal');
-      const img = document.getElementById('lightboxImgTarget');
-      img.src = src;
+      document.getElementById('lightboxImgTarget').src = src;
       modal.style.display = 'flex';
     }
 
@@ -1746,17 +1783,9 @@
             ${heb.shabbat ? `<div style="color:var(--shabbat-text); font-size:0.75rem; font-weight:600; margin-top:2px;">${heb.shabbat}</div>` : ''}
           </div>
           <div style="display:flex; flex-direction:column; gap:5px; margin-top:6px;">
-            ${dayEntries.map(e => {
-              if (e.cat === 'plan' && e.showFullWeekly) {
-                return `
-                  <div style="background:rgba(59,130,246,0.18); border-right:3px solid #3b82f6; padding:6px; border-radius:6px;">
-                    <div style="font-weight:700; font-size:0.8rem; color:#93c5fd;">${e.title}</div>
-                    <div style="font-size:0.74rem; color:#e2e8f0; white-space:pre-wrap; margin-top:3px;">${e.text}</div>
-                  </div>
-                `;
-              }
-              return `<div class="entry-pill-mini cat-${e.cat}">${e.title}</div>`;
-            }).join('')}
+            ${dayEntries.map(e => `
+              <div class="entry-pill-mini cat-${e.cat}">${e.title}</div>
+            `).join('')}
           </div>
         `;
         grid.appendChild(col);
@@ -1772,9 +1801,7 @@
       items.forEach((item, idx) => {
         const li = document.createElement('li');
         li.className = `goal-item ${item.done ? 'done' : ''}`;
-        li.onclick = (e) => {
-          if (e.target.tagName !== 'BUTTON') toggleWeeklyCardGoal(weekKey, cardKey, idx);
-        };
+        li.onclick = (e) => { if (e.target.tagName !== 'BUTTON') toggleWeeklyCardGoal(weekKey, cardKey, idx); };
         li.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" ${item.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleWeeklyCardGoal('${weekKey}', '${cardKey}', ${idx})">
@@ -1848,30 +1875,16 @@
         const dKey = formatDateKey(curDate);
         const heb = getHebrewDateInfo(curDate);
         const entries = db.entries[dKey] || [];
-
         const cell = document.createElement('div');
         const isShab = !!heb.shabbat;
-        let holidayClass = '';
-        if (heb.holidayType) {
-          holidayClass = `has-${heb.holidayType}`;
-        }
-
+        let holidayClass = heb.holidayType ? `has-${heb.holidayType}` : '';
         const isSelected = selectedPreviewDate && (formatDateKey(selectedPreviewDate) === dKey);
 
         cell.className = `month-day-cell ${dKey === todayStr ? 'today' : ''} ${isSelected ? 'selected-day' : ''} ${holidayClass} ${isShab ? 'has-shabbat' : ''}`;
-        
-        cell.onclick = () => {
-          selectMonthDayForPreview(curDate);
-        };
+        cell.onclick = () => selectMonthDayForPreview(curDate);
+        cell.ondblclick = () => { anchorDate = curDate; switchView('daily'); };
 
-        cell.ondblclick = () => {
-          anchorDate = curDate;
-          switchView('daily');
-        };
-
-        const entriesPills = entries.slice(0, 3).map(e => `
-          <div class="entry-pill-mini cat-${e.cat}">${e.title}</div>
-        `).join('');
+        const entriesPills = entries.slice(0, 3).map(e => `<div class="entry-pill-mini cat-${e.cat}">${e.title}</div>`).join('');
 
         cell.innerHTML = `
           <div class="cell-top">
@@ -1885,9 +1898,7 @@
         grid.appendChild(cell);
       });
 
-      if (selectedPreviewDate) {
-        updateMonthPreviewBar(selectedPreviewDate);
-      }
+      if (selectedPreviewDate) updateMonthPreviewBar(selectedPreviewDate);
     }
 
     function selectMonthDayForPreview(date) {
@@ -1910,19 +1921,13 @@
       const weeklyBox = (db.weeklyBoxes && db.weeklyBoxes[weekKey]) || { core: [], tasks: [] };
       const weekGoals = [...(weeklyBox.core || []), ...(weeklyBox.tasks || [])];
       const wContainer = document.getElementById('prevBarWeeklyGoals');
-      if (weekGoals.length === 0) {
-        wContainer.innerHTML = '<span style="color:#64748b; font-size:0.75rem;">אין יעדים מוגדרים לשבוע זה</span>';
-      } else {
-        wContainer.innerHTML = weekGoals.map(g => `<span class="preview-chip ${g.done ? 'done' : ''}">${g.text}</span>`).join('');
-      }
+      wContainer.innerHTML = weekGoals.length === 0 ? '<span style="color:#64748b; font-size:0.75rem;">אין יעדים לשבוע זה</span>' :
+        weekGoals.map(g => `<span class="preview-chip ${g.done ? 'done' : ''}">${g.text}</span>`).join('');
 
       const dGoals = (db.dailyGoals && db.dailyGoals[dKey]) || [];
       const dContainer = document.getElementById('prevBarDailyTasks');
-      if (dGoals.length === 0) {
-        dContainer.innerHTML = '<span style="color:#64748b; font-size:0.75rem;">אין מטלות ליום זה</span>';
-      } else {
-        dContainer.innerHTML = dGoals.map(g => `<span class="preview-chip ${g.done ? 'done' : ''}">${g.text}</span>`).join('');
-      }
+      dContainer.innerHTML = dGoals.length === 0 ? '<span style="color:#64748b; font-size:0.75rem;">אין מטלות ליום זה</span>' :
+        dGoals.map(g => `<span class="preview-chip ${g.done ? 'done' : ''}">${g.text}</span>`).join('');
 
       bar.style.display = 'flex';
     }
@@ -1934,163 +1939,163 @@
       }
     }
 
-    /* 4. תצוגת סמסטר א׳ תשפ״ז (Semester Dashboard & Stream) */
-    function renderSemesterView() {
-      document.getElementById('currentFocusTitle').innerText = `לוח זמנים סמסטר א׳ • תשפ״ז`;
+    /* 4. לוח שנה סמסטריאלי מלא (Semester Calendar Grid) */
+    function renderSemesterCalendarView() {
+      document.getElementById('currentFocusTitle').innerText = `לוח שנה סמסטר א׳ • תשפ״ז`;
 
+      const semStart = new Date(2026, 9, 11); // 11 באוקטובר 2026
+      const examsStart = new Date(2027, 0, 24); // 24 בינואר 2027
+      const semEnd = new Date(2027, 2, 12); // אמצע מרץ 2027 (סיום מועדי ב')
       const today = new Date();
-      const semStart = new Date("2026-10-25");
-      const examsStart = new Date("2027-01-31");
-      const semEnd = new Date("2027-02-26");
 
-      let currentWeekIdx = -1;
-      semesterWeeksConfig.forEach((w, idx) => {
-        const start = new Date(w.start);
-        const end = new Date(w.end);
-        end.setDate(end.getDate() + 1);
-        if (today >= start && today <= end) {
-          currentWeekIdx = idx;
-        }
-      });
-
-      let progressPct = 0;
-      if (today < semStart) {
-        progressPct = 0;
-      } else if (today > semEnd) {
-        progressPct = 100;
-      } else {
-        progressPct = Math.round(((today - semStart) / (semEnd - semStart)) * 100);
+      // חישוב שבוע נוכחי
+      let currentWeekNum = 0;
+      if (today >= semStart) {
+        const diffDays = Math.floor((today - semStart) / (1000 * 60 * 60 * 24));
+        currentWeekNum = Math.floor(diffDays / 7) + 1;
       }
+
+      document.getElementById('semStatCurWeek').textContent = currentWeekNum > 0 ? (currentWeekNum <= 14 ? `שבוע ${currentWeekNum} מתוך 14` : `שבוע ${currentWeekNum}`) : 'טרם החל';
+      
+      const remWeeks = Math.max(0, 14 - currentWeekNum);
+      document.getElementById('semStatRemainingWeeks').textContent = `${remWeeks} שבועות`;
 
       const diffExams = Math.ceil((examsStart - today) / (1000 * 60 * 60 * 24));
-      const daysToExams = diffExams > 0 ? `${diffExams} ימים` : (today <= semEnd ? "בתקופת מבחנים!" : "הסתיימו");
+      document.getElementById('semStatDaysToExams').textContent = diffExams > 0 ? `${diffExams} ימים` : (today <= semEnd ? "בתקופת מבחנים!" : "הסתיימו");
 
+      let progressPct = 0;
+      if (today >= semStart && today <= semEnd) {
+        progressPct = Math.round(((today - semStart) / (semEnd - semStart)) * 100);
+      } else if (today > semEnd) progressPct = 100;
+      
       document.getElementById('semProgressBarFill').style.width = `${progressPct}%`;
       document.getElementById('semStatProgressPct').textContent = `${progressPct}%`;
-      document.getElementById('semStatDaysToExams').textContent = daysToExams;
 
-      if (currentWeekIdx !== -1) {
-        const curWeekObj = semesterWeeksConfig[currentWeekIdx];
-        const isExam = curWeekObj.type === 'exam';
-        document.getElementById('semStatCurWeek').textContent = isExam ? `מבחנים ${curWeekObj.num - 14}` : `שבוע ${curWeekObj.num}/14`;
-        
-        const remWeeks = Math.max(0, 14 - curWeekObj.num);
-        document.getElementById('semStatRemainingWeeks').textContent = `${remWeeks} שבועות`;
-        
-        const statusBadge = document.getElementById('semesterCurrentStatusBadge');
-        statusBadge.textContent = `אתה נמצא כעת ב${curWeekObj.note}`;
-        statusBadge.style.background = isExam ? '#a855f7' : '#22c55e';
-      } else if (today < semStart) {
-        document.getElementById('semStatCurWeek').textContent = 'טרם החל';
-        document.getElementById('semStatRemainingWeeks').textContent = '14 שבועות';
-        document.getElementById('semesterCurrentStatusBadge').textContent = 'סמסטר א׳ יחל ב-25.10.2026';
+      const statusBadge = document.getElementById('semesterCurrentStatusBadge');
+      if (currentWeekNum >= 1 && currentWeekNum <= 14) {
+        statusBadge.textContent = `אתה נמצא כעת בשבוע ${currentWeekNum} מתוך 14 שבועות הוראה`;
+        statusBadge.style.background = '#22c55e';
+      } else if (currentWeekNum > 14 && currentWeekNum <= 19) {
+        statusBadge.textContent = `אתה נמצא בתקופת בחינות מועדי א׳`;
+        statusBadge.style.background = '#a855f7';
+      } else if (currentWeekNum > 19) {
+        statusBadge.textContent = `תקופת מועדי ב׳ והיערכות לסמסטר ב׳`;
+        statusBadge.style.background = '#e11d48';
       } else {
-        document.getElementById('semStatCurWeek').textContent = 'הסתיים';
-        document.getElementById('semStatRemainingWeeks').textContent = '0';
-        document.getElementById('semesterCurrentStatusBadge').textContent = 'סמסטר א׳ הסתיים • בהצלחה בסמסטר ב׳!';
+        statusBadge.textContent = `הסמסטר החל ב-11.10.2026`;
       }
 
-      const stream = document.getElementById('semesterWeeksList');
-      stream.innerHTML = '';
+      // ציור כרטיסי החודשים בלוח השנה של הסמסטר
+      const monthsToRender = [
+        { year: 2026, month: 9, name: "אוקטובר 2026 • תשרי-חשוון" },
+        { year: 2026, month: 10, name: "נובמבר 2026 • חשוון-כסלו" },
+        { year: 2026, month: 11, name: "דצמבר 2026 • כסלו-טבת" },
+        { year: 2027, month: 0, name: "ינואר 2027 • טבת-שבט" },
+        { year: 2027, month: 1, name: "פברואר 2027 • שבט-אדר א׳" },
+        { year: 2027, month: 2, name: "מרץ 2027 • אדר א׳-אדר ב׳" }
+      ];
 
-      semesterWeeksConfig.forEach((w, idx) => {
-        const isCurrent = (idx === currentWeekIdx);
-        const row = document.createElement('div');
+      const container = document.getElementById('semCalendarMonthsContainer');
+      container.innerHTML = '';
 
-        let typeClass = '';
-        let badgeColor = '#3b82f6';
-        let typeBadgeText = `שבוע ${w.num}/14`;
+      monthsToRender.forEach(mObj => {
+        const block = document.createElement('div');
+        block.className = 'sem-month-block';
 
-        if (w.type === 'exam') {
-          typeClass = 'exam-period';
-          badgeColor = '#a855f7';
-          typeBadgeText = `📝 בחינות מועד א׳ (${w.num - 14}/4)`;
-        } else if (w.type === 'holiday') {
-          typeClass = 'holiday-period';
-          badgeColor = '#eab308';
-          typeBadgeText = `🕎 חנוכה (שבוע ${w.num})`;
-        } else if (w.type === 'fast') {
-          typeClass = 'holiday-period';
-          badgeColor = '#ea580c';
-          typeBadgeText = `⚡ צום י׳ בטבת`;
-        } else if (w.type === 'celebration') {
-          typeClass = 'holiday-period';
-          badgeColor = '#10b981';
-          typeBadgeText = `🌳 סיום הוראה / ט״ו בשבט`;
-        }
-
-        row.className = `sem-week-row ${typeClass} ${isCurrent ? 'current-sem-week' : ''}`;
-
-        const weekTasks = (db.semesterData && db.semesterData[w.id]) || [];
-
-        const [sy, sm, sd] = w.start.split('-');
-        const [ey, em, ed] = w.end.split('-');
-        const dateSpanStr = `${Number(sd)}/${Number(sm)} - ${Number(ed)}/${Number(em)}`;
-
-        row.innerHTML = `
-          <div style="flex:1;">
-            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-              <span class="sem-week-badge" style="background:${badgeColor}; color:#fff;">${typeBadgeText}</span>
-              <strong style="color:#f8fafc; font-size:0.95rem;">${w.note}</strong>
-              ${isCurrent ? '<span style="background:#22c55e; color:#fff; font-size:0.7rem; font-weight:bold; padding:2px 6px; border-radius:4px;">שבוע נוכחי ⭐</span>' : ''}
-            </div>
-            <div style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">
-              <span>📅 ${dateSpanStr}</span> • <span>${w.heb}</span>
-            </div>
-
-            <div id="semTasksList_${w.id}" style="margin-top:8px; display:flex; flex-direction:column; gap:4px;">
-              ${weekTasks.map((t, tIdx) => `
-                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.3); border-radius:6px; padding:4px 8px; font-size:0.82rem;">
-                  <label style="display:flex; align-items:center; gap:6px; cursor:pointer; ${t.done ? 'text-decoration:line-through; opacity:0.6;' : ''}">
-                    <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleSemesterWeekTask('${w.id}', ${tIdx})">
-                    <span>${t.text}</span>
-                  </label>
-                  <button type="button" onclick="deleteSemesterWeekTask('${w.id}', ${tIdx})" style="background:none; border:none; color:#ef4444; font-size:0.75rem; cursor:pointer;">✕</button>
-                </div>
-              `).join('')}
-            </div>
-
-            <div style="display:flex; gap:6px; margin-top:8px;">
-              <input type="text" id="semInput_${w.id}" placeholder="הוסף משימה/מטלה לשבוע זה..." style="flex:1; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:4px 8px; font-size:0.8rem; color:#fff; outline:none;" onkeydown="if(event.key==='Enter') addSemesterWeekTask('${w.id}')">
-              <button onclick="addSemesterWeekTask('${w.id}')" style="background:#0284c7; color:#fff; border:none; border-radius:6px; padding:4px 10px; font-size:0.8rem; font-weight:bold; cursor:pointer;">+</button>
-            </div>
+        let html = `
+          <div class="sem-month-title">
+            <span>${mObj.name}</span>
           </div>
+          <table class="sem-month-table">
+            <thead>
+              <tr>
+                <th style="width:65px;">שבוע</th>
+                <th>א׳</th><th>ב׳</th><th>ג׳</th><th>ד׳</th><th>ה׳</th><th>ו׳</th><th>שבת</th>
+              </tr>
+            </thead>
+            <tbody>
         `;
 
-        stream.appendChild(row);
+        const daysInMonth = new Date(mObj.year, mObj.month + 1, 0).getDate();
+        let curDay = 1;
+        
+        while (curDay <= daysInMonth) {
+          html += `<tr>`;
+          
+          // חישוב איזה שבוע סמסטר זה עבור יום ראשון של שבוע זה
+          const weekRowStartDate = new Date(mObj.year, mObj.month, curDay);
+          const dayOfWeek = weekRowStartDate.getDay();
+          const sundayOfThisWeek = new Date(weekRowStartDate);
+          sundayOfThisWeek.setDate(weekRowStartDate.getDate() - dayOfWeek);
+
+          let semWeekLabel = "--";
+          let isCurWeekRow = false;
+          if (sundayOfThisWeek >= semStart) {
+            const diffDaysFromStart = Math.floor((sundayOfThisWeek - semStart) / (1000 * 60 * 60 * 24));
+            const wNum = Math.floor(diffDaysFromStart / 7) + 1;
+            if (wNum <= 14) semWeekLabel = `שבוע ${wNum}`;
+            else if (wNum <= 18) semWeekLabel = `מועד א׳`;
+            else semWeekLabel = `מועד ב׳`;
+
+            if (wNum === currentWeekNum) isCurWeekRow = true;
+          }
+
+          html += `<td><span class="sem-week-badge-col ${isCurWeekRow ? 'is-cur-week' : ''}">${semWeekLabel}</span></td>`;
+
+          // 7 ימי השבוע (0 = ראשון עד 6 = שבת)
+          for (let d = 0; d < 7; d++) {
+            if ((curDay === 1 && d < dayOfWeek) || curDay > daysInMonth) {
+              html += `<td><div class="sem-day-cell-num empty"></div></td>`;
+            } else {
+              const thisDate = new Date(mObj.year, mObj.month, curDay);
+              const dateStr = formatDateKey(thisDate);
+              const isToday = (dateStr === formatDateKey(today));
+              const isBeforeSem = (thisDate < semStart);
+
+              let specialClass = isBeforeSem ? 'before-sem' : 'regular-sem';
+              let titleNote = '';
+
+              // אירועים מיוחדים לפי תאריכים
+              if (dateStr >= "2026-12-05" && dateStr <= "2026-12-12") {
+                specialClass = 'is-holiday';
+                titleNote = 'חנוכה 🕎';
+              } else if (dateStr === "2026-12-20") {
+                specialClass = 'is-fast';
+                titleNote = 'צום י׳ בטבת ⚡';
+              } else if (dateStr === "2027-01-16") {
+                specialClass = 'is-celebration';
+                titleNote = 'סיום הוראה (שבוע 14)';
+              } else if (dateStr === "2027-01-23") {
+                specialClass = 'is-celebration';
+                titleNote = 'ט״ו בשבט 🌳';
+              } else if (dateStr >= "2027-01-24" && dateStr <= "2027-02-19") {
+                specialClass = 'is-exam-a';
+                titleNote = 'בחינות מועדי א׳ 📝';
+              } else if (dateStr >= "2027-02-21" && dateStr <= "2027-03-12") {
+                specialClass = 'is-exam-b';
+                titleNote = 'בחינות מועדי ב׳ / חופשת סמסטר';
+              }
+
+              html += `
+                <td>
+                  <div class="sem-day-cell-num ${specialClass} ${isToday ? 'is-today' : ''}" title="${titleNote ? titleNote + ' • ' : ''}${curDay}/${mObj.month+1}">
+                    <span>${curDay}</span>
+                  </div>
+                </td>
+              `;
+              curDay++;
+            }
+          }
+          html += `</tr>`;
+        }
+
+        html += `</tbody></table>`;
+        block.innerHTML = html;
+        container.appendChild(block);
       });
     }
 
-    function addSemesterWeekTask(weekId) {
-      const input = document.getElementById(`semInput_${weekId}`);
-      const text = input.value.trim();
-      if (!text) return;
-
-      if (!db.semesterData) db.semesterData = {};
-      if (!db.semesterData[weekId]) db.semesterData[weekId] = [];
-
-      db.semesterData[weekId].push({ text, done: false, id: Date.now() });
-      input.value = '';
-      saveDB();
-      renderSemesterView();
-    }
-
-    function toggleSemesterWeekTask(weekId, idx) {
-      if (!db.semesterData || !db.semesterData[weekId] || !db.semesterData[weekId][idx]) return;
-      db.semesterData[weekId][idx].done = !db.semesterData[weekId][idx].done;
-      saveDB();
-      renderSemesterView();
-    }
-
-    function deleteSemesterWeekTask(weekId, idx) {
-      if (!db.semesterData || !db.semesterData[weekId]) return;
-      db.semesterData[weekId].splice(idx, 1);
-      if (db.semesterData[weekId].length === 0) delete db.semesterData[weekId];
-      saveDB();
-      renderSemesterView();
-    }
-
-    /* 5. יעדי סמסטר ומעקב צעדים (Floating Semester Goals Drawer) */
+    /* 5. יעדי סמסטר ומעקב צעדים (Customizable Goals & Categories) */
     function toggleSemesterGoalsDrawer() {
       const drawer = document.getElementById('semesterGoalsDrawer');
       const isVisible = drawer.style.display === 'block';
@@ -2106,19 +2111,32 @@
       let totalPending = 0;
       const categories = db.semesterGoals || defaultSemesterGoals;
 
+      if (categories.length === 0) {
+        container.innerHTML = '<div style="color:#a1a1aa; font-size:0.85rem; text-align:center; padding:20px;">אין עדיין נושאים. לחץ על "+ נושא חדש" למעלה כדי להתחיל!</div>';
+        return;
+      }
+
       categories.forEach((cat, catIdx) => {
         const catBox = document.createElement('div');
         catBox.className = 'sem-cat-section';
 
         catBox.innerHTML = `
-          <div class="sem-cat-title" style="color:${cat.color};">
-            <span>${cat.title}</span>
+          <div class="sem-cat-title-row">
+            <div class="sem-cat-title" style="color:${cat.color};">
+              <span style="width:10px; height:10px; border-radius:50%; background:${cat.color}; display:inline-block;"></span>
+              <strong>${cat.title}</strong>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button onclick="promptEditCategory(${catIdx})" style="background:none; border:none; color:#a1a1aa; font-size:0.75rem; cursor:pointer;" title="ערוך שם נושא או צבע">✏️</button>
+              <button onclick="promptDeleteCategory(${catIdx})" style="background:none; border:none; color:#ef4444; font-size:0.75rem; cursor:pointer;" title="מחק נושא זה">🗑️</button>
+              <button onclick="promptAddGoalToCat(${catIdx})" style="background:#27272a; border:1px solid #3f3f46; color:#fff; border-radius:5px; padding:2px 7px; font-size:0.75rem; font-weight:bold; cursor:pointer;">+ יעד</button>
+            </div>
           </div>
-          <div id="semCatItems_${cat.id}" style="display:flex; flex-direction:column; gap:6px;"></div>
+          <div id="semCatItems_${cat.id || catIdx}" style="display:flex; flex-direction:column; gap:6px;"></div>
         `;
 
         container.appendChild(catBox);
-        const itemsBox = catBox.querySelector(`#semCatItems_${cat.id}`);
+        const itemsBox = catBox.querySelector(`#semCatItems_${cat.id || catIdx}`);
 
         cat.items.forEach((item, itemIdx) => {
           if (!item.done) totalPending++;
@@ -2132,8 +2150,9 @@
               <span class="title-txt" style="color:#f4f4f5;">${item.text}</span>
             </div>
             <div style="display:flex; align-items:center; gap:6px;">
-              ${stepsCount > 0 ? `<span class="steps-pill" onclick="viewGoalStepsLog(${catIdx}, ${itemIdx})" title="לחץ לצפייה בצעדים שנעשו">🏆 ${stepsCount} צעדים</span>` : ''}
-              <button class="btn-step-plus" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים שהתקדמת בנושא">+ צעד</button>
+              ${stepsCount > 0 ? `<span class="steps-pill" onclick="openStepsModal(${catIdx}, ${itemIdx})" title="לחץ לפתיחת יומן הצעדים">🏆 ${stepsCount} צעדים</span>` : ''}
+              <button class="btn-step-plus" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים">+ צעד</button>
+              <button onclick="deleteGoalFromCat(${catIdx}, ${itemIdx})" style="background:none; border:none; color:#71717a; font-size:0.8rem; cursor:pointer; padding:0 3px;">✕</button>
             </div>
           `;
           itemsBox.appendChild(row);
@@ -2148,33 +2167,162 @@
       }
     }
 
+    // הוספה ועריכה של נושאים
+    function promptAddNewCategory() {
+      const title = prompt("הזן שם עבור הנושא החדש (למשל: לימודים, כושר, תורה, פרויקט גמר):");
+      if (!title || !title.trim()) return;
+
+      const colors = ["#38bdf8", "#22c55e", "#f59e0b", "#ec4899", "#a855f7", "#ef4444", "#14b8a6"];
+      const chosenColor = colors[Math.floor(Math.random() * colors.length)];
+
+      if (!Array.isArray(db.semesterGoals)) db.semesterGoals = [];
+      db.semesterGoals.push({
+        id: "cat_" + Date.now(),
+        title: title.trim(),
+        color: chosenColor,
+        items: []
+      });
+
+      saveDB();
+      renderSemesterGoals();
+    }
+
+    function promptEditCategory(catIdx) {
+      const cat = db.semesterGoals[catIdx];
+      const newTitle = prompt("שנה את שם הנושא:", cat.title);
+      if (newTitle && newTitle.trim()) cat.title = newTitle.trim();
+
+      const newColor = prompt("בחר צבע עבור הנושא (למשל: #38bdf8, #22c55e, #f59e0b, #ec4899, #ef4444):", cat.color);
+      if (newColor && newColor.trim()) cat.color = newColor.trim();
+
+      saveDB();
+      renderSemesterGoals();
+    }
+
+    function promptDeleteCategory(catIdx) {
+      if (!confirm(`האם למחוק את הנושא "${db.semesterGoals[catIdx].title}" וכל היעדים שבו?`)) return;
+      db.semesterGoals.splice(catIdx, 1);
+      saveDB();
+      renderSemesterGoals();
+    }
+
+    function promptAddGoalToCat(catIdx) {
+      const text = prompt(`הוסף יעד חדש תחת הנושא "${db.semesterGoals[catIdx].title}":`);
+      if (!text || !text.trim()) return;
+      db.semesterGoals[catIdx].items.push({
+        id: "g_" + Date.now(),
+        text: text.trim(),
+        done: false,
+        steps: []
+      });
+      saveDB();
+      renderSemesterGoals();
+    }
+
+    function deleteGoalFromCat(catIdx, itemIdx) {
+      if (!confirm("האם למחוק יעד זה?")) return;
+      db.semesterGoals[catIdx].items.splice(itemIdx, 1);
+      saveDB();
+      renderSemesterGoals();
+    }
+
     function toggleSemesterGoalItem(catIdx, itemIdx) {
       db.semesterGoals[catIdx].items[itemIdx].done = !db.semesterGoals[catIdx].items[itemIdx].done;
       saveDB();
       renderSemesterGoals();
     }
 
+    // הוספת צעד ישירות
     function promptAddStepToGoal(catIdx, itemIdx) {
       const item = db.semesterGoals[catIdx].items[itemIdx];
-      const stepText = prompt(`רשום צעד, פעולה או הישג ביניים שהשלמת עבור היעד:\n"${item.text}"`);
+      const stepText = prompt(`רשום צעד או הישג ביניים שהשלמת עבור:\n"${item.text}"`);
       if (!stepText || !stepText.trim()) return;
 
       if (!Array.isArray(item.steps)) item.steps = [];
-      const nowStr = new Intl.DateTimeFormat('he-IL', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date());
-      item.steps.push({ text: stepText.trim(), date: nowStr });
+      const now = new Date();
+      const dateStr = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+      const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
+      item.steps.push({ text: stepText.trim(), date: dateStr, time: timeStr, id: Date.now() });
       saveDB();
       renderSemesterGoals();
-      alert(`כל הכבוד! נרשם צעד נוסף בהצלחה:\n"${stepText.trim()}"\nסה״כ צעדים ביעד זה: ${item.steps.length}`);
     }
 
-    function viewGoalStepsLog(catIdx, itemIdx) {
+    // חלון צף מותאם לצעדים (במקום alert)
+    function openStepsModal(catIdx, itemIdx) {
+      currentStepsGoalContext = { catIdx, itemIdx };
       const item = db.semesterGoals[catIdx].items[itemIdx];
-      const steps = item.steps || [];
-      if (steps.length === 0) return alert("טרם נרשמו צעדים ביעד זה.");
+      document.getElementById('stepsModalGoalTitle').textContent = `יעד: "${item.text}"`;
+      renderStepsInModal();
+      document.getElementById('stepsLogModal').style.display = 'flex';
+    }
 
-      const logText = steps.map((s, idx) => `${idx + 1}. [${s.date}] ${s.text}`).join('\n');
-      alert(`🏆 היסטוריית צעדים והתקדמות ביעד:\n"${item.text}"\n\n${logText}`);
+    function closeStepsModal() {
+      document.getElementById('stepsLogModal').style.display = 'none';
+      currentStepsGoalContext = null;
+    }
+
+    function renderStepsInModal() {
+      if (!currentStepsGoalContext) return;
+      const { catIdx, itemIdx } = currentStepsGoalContext;
+      const item = db.semesterGoals[catIdx].items[itemIdx];
+      const listEl = document.getElementById('stepsModalList');
+      listEl.innerHTML = '';
+
+      const steps = item.steps || [];
+      if (steps.length === 0) {
+        listEl.innerHTML = '<div style="color:#a1a1aa; font-size:0.85rem; text-align:center; padding:15px;">טרם נרשמו צעדים ביעד זה.</div>';
+        return;
+      }
+
+      steps.forEach((s, sIdx) => {
+        const row = document.createElement('div');
+        row.className = 'step-log-item';
+        row.innerHTML = `
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <strong style="color:#38bdf8;">#${sIdx + 1}</strong>
+              <span style="color:#fff; font-weight:600;">${s.text}</span>
+            </div>
+            <div style="font-size:0.75rem; color:#94a3b8; margin-top:3px;">
+              <span>📅 ${s.date || ''}</span> • <span>⏰ ${s.time || ''}</span>
+            </div>
+          </div>
+          <button onclick="deleteStepFromGoal(${sIdx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.85rem;" title="מחק צעד זה">✕</button>
+        `;
+        listEl.appendChild(row);
+      });
+    }
+
+    function addStepFromModal() {
+      if (!currentStepsGoalContext) return;
+      const input = document.getElementById('stepsModalNewInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const { catIdx, itemIdx } = currentStepsGoalContext;
+      const item = db.semesterGoals[catIdx].items[itemIdx];
+      if (!Array.isArray(item.steps)) item.steps = [];
+
+      const now = new Date();
+      const dateStr = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+      const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+      item.steps.push({ text: text, date: dateStr, time: timeStr, id: Date.now() });
+      input.value = '';
+
+      saveDB();
+      renderStepsInModal();
+      renderSemesterGoals();
+    }
+
+    function deleteStepFromGoal(stepIdx) {
+      if (!currentStepsGoalContext) return;
+      const { catIdx, itemIdx } = currentStepsGoalContext;
+      db.semesterGoals[catIdx].items[itemIdx].steps.splice(stepIdx, 1);
+      saveDB();
+      renderStepsInModal();
+      renderSemesterGoals();
     }
 
     /* 6. תצוגה שנתית */
@@ -2208,9 +2356,7 @@
       goals.forEach((g, idx) => {
         const li = document.createElement('li');
         li.className = `goal-item ${g.done ? 'done' : ''}`;
-        li.onclick = (e) => {
-          if (e.target.tagName !== 'BUTTON') toggleYearlyGoal(idx);
-        };
+        li.onclick = (e) => { if (e.target.tagName !== 'BUTTON') toggleYearlyGoal(idx); };
         li.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" ${g.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleYearlyGoal(${idx})">
@@ -2251,9 +2397,7 @@
       const drawer = document.getElementById('quickNotesDrawer');
       const isVisible = drawer.style.display === 'block';
       drawer.style.display = isVisible ? 'none' : 'block';
-      if (!isVisible) {
-        document.getElementById('quickTaskInput').focus();
-      }
+      if (!isVisible) document.getElementById('quickTaskInput').focus();
     }
 
     function renderQuickTasks() {
@@ -2294,7 +2438,6 @@
       const input = document.getElementById('quickTaskInput');
       const text = input.value.trim();
       if (!text) return;
-
       if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
       db.quickTasks.unshift({ text, done: false, id: Date.now() });
       input.value = '';
@@ -2319,8 +2462,7 @@
     /* מודל רשומה */
     function toggleWeeklyCheckboxVisibility() {
       const cat = document.getElementById('modalCategory').value;
-      const box = document.getElementById('fullWeeklyOption');
-      box.style.display = (cat === 'plan') ? 'flex' : 'none';
+      document.getElementById('fullWeeklyOption').style.display = (cat === 'plan') ? 'flex' : 'none';
     }
 
     function openAddEntryModal() {
@@ -2504,9 +2646,7 @@
 
     function handleLogout() {
       if (auth) {
-        auth.signOut().then(() => {
-          location.reload();
-        });
+        auth.signOut().then(() => location.reload());
       }
     }
 
@@ -2539,7 +2679,6 @@
                   if (!db.dailyReflections) db.dailyReflections = {};
                   if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
                   if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
-                  if (!db.semesterData) db.semesterData = {};
                   if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
                   localStorage.setItem('hebrew_life_journal_v8', JSON.stringify(db));
                   renderHeaderToday();
@@ -2640,7 +2779,6 @@
           if (!db.dailyReflections) db.dailyReflections = {};
           if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
           if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
-          if (!db.semesterData) db.semesterData = {};
           if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
           saveDB();
           renderHeaderToday();
@@ -2682,7 +2820,6 @@
           if (!db.dailyReflections) db.dailyReflections = {};
           if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
           if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
-          if (!db.semesterData) db.semesterData = {};
           if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
           saveDB();
           init();
