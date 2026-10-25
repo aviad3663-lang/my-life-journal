@@ -98,10 +98,6 @@
       flex-direction: column;
       align-items: flex-end;
       gap: 8px;
-      margin-left: 185px; /* מרווח עבור כפתור היעדים הצף בצד שמאל למעלה */
-    }
-    @media (max-width: 768px) {
-      .header-controls { margin-left: 0; margin-top: 48px; }
     }
 
     .primary-auth-row {
@@ -534,12 +530,12 @@
     .sem-legend-item { display: inline-flex; align-items: center; gap: 6px; }
     .sem-legend-dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
 
-    /* רשת חודשי הסמסטר - טור יחיד רחב וברור */
+    /* רשת חודשי הסמסטר - טור יחיד רחב ויציב */
     .sem-calendar-single-column {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      max-width: 780px;
+      max-width: 820px;
       margin: 0 auto;
     }
 
@@ -566,29 +562,33 @@
       border-collapse: collapse;
       text-align: center;
       font-size: 0.85rem;
+      table-layout: fixed; /* מבטיח שרוחב העמודות לא ישתנה לעולם בהוספת טקסט */
     }
     .sem-month-table th {
       color: #94a3b8;
       font-weight: 700;
-      padding: 6px 3px;
+      padding: 6px 2px;
       font-size: 0.8rem;
+      width: 12.5%;
     }
     .sem-month-table td {
-      padding: 4px 2px;
+      padding: 3px 2px;
       vertical-align: top;
+      width: 12.5%;
     }
     .sem-day-cell-num {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      min-height: 48px;
+      height: 54px; /* גובה קבוע שמונע קפיצות עיצוב */
       border-radius: 8px;
       border: 1px solid transparent;
-      padding: 4px 2px;
+      padding: 3px 2px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s;
+      overflow: hidden;
     }
     .sem-day-cell-num:hover {
       border-color: rgba(56, 189, 248, 0.5);
@@ -604,6 +604,19 @@
     .sem-day-cell-num.is-sem-break { background: rgba(244, 63, 94, 0.28); border-color: #f43f5e; color: #fecdd3; font-weight: 800; }
     .sem-day-cell-num.is-exam-b { background: rgba(99, 102, 241, 0.25); border-color: #6366f1; color: #c7d2fe; font-weight: 800; }
     .sem-day-cell-num.is-sem-b-start { background: rgba(249, 115, 22, 0.3); border-color: #f97316; color: #ffedd5; font-weight: 900; }
+    
+    /* ימים שכבר חלפו - צבע כהה ומעומעם */
+    .sem-day-cell-num.sem-day-passed {
+      opacity: 0.42;
+      filter: grayscale(45%);
+      background: rgba(0, 0, 0, 0.45) !important;
+      border-color: rgba(255, 255, 255, 0.05) !important;
+      color: #94a3b8 !important;
+    }
+    .sem-day-cell-num.sem-day-passed:hover {
+      opacity: 0.85;
+    }
+
     .sem-day-cell-num.is-today {
       border: 2px solid #22c55e !important;
       background: rgba(34, 197, 94, 0.25) !important;
@@ -624,22 +637,39 @@
       color: #052e16;
       font-weight: 900;
     }
+    .sem-week-badge-col.sem-week-passed {
+      opacity: 0.38;
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* כיתוב אירוע מיוחד בתוך המשבצת */
+    .sem-special-event-label {
+      font-size: 0.60rem;
+      line-height: 1.1;
+      font-weight: 800;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      display: block;
+    }
 
     /* תגית שם מבחן מקוצר על גבי יום הלוח */
     .sem-day-exam-tag {
-      font-size: 0.68rem;
+      font-size: 0.62rem;
       background: #0284c7;
       color: #ffffff;
       border-radius: 4px;
-      padding: 1px 4px;
-      margin-top: 3px;
+      padding: 1px 3px;
+      margin-top: 2px;
       max-width: 100%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       font-weight: 700;
       display: block;
-      line-height: 1.2;
+      line-height: 1.15;
       box-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
 
@@ -732,35 +762,35 @@
       color: #a8a29e;
     }
 
-    /* כפתור יעדי סמסטר - פינה שמאלית עליונה (Top-Left) */
+    /* כפתור יעדים - ממוקם בגובה שורת הציטוטים ללא הפרעה לכפתורי הסרגל */
     #btnSemesterGoalsToggle {
       position: fixed;
-      top: 18px;
+      top: 86px;
       left: 18px;
       z-index: 9999;
       background: linear-gradient(135deg, #f97316, #ef4444);
       color: #ffffff;
       border: 2px solid #fed7aa;
       border-radius: 50px;
-      padding: 9px 18px;
+      padding: 7px 15px;
       font-weight: 800;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       cursor: pointer;
-      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.55);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       transition: transform 0.2s, box-shadow 0.2s;
     }
     #btnSemesterGoalsToggle:hover {
       transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 12px 30px rgba(239, 68, 68, 0.75);
+      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.7);
     }
 
     #semesterGoalsDrawer {
       display: none;
       position: fixed;
-      top: 68px;
+      top: 130px;
       left: 18px;
       z-index: 10000;
       width: 470px;
@@ -776,13 +806,29 @@
     .sem-goals-header {
       background: linear-gradient(135deg, #f97316, #ef4444);
       color: #ffffff;
-      padding: 12px 16px;
+      padding: 14px 16px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center; /* כותרת ממורכזת באמצע */
       align-items: center;
-      font-weight: 800;
-      font-size: 1.05rem;
+      position: relative;
     }
+    .sem-goals-header-title {
+      font-size: 1.25rem; /* גופן גדול ומודגש */
+      font-weight: 900;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+    .sem-goals-close-btn {
+      position: absolute;
+      left: 14px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
     .sem-cat-section {
       margin-bottom: 18px;
       border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -896,9 +942,9 @@
 </head>
 <body>
 
-  <!-- כפתור יעדי סמסטר צף (בפינה השמאלית העליונה) -->
-  <button id="btnSemesterGoalsToggle" onclick="toggleSemesterGoalsDrawer()" title="יעדי סמסטר ומעקב צעדים">
-    <span>🎯 יעדי סמסטר</span>
+  <!-- כפתור יעדים צף (בגובה שורת הציטוטים בצד שמאל) -->
+  <button id="btnSemesterGoalsToggle" onclick="toggleSemesterGoalsDrawer()" title="יעדים לסמסטר ומעקב צעדים">
+    <span>🎯 יעדים</span>
     <span class="quick-badge" id="semGoalsBadge" style="background:#fff; color:#ef4444; font-weight:800; display:none;">0</span>
   </button>
 
@@ -909,6 +955,7 @@
         <div class="hebrew-subtitle" id="headerHebrew">טוען תאריך עברי...</div>
       </div>
 
+      <!-- כפתורי סרגל עליון צמודים רגיל לשמאל -->
       <div class="header-controls">
         <div class="primary-auth-row">
           <button class="btn-tool" style="background:#0284c7; color:#fff; font-weight:700; padding:5px 10px; font-size:0.8rem;" onclick="copyBackupToDocs()" title="העתק קוד גיבוי מלא ללוח להדבקה במסמך Google Docs">
@@ -932,14 +979,13 @@
           <button class="btn-tool" onclick="exportWeeklyMemoriesPDF()">📖 ספר PDF</button>
           <button class="btn-tool" onclick="exportGoogleCalendarICS()">📅 ייצוא ליומן</button>
           <button class="btn-tool" onclick="changeBackground()">🎨 רקע</button>
-          <button class="btn-tool" onclick="exportData()">💾 הורד קובץ חדש</button>
           <button class="btn-tool" onclick="document.getElementById('importFile').click()">📂 שחזור מקובץ</button>
           <input type="file" id="importFile" style="display:none" onchange="importData(event)">
         </div>
       </div>
     </header>
 
-    <!-- באנר משפטי חיזוק ומוסר לניצול הזמן (מקורות חז"ל ומוסר) -->
+    <!-- באנר משפטי חיזוק ומוסר לניצול הזמן (מקורות חז"ל וכלליים על שליחות, אומץ וזמן) -->
     <div class="time-quote-banner">
       <div style="display:flex; align-items:center; gap:8px;">
         <span style="font-size:1.15rem;">📜</span>
@@ -1089,7 +1135,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
             <h2 style="font-size:1.35rem; color:#38bdf8; margin:0;">🎓 סמסטר א׳ • תשפ״ז (2026-2027)</h2>
-            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:3px;">המרכז האקדמי לב • נפתח ב-11.10.2026 • 14 שבועות הוראה ותקופת בחינות[cite: 14]</div>
+            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:3px;">המרכז האקדמי לב • נפתח ב-11.10.2026 • 14 שבועות הוראה ותקופת בחינות[cite: 13]</div>
           </div>
           <span id="semesterCurrentStatusBadge" class="sem-week-badge-col" style="background:#22c55e; color:#052e16; font-size:0.85rem; padding:4px 10px; font-weight:bold;">חישוב סטטוס...</span>
         </div>
@@ -1120,6 +1166,7 @@
         <!-- מקרא צבעים מדויק ללוח השנה -->
         <div class="sem-legend-bar">
           <span class="sem-legend-item"><span class="sem-legend-dot" style="background:#22c55e; border:1px solid #fff;"></span> <strong>היום / שבוע נוכחי</strong></span>
+          <span class="sem-legend-item"><span class="sem-legend-dot" style="background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.2);"></span> <strong>ימים/שבועות שעברו</strong></span>
           <span class="sem-legend-item"><span class="sem-legend-dot" style="background:rgba(56,189,248,0.3); border:1px solid #38bdf8;"></span> שבועות הוראה</span>
           <span class="sem-legend-item"><span class="sem-legend-dot" style="background:#eab308;"></span> חג חנוכה 🕎</span>
           <span class="sem-legend-item"><span class="sem-legend-dot" style="background:#ea580c;"></span> צום י׳ בטבת</span>
@@ -1132,10 +1179,7 @@
       </div>
 
       <div class="panel">
-        <div style="text-align:center; margin-bottom:14px; color:#94a3b8; font-size:0.85rem;">
-          💡 <strong>טיפ:</strong> לחץ על כל יום בלוח השנה כדי להוסיף, לערוך או למחוק שם מבחן מקוצר (למשל: אינפי 1).
-        </div>
-        <!-- גלילה בטור יחיד נוח וקריא -->
+        <!-- גלילה בטור יחיד נוח וקריא ללא טקסט טיפ -->
         <div class="sem-calendar-single-column" id="semCalendarMonthsContainer"></div>
       </div>
     </div>
@@ -1175,13 +1219,11 @@
     </div>
   </div>
 
-  <!-- חלונית יעדי סמסטר ומעקב צעדים (צד שמאל למעלה) -->
+  <!-- חלונית יעדים לסמסטר ומעקב צעדים -->
   <div id="semesterGoalsDrawer">
     <div class="sem-goals-header">
-      <div style="display:flex; align-items:center; gap:6px;">
-        <span>🎯 יעדי סמסטר ומעקב צעדים</span>
-      </div>
-      <button onclick="toggleSemesterGoalsDrawer()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer; font-weight:bold;">✕</button>
+      <h3 class="sem-goals-header-title">יעדים לסמסטר</h3>
+      <button class="sem-goals-close-btn" onclick="toggleSemesterGoalsDrawer()">✕</button>
     </div>
     <div style="padding:10px 14px; background:#27272a; display:flex; justify-content:space-between; align-items:center;">
       <span style="font-size:0.8rem; color:#a1a1aa;">ניהול נושאים ויעדים אישיים</span>
@@ -1402,7 +1444,7 @@
     let editingContext = null;
     let currentStepsGoalContext = null;
 
-    // מאגר משפטי מוסר, חז"ל וחיזוק תורני בניצול הזמן
+    // מאגר משפטי מוסר, חז"ל וחיזוק תורני וכללי בניצול הזמן, שליחות, חסד ואומץ
     const timeQuotes = [
       "״רַבִּי טַרְפוֹן אוֹמֵר: הַיּוֹם קָצָר וְהַמְּלָאכָה מְרֻבָּה, וְהַפּוֹעֲלִים עֲצֵלִים, וְהַשָּׂכָר הַרְבֵּה, וּבַעַל הַבַּיִת דּוֹחֵק.״ (מסכת אבות ב, טו)",
       "״יָמָיו כְּצֵל עוֹבֵר – לֹא כְּצִלּוֹ שֶׁל כּוֹתֶל וְלֹא כְּצִלּוֹ שֶׁל אִילָן, אֶלָּא כְּצִלּוֹ שֶׁל עוֹף הַפּוֹרֵחַ.״ (מדרש רבה)",
@@ -1410,10 +1452,12 @@
       "״אַל תֹּאמַר לִכְשֶׁאֶפָּנֶה אֶשְׁנֶה, שֶׁמָּא לֹא תִפָּנֶה.״ (מסכת אבות ב, ד)",
       "״הַזְּמַן הוּא הַחַיִּים עַצְמָם; הַמְּאַבֵּד אֶת זְמַנּוֹ – מְאַבֵּד אֶת חַיָּיו וְעַצְמוּתוֹ.״ (החפץ חיים זצ״ל)",
       "״כָּל מַה שֶּׁבְּכֹחֲךָ לַעֲשׂוֹת עֲשֵׂה – כִּי הַשָּׁעָה הַחוֹלֶפֶת שׁוּב לֹא תָּשׁוּב לְעוֹלָם.״ (הגר״א מווילנא)",
-      "״יְסוֹד הַחֲסִידוּת וְשֹׁרֶשׁ הָעֲבוֹדָה הַתְּמִימָה – שֶׁיִּתְבָּרֵר וְיִתְאַמֵּת אֶצְלוֹ מַה חוֹבָתוֹ בְּעוֹלָמוֹ.״ (מסילת ישרים)",
+      "״עוֹלָם חֶסֶד יִבָּנֶה – כָּל אָדָם נִבְרָא עִם שְׁלִיחוּת מְיֻחֶדֶת לְהָאִיר, לְהֵיטִיב וּלְהַרְבּוֹת טוֹב בָּעוֹלָם.״",
       "״אִם אֵין אֲנִי לִי, מִי לִי? וּכְשֶׁאֲנִי לְעַצְמִי, מָה אֲנִי? וְאִם לֹא עַכְשָׁיו, אֵימָתַי?״ (אבות א, יד)",
-      "״לְפוּם צַעֲרָא אַגְרָא – כְּפִי הַיְּגִיעָה וְהַהִתְגַּבְּרוּת בַּזְּמַן, כָּךְ שְׂכָרוֹ שֶׁל אָדָם.״ (אבות ה, כג)",
-      "״הַזְּמַן יָקָר מִכָּל פְּנִינִים, כִּי בְּכָל רֶגַע וָרֶגַע יָכוֹל אָדָם לִקְנוֹת חַיֵּי עוֹלָם.״ (שערי תשובה)"
+      "״הָאֹמֶץ אֵינוֹ הֵעָדֵר הַפַּחַד, אֶלָּא הַהַכָּרָה שֶׁיֵּשׁ דָּבָר חָשׁוּב מִמֶּנּוּ – תָּעֵז, תַּחְלֹם, תִּתְעַקֵּשׁ וְאַל תְּוַתֵּר!״",
+      "״לֹא עָלֶיךָ הַמְּלָאכָה לִגְמֹר, וְלֹא אַתָּה בֶן חוֹרִין לִבָּטֵל מִמֶּנָּה.״ (מסכת אבות ב, טז)",
+      "״הַהַצְלָחָה אֵינָהּ נִמְדֶּדֶת בְּלֹא לִפּוֹל, אֶלָּא בַּיְּכֹלֶת לָקוּם מֵחָדָשׁ בְּכָל פַּעַם בִּגְבוּרָה וּבֶאֱמוּנָה.״",
+      "״הַזְּמַן יָקָר מִכָּל פְּנִינִים, כִּי בְּכָל רֶגַע וָרֶגַע יָכוֹל אָדָם לִקְנוֹת עוֹלָמוֹ בְּמַעֲשֶׂה טוֹב.״ (שערי תשובה)"
     ];
     let currentQuoteIndex = 0;
 
@@ -1984,7 +2028,7 @@
       }
     }
 
-    /* 4. לוח שנה סמסטריאלי מלא - טור יחיד לגלילה נוחה + הוספת שמות מבחנים */
+    /* 4. לוח שנה סמסטריאלי מלא - טור יחיד לגלילה נוחה + הוספת שמות מבחנים ללא שינוי פריסה */
     function renderSemesterCalendarView() {
       document.getElementById('currentFocusTitle').innerText = `לוח שנה סמסטר א׳ • תשפ״ז`;
 
@@ -1992,11 +2036,12 @@
       const examsStart = new Date(2027, 0, 24); // 24 בינואר 2027
       const semEnd = new Date(2027, 1, 28); // 28 בפברואר 2027 (תחילת סמסטר ב')
       const today = new Date();
+      const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
       // חישוב שבוע נוכחי בסמסטר
       let currentWeekNum = 0;
-      if (today >= semStart) {
-        const diffDays = Math.floor((today - semStart) / (1000 * 60 * 60 * 24));
+      if (todayMid >= semStart) {
+        const diffDays = Math.floor((todayMid - semStart) / (1000 * 60 * 60 * 24));
         currentWeekNum = Math.floor(diffDays / 7) + 1;
       }
 
@@ -2005,13 +2050,13 @@
       const remWeeks = Math.max(0, 14 - currentWeekNum);
       document.getElementById('semStatRemainingWeeks').textContent = `${remWeeks} שבועות`;
 
-      const diffExams = Math.ceil((examsStart - today) / (1000 * 60 * 60 * 24));
-      document.getElementById('semStatDaysToExams').textContent = diffExams > 0 ? `${diffExams} ימים` : (today <= semEnd ? "בתקופת מבחנים!" : "הסתיימו");
+      const diffExams = Math.ceil((examsStart - todayMid) / (1000 * 60 * 60 * 24));
+      document.getElementById('semStatDaysToExams').textContent = diffExams > 0 ? `${diffExams} ימים` : (todayMid <= semEnd ? "בתקופת מבחנים!" : "הסתיימו");
 
       let progressPct = 0;
-      if (today >= semStart && today <= semEnd) {
-        progressPct = Math.round(((today - semStart) / (semEnd - semStart)) * 100);
-      } else if (today > semEnd) progressPct = 100;
+      if (todayMid >= semStart && todayMid <= semEnd) {
+        progressPct = Math.round(((todayMid - semStart) / (semEnd - semStart)) * 100);
+      } else if (todayMid > semEnd) progressPct = 100;
       
       document.getElementById('semProgressBarFill').style.width = `${progressPct}%`;
       document.getElementById('semStatProgressPct').textContent = `${progressPct}%`;
@@ -2071,6 +2116,10 @@
           const sundayOfThisWeek = new Date(weekRowStartDate);
           sundayOfThisWeek.setDate(weekRowStartDate.getDate() - dayOfWeek);
 
+          const saturdayOfThisWeek = new Date(sundayOfThisWeek);
+          saturdayOfThisWeek.setDate(sundayOfThisWeek.getDate() + 6);
+          const isWeekPassed = (saturdayOfThisWeek < todayMid);
+
           let semWeekLabel = "--";
           let isCurWeekRow = false;
           if (sundayOfThisWeek >= semStart) {
@@ -2084,55 +2133,58 @@
             if (wNum === currentWeekNum) isCurWeekRow = true;
           }
 
-          html += `<td><span class="sem-week-badge-col ${isCurWeekRow ? 'is-cur-week' : ''}">${semWeekLabel}</span></td>`;
+          html += `<td><span class="sem-week-badge-col ${isCurWeekRow ? 'is-cur-week' : ''} ${isWeekPassed ? 'sem-week-passed' : ''}">${semWeekLabel}</span></td>`;
 
           for (let d = 0; d < 7; d++) {
             if ((curDay === 1 && d < dayOfWeek) || curDay > daysInMonth) {
               html += `<td><div class="sem-day-cell-num empty"></div></td>`;
             } else {
               const thisDate = new Date(mObj.year, mObj.month, curDay);
+              const thisDateMid = new Date(thisDate.getFullYear(), thisDate.getMonth(), thisDate.getDate());
               const dateStr = formatDateKey(thisDate);
               const isToday = (dateStr === formatDateKey(today));
+              const isPassed = (thisDateMid < todayMid);
               const isBeforeSem = (thisDate < semStart);
 
               let specialClass = isBeforeSem ? 'before-sem' : 'regular-sem';
-              let titleNote = '';
+              let eventLabel = '';
 
-              // אירועים ומועדים מדויקים לפי התצלום והלו"ז
+              // אירועים ומועדים מדויקים לפי התצלום והלו"ז - כולל תווית כתובה בתוך המשבצת
               if (dateStr >= "2026-12-05" && dateStr <= "2026-12-12") {
                 specialClass = 'is-holiday';
-                titleNote = 'חנוכה 🕎';
+                eventLabel = 'חנוכה 🕎';
               } else if (dateStr === "2026-12-20") {
                 specialClass = 'is-fast';
-                titleNote = 'צום י׳ בטבת ⚡';
+                eventLabel = 'צום י׳ בטבת';
               } else if (dateStr === "2027-01-21") {
                 specialClass = 'is-celebration';
-                titleNote = 'סיום הוראה סמסטר א׳ (שבוע 14)';
+                eventLabel = 'סיום הוראה';
               } else if (dateStr === "2027-01-23") {
                 specialClass = 'is-celebration';
-                titleNote = 'ט״ו בשבט 🌳';
+                eventLabel = 'ט״ו בשבט 🌳';
               } else if (dateStr >= "2027-01-24" && dateStr <= "2027-02-12") {
                 specialClass = 'is-exam-a';
-                titleNote = 'בחינות מועדי א׳ 📝';
+                eventLabel = 'מועד א׳ 📝';
               } else if (dateStr >= "2027-02-14" && dateStr <= "2027-02-16") {
                 specialClass = 'is-sem-break';
-                titleNote = 'חופשת סמסטר 🏖️ (3 ימים)';
+                eventLabel = 'חופשת סמסטר';
               } else if (dateStr >= "2027-02-17" && dateStr <= "2027-02-27") {
                 specialClass = 'is-exam-b';
-                titleNote = 'בחינות מועדי ב׳ סמסטר א׳ (שבועיים)';
+                eventLabel = 'מועד ב׳';
               } else if (dateStr === "2027-02-28") {
                 specialClass = 'is-sem-b-start';
-                titleNote = 'תחילת סמסטר ב׳ תשפ״ז 🚀';
+                eventLabel = 'סמסטר ב׳ 🚀';
               }
 
               const examName = (db.semesterExams && db.semesterExams[dateStr]) || '';
 
               html += `
                 <td>
-                  <div class="sem-day-cell-num ${specialClass} ${isToday ? 'is-today' : ''}" 
+                  <div class="sem-day-cell-num ${specialClass} ${isToday ? 'is-today' : ''} ${isPassed ? 'sem-day-passed' : ''}" 
                        onclick="promptEditSemesterDayExam('${dateStr}', '${curDay}/${mObj.month+1}')" 
-                       title="${titleNote ? titleNote + ' • ' : ''}${curDay}/${mObj.month+1}${examName ? ' | ' + examName : ' (לחץ להוספת שם מבחן)'}">
-                    <span>${curDay}</span>
+                       title="${curDay}/${mObj.month+1}${eventLabel ? ' • ' + eventLabel : ''}${examName ? ' | ' + examName : ' (לחץ להוספת מבחן)'}">
+                    <span style="font-size:0.86rem; line-height:1;">${curDay}</span>
+                    ${eventLabel ? `<span class="sem-special-event-label">${eventLabel}</span>` : ''}
                     ${examName ? `<span class="sem-day-exam-tag">${examName}</span>` : ''}
                   </div>
                 </td>
