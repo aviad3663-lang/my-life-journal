@@ -581,7 +581,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      height: 54px; /* גובה קבוע שמונע קפיצות עיצוב */
+      height: 56px; /* גובה קבוע שמונע קפיצות עיצוב */
       border-radius: 8px;
       border: 1px solid transparent;
       padding: 3px 2px;
@@ -787,14 +787,15 @@
       box-shadow: 0 10px 25px rgba(239, 68, 68, 0.7);
     }
 
+    /* חלון יעדים רחב, גדול וברור */
     #semesterGoalsDrawer {
       display: none;
       position: fixed;
       top: 130px;
       left: 18px;
       z-index: 10000;
-      width: 470px;
-      max-width: 94vw;
+      width: 820px; /* תצוגה גדולה ומרווחת */
+      max-width: 95vw;
       background: #18181b;
       border: 2px solid #f97316;
       border-radius: 18px;
@@ -808,31 +809,32 @@
       color: #ffffff;
       padding: 14px 16px;
       display: flex;
-      justify-content: center; /* כותרת ממורכזת באמצע */
+      justify-content: center; /* כותרת ממורכזת בדיוק באמצע */
       align-items: center;
       position: relative;
     }
     .sem-goals-header-title {
-      font-size: 1.25rem; /* גופן גדול ומודגש */
+      font-size: 1.3rem; /* טקסט גדול ומודגש */
       font-weight: 900;
       margin: 0;
       letter-spacing: 0.5px;
+      text-align: center;
     }
     .sem-goals-close-btn {
       position: absolute;
-      left: 14px;
+      left: 16px;
       background: none;
       border: none;
       color: #fff;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       cursor: pointer;
       font-weight: bold;
     }
 
     .sem-cat-section {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       border-bottom: 1px solid rgba(255,255,255,0.08);
-      padding-bottom: 14px;
+      padding-bottom: 16px;
     }
     /* כותרות נושאים מוגדלות ובולטות */
     .sem-cat-title-row {
@@ -841,34 +843,50 @@
       align-items: center;
       background: rgba(255, 255, 255, 0.05);
       border-radius: 10px;
-      padding: 8px 12px;
+      padding: 9px 14px;
       margin-bottom: 10px;
-      border-right: 5px solid;
+      border-right: 6px solid;
     }
     .sem-cat-title {
-      font-size: 1.15rem; /* כותרת גדולה ובולטת לעין */
+      font-size: 1.18rem; /* כותרת גדולה ובולטת לעין */
       font-weight: 900;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       letter-spacing: 0.3px;
     }
-    .sem-goal-row {
+    /* באנר תזכורת צ'ופר בכל נושא */
+    .sem-cat-reward-banner {
+      font-size: 0.78rem;
+      background: rgba(234, 179, 8, 0.12);
+      border: 1px dashed rgba(234, 179, 8, 0.4);
+      color: #fef08a;
+      border-radius: 8px;
+      padding: 5px 12px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sem-goal-box {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .sem-goal-main-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      background: #27272a;
-      border: 1px solid #3f3f46;
-      border-radius: 8px;
-      padding: 7px 10px;
-      margin-bottom: 6px;
-      font-size: 0.86rem;
+      font-size: 0.92rem;
     }
-    .sem-goal-row.done {
-      opacity: 0.5;
+    .sem-goal-box.done {
+      opacity: 0.55;
     }
-    .sem-goal-row.done span.title-txt {
+    .sem-goal-box.done span.title-txt {
       text-decoration: line-through;
       color: #a1a1aa;
     }
@@ -888,10 +906,46 @@
       color: #4ade80;
       border: 1px solid rgba(34, 197, 94, 0.4);
       border-radius: 12px;
-      padding: 2px 7px;
-      font-size: 0.74rem;
+      padding: 2px 8px;
+      font-size: 0.76rem;
       font-weight: 700;
       cursor: pointer;
+    }
+
+    /* רשימת תתי-יעדים / צעדים בדרך המוצגת מתחת ליעד */
+    .subtasks-container {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .subtask-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      color: #e2e8f0;
+    }
+    .subtask-add-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .subtask-input {
+      flex: 1;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid #52525b;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 0.78rem;
+      color: #fff;
+      outline: none;
     }
 
     /* חלון צף מעוצב לרשימת הצעדים (Steps Modal) */
@@ -899,8 +953,8 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.78);
+      backdrop-filter: blur(8px);
       align-items: center;
       justify-content: center;
       z-index: 100001;
@@ -908,23 +962,23 @@
       font-family: system-ui, sans-serif;
     }
     .steps-modal-box {
-      background: #18181b;
+      background: #1e293b;
       border: 2px solid #38bdf8;
-      border-radius: 16px;
+      border-radius: 18px;
       width: 90%;
-      max-width: 480px;
-      padding: 20px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      max-width: 520px;
+      padding: 22px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.95);
       color: #fff;
     }
     .step-log-item {
-      background: #27272a;
-      border: 1px solid #3f3f46;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255,255,255,0.08);
       border-right: 4px solid #38bdf8;
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 9px 12px;
       margin-bottom: 8px;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -1219,17 +1273,17 @@
     </div>
   </div>
 
-  <!-- חלונית יעדים לסמסטר ומעקב צעדים -->
+  <!-- חלונית יעדים לסמסטר ומעקב צעדים (תצוגה רחבה וממורכזת) -->
   <div id="semesterGoalsDrawer">
     <div class="sem-goals-header">
       <h3 class="sem-goals-header-title">יעדים לסמסטר</h3>
       <button class="sem-goals-close-btn" onclick="toggleSemesterGoalsDrawer()">✕</button>
     </div>
-    <div style="padding:10px 14px; background:#27272a; display:flex; justify-content:space-between; align-items:center;">
-      <span style="font-size:0.8rem; color:#a1a1aa;">ניהול נושאים ויעדים אישיים</span>
-      <button onclick="promptAddNewCategory()" style="background:#f97316; color:#fff; border:none; border-radius:6px; padding:3px 9px; font-size:0.75rem; font-weight:bold; cursor:pointer;">+ נושא חדש</button>
+    <div style="padding:10px 16px; background:#27272a; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:0.82rem; color:#a1a1aa;">ניהול נושאים, יעדים ותתי-משימות</span>
+      <button onclick="promptAddNewCategory()" style="background:#f97316; color:#fff; border:none; border-radius:6px; padding:4px 10px; font-size:0.78rem; font-weight:bold; cursor:pointer;">+ נושא חדש</button>
     </div>
-    <div style="padding:14px; max-height:500px; overflow-y:auto;" id="semGoalsListContainer">
+    <div style="padding:16px; max-height:540px; overflow-y:auto;" id="semGoalsListContainer">
       <!-- קטגוריות ויעדים ייטענו כאן -->
     </div>
   </div>
@@ -1237,18 +1291,18 @@
   <!-- חלון צף מעוצב לרשימת הצעדים (Steps Modal) -->
   <div id="stepsLogModal" onclick="if(event.target===this) closeStepsModal()">
     <div class="steps-modal-box">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
         <div>
-          <h3 style="margin:0; color:#38bdf8; font-size:1.1rem;">📋 היסטוריית צעדים והתקדמות</h3>
-          <div id="stepsModalGoalTitle" style="font-size:0.85rem; color:#cbd5e1; margin-top:2px;"></div>
+          <h3 style="margin:0; color:#38bdf8; font-size:1.15rem;">📋 היסטוריית צעדים שבוצעו</h3>
+          <div id="stepsModalGoalTitle" style="font-size:0.85rem; color:#cbd5e1; margin-top:3px;"></div>
         </div>
-        <button onclick="closeStepsModal()" style="background:none; border:none; color:#94a3b8; font-size:1.3rem; cursor:pointer;">✕</button>
+        <button onclick="closeStepsModal()" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer;">✕</button>
       </div>
 
-      <div id="stepsModalList" style="max-height:280px; overflow-y:auto; margin-bottom:14px;"></div>
+      <div id="stepsModalList" style="max-height:300px; overflow-y:auto; margin-bottom:14px;"></div>
 
       <div style="display:flex; gap:6px;">
-        <input type="text" id="stepsModalNewInput" placeholder="רשום צעד או הישג ביניים שהשלמת..." style="flex:1; background:#27272a; border:1px solid #3f3f46; border-radius:8px; padding:8px 12px; color:#fff; font-size:0.88rem; outline:none;" onkeydown="if(event.key==='Enter') addStepFromModal()">
+        <input type="text" id="stepsModalNewInput" placeholder="רשום צעד או הישג ביניים שהשלמת..." style="flex:1; background:#0f172a; border:1px solid #334155; border-radius:8px; padding:8px 12px; color:#fff; font-size:0.88rem; outline:none;" onkeydown="if(event.key==='Enter') addStepFromModal()">
         <button onclick="addStepFromModal()" style="background:#0284c7; color:#fff; border:none; border-radius:8px; padding:8px 14px; font-weight:bold; cursor:pointer;">הוסף צעד</button>
       </div>
     </div>
@@ -1383,10 +1437,10 @@
         title: "🎓 לימודים אקדמיים ומצוינות",
         color: "#3b82f6",
         items: [
-          { id: "s1", text: "הגשת כל תרגילי הבית והמטלות בזמן (ללא פיגורים)", done: false, steps: [] },
-          { id: "s2", text: "חזרות שבועיות ותרגול עמוק להבנת החומר", done: false, steps: [] },
-          { id: "s3", text: "נוכחות מלאה והקשבה פעילה בהרצאות ובמעבדות", done: false, steps: [] },
-          { id: "s4", text: "הכנה מוקדמת ופתרון מבחני עבר לקראת מועדי א׳", done: false, steps: [] }
+          { id: "s1", text: "הגשת כל תרגילי הבית והמטלות בזמן (ללא פיגורים)", done: false, steps: [], subtasks: [] },
+          { id: "s2", text: "חזרות שבועיות ותרגול עמוק להבנת החומר", done: false, steps: [], subtasks: [] },
+          { id: "s3", text: "נוכחות מלאה והקשבה פעילה בהרצאות ובמעבדות", done: false, steps: [], subtasks: [] },
+          { id: "s4", text: "הכנה מוקדמת ופתרון מבחני עבר לקראת מועדי א׳", done: false, steps: [], subtasks: [] }
         ]
       },
       {
@@ -1394,8 +1448,8 @@
         title: "📖 תורה, קודש ועבודת ה׳",
         color: "#10b981",
         items: [
-          { id: "t1", text: "קביעת עתים לתורה: לימוד יומי קבוע בהלכה ומוסר", done: false, steps: [] },
-          { id: "t2", text: "הקפדה על 3 תפילות ביום במניין ובכוונה", done: false, steps: [] }
+          { id: "t1", text: "קביעת עתים לתורה: לימוד יומי קבוע בהלכה ומוסר", done: false, steps: [], subtasks: [] },
+          { id: "t2", text: "הקפדה על 3 תפילות ביום במניין ובכוונה", done: false, steps: [], subtasks: [] }
         ]
       },
       {
@@ -1403,8 +1457,8 @@
         title: "🏃‍♂️ כושר גופני, בריאות וחיוניות",
         color: "#f59e0b",
         items: [
-          { id: "h1", text: "שגרת אימונים קבועה (3-4 פעמים בשבוע: ריצה/כוח)", done: false, steps: [] },
-          { id: "h2", text: "שינה מסודרת: לפחות 7 שעות שינה בלילה והשכמה בזמן", done: false, steps: [] }
+          { id: "h1", text: "שגרת אימונים קבועה (3-4 פעמים בשבוע: ריצה/כוח)", done: false, steps: [], subtasks: [] },
+          { id: "h2", text: "שינה מסודרת: לפחות 7 שעות שינה בלילה והשכמה בזמן", done: false, steps: [], subtasks: [] }
         ]
       },
       {
@@ -1412,8 +1466,8 @@
         title: "🧭 פיתוח אישי, ניצול זמן וסדר",
         color: "#8b5cf6",
         items: [
-          { id: "p1", text: "תכנון שבועי ויומי עקבי במרחב האישי", done: false, steps: [] },
-          { id: "p2", text: "מלחמה נחושה בדחיינות וחיזוק המיקוד והמשמעת", done: false, steps: [] }
+          { id: "p1", text: "תכנון שבועי ויומי עקבי במרחב האישי", done: false, steps: [], subtasks: [] },
+          { id: "p2", text: "מלחמה נחושה בדחיינות וחיזוק המיקוד והמשמעת", done: false, steps: [], subtasks: [] }
         ]
       }
     ];
@@ -1444,7 +1498,7 @@
     let editingContext = null;
     let currentStepsGoalContext = null;
 
-    // מאגר משפטי מוסר, חז"ל וחיזוק תורני וכללי בניצול הזמן, שליחות, חסד ואומץ
+    // מאגר משפטי מוסר, חז"ל וחיזוק תורני וכללי
     const timeQuotes = [
       "״רַבִּי טַרְפוֹן אוֹמֵר: הַיּוֹם קָצָר וְהַמְּלָאכָה מְרֻבָּה, וְהַפּוֹעֲלִים עֲצֵלִים, וְהַשָּׂכָר הַרְבֵּה, וּבַעַל הַבַּיִת דּוֹחֵק.״ (מסכת אבות ב, טו)",
       "״יָמָיו כְּצֵל עוֹבֵר – לֹא כְּצִלּוֹ שֶׁל כּוֹתֶל וְלֹא כְּצִלּוֹ שֶׁל אִילָן, אֶלָּא כְּצִלּוֹ שֶׁל עוֹף הַפּוֹרֵחַ.״ (מדרש רבה)",
@@ -1452,11 +1506,13 @@
       "״אַל תֹּאמַר לִכְשֶׁאֶפָּנֶה אֶשְׁנֶה, שֶׁמָּא לֹא תִפָּנֶה.״ (מסכת אבות ב, ד)",
       "״הַזְּמַן הוּא הַחַיִּים עַצְמָם; הַמְּאַבֵּד אֶת זְמַנּוֹ – מְאַבֵּד אֶת חַיָּיו וְעַצְמוּתוֹ.״ (החפץ חיים זצ״ל)",
       "״כָּל מַה שֶּׁבְּכֹחֲךָ לַעֲשׂוֹת עֲשֵׂה – כִּי הַשָּׁעָה הַחוֹלֶפֶת שׁוּב לֹא תָּשׁוּב לְעוֹלָם.״ (הגר״א מווילנא)",
-      "״עוֹלָם חֶסֶד יִבָּנֶה – כָּל אָדָם נִבְרָא עִם שְׁלִיחוּת מְיֻחֶדֶת לְהָאִיר, לְהֵיטִיב וּלְהַרְבּוֹת טוֹב בָּעוֹלָם.״",
+      "״עוֹלָם חֶסֶד יִבָּנֶה – נִבְרֵאתָ כְּדֵי לְהֵיטִיב, לְהָאִיר וּלְהַרְבּוֹת טוֹב בָּעוֹלָם בְּכָל יוֹם מֵחָדָשׁ.״",
       "״אִם אֵין אֲנִי לִי, מִי לִי? וּכְשֶׁאֲנִי לְעַצְמִי, מָה אֲנִי? וְאִם לֹא עַכְשָׁיו, אֵימָתַי?״ (אבות א, יד)",
       "״הָאֹמֶץ אֵינוֹ הֵעָדֵר הַפַּחַד, אֶלָּא הַהַכָּרָה שֶׁיֵּשׁ דָּבָר חָשׁוּב מִמֶּנּוּ – תָּעֵז, תַּחְלֹם, תִּתְעַקֵּשׁ וְאַל תְּוַתֵּר!״",
       "״לֹא עָלֶיךָ הַמְּלָאכָה לִגְמֹר, וְלֹא אַתָּה בֶן חוֹרִין לִבָּטֵל מִמֶּנָּה.״ (מסכת אבות ב, טז)",
-      "״הַהַצְלָחָה אֵינָהּ נִמְדֶּדֶת בְּלֹא לִפּוֹל, אֶלָּא בַּיְּכֹלֶת לָקוּם מֵחָדָשׁ בְּכָל פַּעַם בִּגְבוּרָה וּבֶאֱמוּנָה.״",
+      "״שֶׁבַע יִפּוֹל צַדִּיק וָקָם – הַגְּדֻלָּה הִיא לֹא לְהִמָּנַע מִנְּפִילָה, אֶלָּא לִמְצוֹא אֶת הָאֹמֶץ לָקוּם מֵחָדָשׁ.״",
+      "״הַהַצְלָחָה הִיא לָלֶכֶת מִכִּשָּׁלוֹן לְכִשָּׁלוֹן מִבְּלִי לְאַבֵּד אֶת הַהִתְלַהֲבוּת, הָאֱמוּנָה וְהַשִּׂמְחָה בַּדֶּרֶךְ.״",
+      "״אֵין דָּבָר הָעוֹמֵד בִּפְנֵי הָרָצוֹן – כְּשֶׁאָדָם רוֹצֶה בֶּאֱמֶת, נִפְתָּחִים לוֹ מַעְיָנוֹת גְּבוּרָה פְּנִימִיִּים.״",
       "״הַזְּמַן יָקָר מִכָּל פְּנִינִים, כִּי בְּכָל רֶגַע וָרֶגַע יָכוֹל אָדָם לִקְנוֹת עוֹלָמוֹ בְּמַעֲשֶׂה טוֹב.״ (שערי תשובה)"
     ];
     let currentQuoteIndex = 0;
@@ -2149,7 +2205,7 @@
               let specialClass = isBeforeSem ? 'before-sem' : 'regular-sem';
               let eventLabel = '';
 
-              // אירועים ומועדים מדויקים לפי התצלום והלו"ז - כולל תווית כתובה בתוך המשבצת
+              // אירועים ומועדים מדויקים לפי התצלום והלו"ז
               if (dateStr >= "2026-12-05" && dateStr <= "2026-12-12") {
                 specialClass = 'is-holiday';
                 eventLabel = 'חנוכה 🕎';
@@ -2216,7 +2272,7 @@
       renderSemesterCalendarView();
     }
 
-    /* 5. יעדי סמסטר ומעקב צעדים - כותרות מוגדלות ובולטות */
+    /* 5. יעדי סמסטר ומעקב צעדים - כותרות מוגדלות ובולטות, תתי יעדים, סדר ומיון */
     function toggleSemesterGoalsDrawer() {
       const drawer = document.getElementById('semesterGoalsDrawer');
       const isVisible = drawer.style.display === 'block';
@@ -2241,19 +2297,35 @@
         const catBox = document.createElement('div');
         catBox.className = 'sem-cat-section';
 
+        // חישוב סך צעדים בקטגוריה עבור מנגנון הצ'ופר
+        let catTotalSteps = 0;
+        cat.items.forEach(it => { catTotalSteps += ((it.steps && it.steps.length) || 0); });
+        const remainder = catTotalSteps % 5;
+        const stepsUntilReward = (5 - remainder) === 0 ? 5 : (5 - remainder);
+
         catBox.innerHTML = `
           <div class="sem-cat-title-row" style="border-right-color:${cat.color};">
             <div class="sem-cat-title" style="color:${cat.color};">
               <span style="width:14px; height:14px; border-radius:50%; background:${cat.color}; display:inline-block;"></span>
               <strong>${cat.title}</strong>
             </div>
-            <div style="display:flex; gap:6px; align-items:center;">
+            <div style="display:flex; gap:5px; align-items:center;">
+              <button onclick="sortCategoryBySteps(${catIdx})" style="background:#27272a; border:1px solid #3f3f46; color:#fef08a; border-radius:6px; padding:3px 7px; font-size:0.75rem; font-weight:bold; cursor:pointer;" title="מיין יעדים לפי כמות צעדים מהגבוה לנמוך">⚡ מיין</button>
+              <button onclick="moveCategory(${catIdx}, -1)" style="background:none; border:none; color:#a1a1aa; font-size:0.8rem; cursor:pointer;" title="הזז נושא למעלה" ${catIdx === 0 ? 'disabled style="opacity:0.2;"' : ''}>▲</button>
+              <button onclick="moveCategory(${catIdx}, 1)" style="background:none; border:none; color:#a1a1aa; font-size:0.8rem; cursor:pointer;" title="הזז נושא למטה" ${catIdx === categories.length - 1 ? 'disabled style="opacity:0.2;"' : ''}>▼</button>
               <button onclick="promptEditCategory(${catIdx})" style="background:none; border:none; color:#a1a1aa; font-size:0.8rem; cursor:pointer;" title="ערוך שם נושא או צבע">✏️</button>
               <button onclick="promptDeleteCategory(${catIdx})" style="background:none; border:none; color:#ef4444; font-size:0.8rem; cursor:pointer;" title="מחק נושא זה">🗑️</button>
-              <button onclick="promptAddGoalToCat(${catIdx})" style="background:#27272a; border:1px solid #3f3f46; color:#fff; border-radius:6px; padding:3px 8px; font-size:0.75rem; font-weight:bold; cursor:pointer;">+ יעד</button>
+              <button onclick="promptAddGoalToCat(${catIdx})" style="background:#f97316; color:#fff; border:none; border-radius:6px; padding:3px 8px; font-size:0.75rem; font-weight:bold; cursor:pointer;">+ יעד</button>
             </div>
           </div>
-          <div id="semCatItems_${cat.id || catIdx}" style="display:flex; flex-direction:column; gap:6px;"></div>
+
+          <!-- באנר תזכורת צ'ופר -->
+          <div class="sem-cat-reward-banner">
+            <span>🎁 <strong>תזכורת צ'ופר:</strong> נצברו בתחום זה <strong>${catTotalSteps}</strong> צעדים!</span>
+            <span>עוד <strong>${stepsUntilReward}</strong> צעדים לצ'ופר הבא ☕</span>
+          </div>
+
+          <div id="semCatItems_${cat.id || catIdx}" style="display:flex; flex-direction:column; gap:8px;"></div>
         `;
 
         container.appendChild(catBox);
@@ -2262,21 +2334,48 @@
         cat.items.forEach((item, itemIdx) => {
           if (!item.done) totalPending++;
           const stepsCount = (item.steps && item.steps.length) || 0;
+          const subtasks = item.subtasks || [];
 
-          const row = document.createElement('div');
-          row.className = `sem-goal-row ${item.done ? 'done' : ''}`;
-          row.innerHTML = `
-            <div style="display:flex; align-items:center; gap:8px; flex:1;">
-              <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleSemesterGoalItem(${catIdx}, ${itemIdx})" style="cursor:pointer;">
-              <span class="title-txt" style="color:#f4f4f5;">${item.text}</span>
+          const box = document.createElement('div');
+          box.className = `sem-goal-box ${item.done ? 'done' : ''}`;
+          
+          box.innerHTML = `
+            <div class="sem-goal-main-row">
+              <div style="display:flex; align-items:center; gap:8px; flex:1;">
+                <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleSemesterGoalItem(${catIdx}, ${itemIdx})" style="cursor:pointer; width:17px; height:17px;">
+                <span class="title-txt" style="color:#f4f4f5; font-weight:600;">${item.text}</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:5px;">
+                <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, -1)" style="background:none; border:none; color:#71717a; font-size:0.75rem; cursor:pointer;" title="הזז יעד למעלה" ${itemIdx === 0 ? 'disabled style="opacity:0.2;"' : ''}>▲</button>
+                <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, 1)" style="background:none; border:none; color:#71717a; font-size:0.75rem; cursor:pointer;" title="הזז יעד למטה" ${itemIdx === cat.items.length - 1 ? 'disabled style="opacity:0.2;"' : ''}>▼</button>
+                <button class="btn-step-plus" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים">+ צעד</button>
+                ${stepsCount > 0 ? `<span class="steps-pill" onclick="openStepsModal(${catIdx}, ${itemIdx})" title="לחץ לפתיחת יומן הצעדים המפורט">🏆 ${stepsCount} צעדים</span>` : ''}
+                <button onclick="deleteGoalFromCat(${catIdx}, ${itemIdx})" style="background:none; border:none; color:#71717a; font-size:0.85rem; cursor:pointer; padding:0 3px;" title="מחק יעד">✕</button>
+              </div>
             </div>
-            <div style="display:flex; align-items:center; gap:6px;">
-              ${stepsCount > 0 ? `<span class="steps-pill" onclick="openStepsModal(${catIdx}, ${itemIdx})" title="לחץ לפתיחת יומן הצעדים">🏆 ${stepsCount} צעדים</span>` : ''}
-              <button class="btn-step-plus" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים">+ צעד</button>
-              <button onclick="deleteGoalFromCat(${catIdx}, ${itemIdx})" style="background:none; border:none; color:#71717a; font-size:0.8rem; cursor:pointer; padding:0 3px;">✕</button>
+
+            <!-- רשימת תתי-יעדים בדרך -->
+            <div class="subtasks-container">
+              <div id="subtasksList_${catIdx}_${itemIdx}" style="display:flex; flex-direction:column; gap:4px;">
+                ${subtasks.map((st, stIdx) => `
+                  <div class="subtask-item-row">
+                    <span style="flex:1;">📌 ${st.text}</span>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                      <button onclick="completeSubtaskAsStep(${catIdx}, ${itemIdx}, ${stIdx})" style="background:#22c55e; color:#052e16; border:none; border-radius:4px; padding:2px 7px; font-size:0.72rem; font-weight:800; cursor:pointer;" title="סמן שבוצע - יתווסף ישירות כצעד מושלם!">✔ בוצע</button>
+                      <button onclick="deleteSubtask(${catIdx}, ${itemIdx}, ${stIdx})" style="background:none; border:none; color:#ef4444; font-size:0.72rem; cursor:pointer;" title="מחק תת-יעד">✕</button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+
+              <!-- הוספת תת-יעד בדרך -->
+              <div class="subtask-add-row">
+                <input type="text" id="subtaskInput_${catIdx}_${itemIdx}" class="subtask-input" placeholder="הוסף תת-יעד / צעד בדרך..." onkeydown="if(event.key==='Enter') addSubtaskToGoal(${catIdx}, ${itemIdx})">
+                <button onclick="addSubtaskToGoal(${catIdx}, ${itemIdx})" style="background:#3b82f6; color:#fff; border:none; border-radius:6px; padding:3px 9px; font-size:0.75rem; font-weight:bold; cursor:pointer;">+ הוסף</button>
+              </div>
             </div>
           `;
-          itemsBox.appendChild(row);
+          itemsBox.appendChild(box);
         });
       });
 
@@ -2285,6 +2384,96 @@
         badge.textContent = totalPending;
       } else {
         badge.style.display = 'none';
+      }
+    }
+
+    // שינוי סדר נושאים
+    function moveCategory(catIdx, direction) {
+      const targetIdx = catIdx + direction;
+      if (targetIdx < 0 || targetIdx >= db.semesterGoals.length) return;
+      const temp = db.semesterGoals[catIdx];
+      db.semesterGoals[catIdx] = db.semesterGoals[targetIdx];
+      db.semesterGoals[targetIdx] = temp;
+      saveDB();
+      renderSemesterGoals();
+    }
+
+    // שינוי סדר יעדים
+    function moveGoalInCat(catIdx, itemIdx, direction) {
+      const items = db.semesterGoals[catIdx].items;
+      const targetIdx = itemIdx + direction;
+      if (targetIdx < 0 || targetIdx >= items.length) return;
+      const temp = items[itemIdx];
+      items[itemIdx] = items[targetIdx];
+      items[targetIdx] = temp;
+      saveDB();
+      renderSemesterGoals();
+    }
+
+    // מיון אוטומטי של יעדים בנושא לפי מספר צעדים מהגבוה לנמוך
+    function sortCategoryBySteps(catIdx) {
+      db.semesterGoals[catIdx].items.sort((a, b) => {
+        const countA = (a.steps && a.steps.length) || 0;
+        const countB = (b.steps && b.steps.length) || 0;
+        return countB - countA;
+      });
+      saveDB();
+      renderSemesterGoals();
+    }
+
+    // הוספת תת-יעד בדרך
+    function addSubtaskToGoal(catIdx, itemIdx) {
+      const input = document.getElementById(`subtaskInput_${catIdx}_${itemIdx}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      const item = db.semesterGoals[catIdx].items[itemIdx];
+      if (!Array.isArray(item.subtasks)) item.subtasks = [];
+      item.subtasks.push({ id: Date.now(), text: text });
+      input.value = '';
+      saveDB();
+      renderSemesterGoals();
+    }
+
+    // מחיקת תת-יעד
+    function deleteSubtask(catIdx, itemIdx, stIdx) {
+      db.semesterGoals[catIdx].items[itemIdx].subtasks.splice(stIdx, 1);
+      saveDB();
+      renderSemesterGoals();
+    }
+
+    // לחיצה על ✔ בתת-יעד: מוחק מתתי-היעדים ורושם אוטומטית כצעד שבוצע
+    function completeSubtaskAsStep(catIdx, itemIdx, stIdx) {
+      const item = db.semesterGoals[catIdx].items[itemIdx];
+      const subtask = item.subtasks[stIdx];
+      const completedText = subtask.text;
+
+      // 1. הסרה מתתי היעדים
+      item.subtasks.splice(stIdx, 1);
+
+      // 2. הוספה ישירה לרשימת הצעדים עם תאריך ושעה
+      if (!Array.isArray(item.steps)) item.steps = [];
+      const now = new Date();
+      const dateStr = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+      const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+      item.steps.push({ text: completedText, date: dateStr, time: timeStr, id: Date.now() });
+
+      saveDB();
+      renderSemesterGoals();
+
+      // בדיקת ספירת צעדים כוללת לצ'ופר
+      checkAndNotifyReward(catIdx);
+    }
+
+    // בדיקת צ'ופר בכל כפולה של 5
+    function checkAndNotifyReward(catIdx) {
+      const cat = db.semesterGoals[catIdx];
+      let catTotalSteps = 0;
+      cat.items.forEach(it => { catTotalSteps += ((it.steps && it.steps.length) || 0); });
+
+      if (catTotalSteps > 0 && catTotalSteps % 5 === 0) {
+        alert(`🎉 אלוף! השלמת 5 צעדים בתחום "${cat.title}"! (סה״כ ${catTotalSteps} צעדים)\n\nזה הזמן לעצור רגע ולפנק את עצמך בצ'ופר שמגיע לך על ההתמדה וההתקדמות! ☕🍰`);
       }
     }
 
@@ -2333,7 +2522,8 @@
         id: "g_" + Date.now(),
         text: text.trim(),
         done: false,
-        steps: []
+        steps: [],
+        subtasks: []
       });
       saveDB();
       renderSemesterGoals();
@@ -2365,6 +2555,8 @@
       item.steps.push({ text: stepText.trim(), date: dateStr, time: timeStr, id: Date.now() });
       saveDB();
       renderSemesterGoals();
+
+      checkAndNotifyReward(catIdx);
     }
 
     // פתיחת חלון צף מעוצב לרשימת הצעדים
@@ -2400,7 +2592,7 @@
         row.innerHTML = `
           <div style="flex:1;">
             <div style="display:flex; align-items:center; gap:8px;">
-              <strong style="color:#38bdf8;">#${sIdx + 1}</strong>
+              <strong style="color:#38bdf8; font-size:0.95rem;">#${sIdx + 1}</strong>
               <span style="color:#fff; font-weight:600;">${s.text}</span>
             </div>
             <div style="font-size:0.75rem; color:#94a3b8; margin-top:3px;">
@@ -2433,6 +2625,7 @@
       saveDB();
       renderStepsInModal();
       renderSemesterGoals();
+      checkAndNotifyReward(catIdx);
     }
 
     function deleteStepFromGoal(stepIdx) {
@@ -2880,7 +3073,7 @@
           await writable.close();
           alert("הקובץ הקבוע עודכן בהצלחה במחשבך!");
         } else {
-          exportData();
+          alert("הדפדפן אינו תומך בעדכון ישיר של קובץ מקומי. השתמש בגיבוי ל-Docs.");
         }
       } catch (err) {
         if (err.name !== 'AbortError') {
@@ -2921,14 +3114,6 @@
         document.body.style.backgroundImage = `url('${url}')`;
         localStorage.setItem('journal_bg_v8', url);
       }
-    }
-
-    function exportData() {
-      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `life_journal_backup_${formatDateKey(new Date())}.json`;
-      a.click();
     }
 
     function importData(e) {
