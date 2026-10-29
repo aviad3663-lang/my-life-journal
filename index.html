@@ -399,50 +399,79 @@
     .week-day-col:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.4); }
     .week-day-header { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; text-align: center; }
 
-    /* 3. תצוגה חודשית */
+    /* 3. תצוגה חודשית - עיצוב חדש, מודרני, קריא וברור לפס המטרות */
     .month-day-preview-bar {
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 12px;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.98));
+      border: 1.5px solid #38bdf8;
+      border-radius: 16px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     }
     .preview-bar-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 6px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      padding-bottom: 5px;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 8px;
     }
-    .preview-bar-content {
+    .preview-bar-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      font-size: 0.84rem;
+      gap: 16px;
     }
-    @media (max-width: 700px) { .preview-bar-content { grid-template-columns: 1fr; } }
-    .preview-chip-list {
+    @media (max-width: 768px) { .preview-bar-grid { grid-template-columns: 1fr; } }
+
+    .preview-section-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px 14px;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .preview-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      font-weight: 800;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+      padding-bottom: 6px;
+    }
+    .preview-items-list {
+      display: flex;
+      flex-direction: column;
       gap: 5px;
-      margin-top: 4px;
+      max-height: 160px;
+      overflow-y: auto;
+      padding-left: 4px;
     }
-    .preview-chip {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 2px 7px;
-      border-radius: 5px;
-      font-size: 0.78rem;
+    .preview-item-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 7px;
+      padding: 5px 9px;
+      font-size: 0.84rem;
+      color: #f1f5f9;
+      line-height: 1.35;
     }
-    .preview-chip.done {
+    .preview-item-row.done {
+      opacity: 0.55;
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .preview-item-row.done span {
       text-decoration: line-through;
-      color: var(--text-muted);
-      opacity: 0.6;
+      color: #94a3b8;
     }
 
     .month-names-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 700; color: var(--text-muted); font-size: 0.88rem; margin-bottom: 8px; }
@@ -522,7 +551,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      max-width: 820px;
+      max-width: 840px;
       margin: 0 auto;
     }
 
@@ -643,6 +672,20 @@
       font-size: 0.62rem;
       line-height: 1.1;
       font-weight: 800;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      display: block;
+    }
+
+    /* כיתוב שם שבת ופרשה */
+    .sem-shabbat-label {
+      font-size: 0.62rem;
+      line-height: 1.1;
+      color: #a5b4fc;
+      font-weight: 700;
       margin-top: 2px;
       white-space: nowrap;
       overflow: hidden;
@@ -792,7 +835,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
 
-    /* חלון יעדים צר, קומפקטי ומהיר */
+    /* חלון יעדים - תומך במצב רגיל ובמצב מורחב */
     #semesterGoalsDrawer {
       display: none;
       position: fixed;
@@ -808,7 +851,13 @@
       overflow: hidden;
       font-family: system-ui, sans-serif;
       direction: rtl;
+      transition: width 0.25s ease, max-width 0.25s ease;
     }
+    #semesterGoalsDrawer.expanded {
+      width: 960px; /* מצב מורחב */
+      max-width: 96vw;
+    }
+
     .sem-goals-header {
       background: linear-gradient(135deg, #f97316, #ef4444);
       color: #ffffff;
@@ -825,16 +874,25 @@
       letter-spacing: 0.5px;
       text-align: center;
     }
-    .sem-goals-close-btn {
+    .sem-goals-header-actions {
       position: absolute;
-      left: 16px;
+      left: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sem-goals-action-btn {
       background: none;
       border: none;
       color: #fff;
-      font-size: 1.3rem;
+      font-size: 1.15rem;
       cursor: pointer;
       font-weight: bold;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: background 0.15s;
     }
+    .sem-goals-action-btn:hover { background: rgba(255,255,255,0.2); }
 
     /* תזכורת צ'ופר יחידה ומרוכזת למעלה בקטן */
     .sem-single-top-reminder {
@@ -847,13 +905,33 @@
       font-weight: 600;
     }
 
+    /* רשת יעדים - תומכת בטור אחד ברגיל וב-2 טורים במורחב */
+    #semGoalsListContainer {
+      padding: 12px;
+      max-height: 560px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    #semesterGoalsDrawer.expanded #semGoalsListContainer {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 768px) {
+      #semesterGoalsDrawer.expanded #semGoalsListContainer {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .sem-cat-section {
-      margin-bottom: 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      padding-bottom: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      padding: 10px;
       transition: opacity 0.2s;
     }
-    /* כותרות נושאים מוגדלות ובולטות עם צבע רקע */
     .sem-cat-title-row {
       display: flex;
       justify-content: space-between;
@@ -865,7 +943,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     }
     .sem-cat-title {
-      font-size: 1.22rem; /* כותרת גדולה ובולטת לעין */
+      font-size: 1.22rem;
       font-weight: 900;
       display: flex;
       align-items: center;
@@ -884,13 +962,28 @@
       transform: scale(1.2);
     }
 
+    /* כפתור הוספת יעד - אחיד וזהה לכולם בצבע כחול-תכלת */
+    .btn-add-goal-universal {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      border: none;
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-add-goal-universal:hover {
+      background: #0369a1 !important;
+    }
+
     .sem-goal-box {
       border-radius: 8px;
       padding: 8px 11px;
       margin-bottom: 7px;
       transition: all 0.2s;
     }
-    /* עיצוב זוהר חגיגי ליעד שהשיג 5 צעדים */
     .sem-goal-box.has-reward {
       border: 1.5px solid #facc15 !important;
       background: linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(39, 39, 42, 0.95)) !important;
@@ -901,7 +994,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      font-size: 0.83rem; /* כתב מעט קטן יותר כדי שיכנס יותר טקסט */
+      font-size: 0.83rem;
     }
     .sem-goal-box.done {
       opacity: 0.55;
@@ -910,17 +1003,21 @@
       text-decoration: line-through;
       color: #a1a1aa;
     }
+
+    /* כפתור הצעד - מקבל את צבע הנושא */
     .btn-step-plus {
-      background: #0284c7;
-      color: #fff;
       border: none;
       border-radius: 6px;
       padding: 3px 8px;
       font-size: 0.74rem;
       font-weight: bold;
+      color: #fff;
       cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      transition: opacity 0.15s;
     }
-    .btn-step-plus:hover { background: #0369a1; }
+    .btn-step-plus:hover { opacity: 0.88; }
+
     .steps-pill {
       background: rgba(34, 197, 94, 0.2);
       color: #4ade80;
@@ -1199,25 +1296,35 @@
       <div class="weekly-grid" id="weeklyGrid"></div>
     </div>
 
-    <!-- 3. תצוגה חודשית -->
+    <!-- 3. תצוגה חודשית - פס תצוגה מקדימה משודרג, ברור ומסודר -->
     <div id="viewMonthly" class="view-container active">
       <div class="panel">
         <div id="monthDayPreviewBar" class="month-day-preview-bar" style="display:none;">
           <div class="preview-bar-header">
-            <div>
-              <strong id="prevBarDateTitle" style="color:#38bdf8;">--</strong>
-              <span id="prevBarHebrewTitle" style="color:#94a3b8; font-size:0.8rem; margin-right:6px;"></span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <strong id="prevBarDateTitle" style="color:#38bdf8; font-size:1.05rem;">--</strong>
+              <span id="prevBarHebrewTitle" style="color:#cbd5e1; font-size:0.85rem;"></span>
             </div>
-            <button class="btn-primary" style="padding:3px 9px; font-size:0.75rem;" onclick="openSelectedDayDailyView()">פתח לו״ז יומי מלא ↗</button>
+            <button class="btn-primary" style="padding:4px 12px; font-size:0.78rem; font-weight:700;" onclick="openSelectedDayDailyView()">פתח לו״ז יומי מלא ↗</button>
           </div>
-          <div class="preview-bar-content">
-            <div>
-              <span style="font-weight:700; color:#fbbf24;">🌟 יעדי השבוע:</span>
-              <div id="prevBarWeeklyGoals" class="preview-chip-list"></div>
+
+          <div class="preview-bar-grid">
+            <!-- כרטיס יעדי שבוע מסודר -->
+            <div class="preview-section-card">
+              <div class="preview-section-header">
+                <span style="color:#fbbf24;">🌟 יעדי השבוע</span>
+                <span id="prevBarWeeklyCount" style="color:#94a3b8; font-size:0.75rem;"></span>
+              </div>
+              <div id="prevBarWeeklyGoals" class="preview-items-list"></div>
             </div>
-            <div>
-              <span style="font-weight:700; color:#38bdf8;">🎯 משימות היום:</span>
-              <div id="prevBarDailyTasks" class="preview-chip-list"></div>
+
+            <!-- כרטיס מטלות היום מסודר -->
+            <div class="preview-section-card">
+              <div class="preview-section-header">
+                <span style="color:#38bdf8;">🎯 מטלות היום</span>
+                <span id="prevBarDailyCount" style="color:#94a3b8; font-size:0.75rem;"></span>
+              </div>
+              <div id="prevBarDailyTasks" class="preview-items-list"></div>
             </div>
           </div>
         </div>
@@ -1229,7 +1336,7 @@
       </div>
     </div>
 
-    <!-- 4. תצוגת סמסטר א׳ תשפ״ז - פריסה בטור יחיד עם שמות מבחנים וסימון ימים שעברו -->
+    <!-- 4. תצוגת סמסטר א׳ תשפ״ז - פריסה בטור יחיד עם שמות מבחנים, שמות שבתות וסימון ימים שעברו -->
     <div id="viewSemester" class="view-container">
       <div class="semester-dashboard">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
@@ -1265,7 +1372,6 @@
       </div>
 
       <div class="panel">
-        <!-- גלילה בטור יחיד נוח וקריא ללא טקסט טיפ וללא מקרא -->
         <div class="sem-calendar-single-column" id="semCalendarMonthsContainer"></div>
       </div>
     </div>
@@ -1305,11 +1411,14 @@
     </div>
   </div>
 
-  <!-- חלונית יעדים לסמסטר ומעקב צעדים (תצוגה צרה, ממוקדת ונוחה) -->
+  <!-- חלונית יעדים לסמסטר ומעקב צעדים (תומכת במצב רגיל ובמצב מורחב) -->
   <div id="semesterGoalsDrawer">
     <div class="sem-goals-header">
       <h3 class="sem-goals-header-title">יעדים לסמסטר</h3>
-      <button class="sem-goals-close-btn" onclick="toggleSemesterGoalsDrawer()">✕</button>
+      <div class="sem-goals-header-actions">
+        <button class="sem-goals-action-btn" id="btnToggleExpandDrawer" onclick="toggleGoalsDrawerExpand()" title="הרחב/כווץ חלון">⤢</button>
+        <button class="sem-goals-action-btn" onclick="toggleSemesterGoalsDrawer()" title="סגור חלון">✕</button>
+      </div>
     </div>
     
     <!-- תזכורת צ'ופר יחידה ומרוכזת למעלה בקטן -->
@@ -1321,7 +1430,7 @@
       <span style="font-size:0.8rem; color:#a1a1aa;">גרירת ⠿ לשינוי סדר • Enter לתת-יעד</span>
       <button onclick="promptAddNewCategory()" style="background:#f97316; color:#fff; border:none; border-radius:6px; padding:3px 9px; font-size:0.75rem; font-weight:bold; cursor:pointer;">+ נושא חדש</button>
     </div>
-    <div style="padding:12px; max-height:550px; overflow-y:auto;" id="semGoalsListContainer">
+    <div id="semGoalsListContainer">
       <!-- קטגוריות ויעדים ייטענו כאן -->
     </div>
   </div>
@@ -1469,7 +1578,7 @@
       console.warn("Firebase Init Error:", err);
     }
 
-    // פונקציית עזר להמרת צבע HEX ל-RGBA עבור רקע תואם
+    // המרת צבע HEX ל-RGBA עבור רקע תואם
     function hexToRgba(hex, alpha = 1) {
       if (!hex || typeof hex !== 'string') return `rgba(59, 130, 246, ${alpha})`;
       hex = hex.replace('#', '');
@@ -1482,7 +1591,7 @@
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
 
-    // מאגר צבעים מורחב לבחירה עבור הנושאים
+    // 16 צבעים מגוונים לבחירה
     const availableCategoryColors = [
       { code: "#38bdf8", name: "תכלת שמיים" },
       { code: "#3b82f6", name: "כחול רויאל" },
@@ -1668,7 +1777,7 @@
       if (date.getDay() === 6) {
         const dKey = formatDateKey(date);
         const parasha = (db.parshiotCache && db.parshiotCache[dKey]);
-        if (parasha) shabbat = `שבת • פרשת ${parasha}`;
+        if (parasha) shabbat = `פרשת ${parasha}`;
         else { shabbat = 'שבת קודש'; fetchParshiotForYear(date.getFullYear()); }
       }
 
@@ -2063,7 +2172,7 @@
       renderWeeklyCardList(cardKey, weekKey);
     }
 
-    /* 3. תצוגה חודשית */
+    /* 3. תצוגה חודשית - פס תצוגה מקדימה משודרג וברור */
     function renderMonthlyView() {
       let startOfHebrewMonth = new Date(anchorDate);
       while (getHebrewDateInfo(startOfHebrewMonth).dayNum > 1) {
@@ -2141,16 +2250,44 @@
       document.getElementById('prevBarDateTitle').textContent = gregName;
       document.getElementById('prevBarHebrewTitle').textContent = `• ${heb.hebrewDayAndMonth} ${heb.holiday ? '('+heb.holiday+')' : ''}`;
 
-      const weeklyBox = (db.weeklyBoxes && db.weeklyBoxes[weekKey]) || { core: [], tasks: [] };
-      const weekGoals = [...(weeklyBox.core || []), ...(weeklyBox.tasks || [])];
+      // יעדי השבוע
+      const weeklyBox = (db.weeklyBoxes && db.weeklyBoxes[weekKey]) || { core: [], tasks: [], habits: [] };
+      const weekGoals = [...(weeklyBox.core || []), ...(weeklyBox.tasks || []), ...(weeklyBox.habits || [])];
       const wContainer = document.getElementById('prevBarWeeklyGoals');
-      wContainer.innerHTML = weekGoals.length === 0 ? '<span style="color:#64748b; font-size:0.75rem;">אין יעדים לשבוע זה</span>' :
-        weekGoals.map(g => `<span class="preview-chip ${g.done ? 'done' : ''}">${g.text}</span>`).join('');
+      const wCountEl = document.getElementById('prevBarWeeklyCount');
 
+      const doneW = weekGoals.filter(g => g.done).length;
+      wCountEl.textContent = weekGoals.length > 0 ? `(${doneW}/${weekGoals.length} הושלמו)` : '';
+
+      if (weekGoals.length === 0) {
+        wContainer.innerHTML = '<div style="color:#64748b; font-size:0.8rem; padding:6px 0;">אין יעדים מוגדרים לשבוע זה</div>';
+      } else {
+        wContainer.innerHTML = weekGoals.map(g => `
+          <div class="preview-item-row ${g.done ? 'done' : ''}">
+            <span style="color:#fbbf24; font-size:0.85rem;">${g.done ? '✔' : '▫'}</span>
+            <span>${g.text}</span>
+          </div>
+        `).join('');
+      }
+
+      // מטלות היום
       const dGoals = (db.dailyGoals && db.dailyGoals[dKey]) || [];
       const dContainer = document.getElementById('prevBarDailyTasks');
-      dContainer.innerHTML = dGoals.length === 0 ? '<span style="color:#64748b; font-size:0.75rem;">אין מטלות ליום זה</span>' :
-        dGoals.map(g => `<span class="preview-chip ${g.done ? 'done' : ''}">${g.text}</span>`).join('');
+      const dCountEl = document.getElementById('prevBarDailyCount');
+
+      const doneD = dGoals.filter(g => g.done).length;
+      dCountEl.textContent = dGoals.length > 0 ? `(${doneD}/${dGoals.length} בוצעו)` : '';
+
+      if (dGoals.length === 0) {
+        dContainer.innerHTML = '<div style="color:#64748b; font-size:0.8rem; padding:6px 0;">אין מטלות ליום זה</div>';
+      } else {
+        dContainer.innerHTML = dGoals.map(g => `
+          <div class="preview-item-row ${g.done ? 'done' : ''}">
+            <span style="color:#38bdf8; font-size:0.85rem;">${g.done ? '✔' : '▫'}</span>
+            <span>${g.text}</span>
+          </div>
+        `).join('');
+      }
 
       bar.style.display = 'flex';
     }
@@ -2162,13 +2299,13 @@
       }
     }
 
-    /* 4. לוח שנה סמסטריאלי מלא - טור יחיד לגלילה נוחה, כותרות נקיות, שמות מבחנים וסימון ימים שעברו */
+    /* 4. לוח שנה סמסטריאלי מלא - טור יחיד לגלילה נוחה, כותרות נקיות, שמות שבתות, שמות מבחנים וסימון ימים שעברו */
     function renderSemesterCalendarView() {
       document.getElementById('currentFocusTitle').innerText = `לוח שנה סמסטר א׳ • תשפ״ז`;
 
       const semStart = new Date(2026, 9, 11); // 11 באוקטובר 2026
       const examsStart = new Date(2027, 0, 24); // 24 בינואר 2027
-      const semEnd = new Date(2027, 1, 28); // 28 בפברואר 2027 (תחילת סמסטר ב')
+      const semEnd = new Date(2027, 1, 28); // 28 בפברואר 2027
       const today = new Date();
       const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
@@ -2209,7 +2346,7 @@
         statusBadge.textContent = `סמסטר א׳ נפתח ב-11.10.2026`;
       }
 
-      // חודשי הסמסטר בטור יחיד - כותרות נקיות בלבד ללא סוגריים
+      // חודשי הסמסטר בטור יחיד - שמות נקיים בלבד ללא סוגריים
       const monthsToRender = [
         { year: 2026, month: 9, name: "אוקטובר 2026 • תשרי-חשוון" },
         { year: 2026, month: 10, name: "נובמבר 2026 • חשוון-כסלו" },
@@ -2310,15 +2447,23 @@
                 eventLabel = 'סמסטר ב׳ 🚀';
               }
 
+              // שמות שבתות בכל יום שבת
+              let shabbatName = '';
+              if (d === 6) {
+                const hebDateInfo = getHebrewDateInfo(thisDate);
+                shabbatName = hebDateInfo.shabbat || 'שבת קודש';
+              }
+
               const examName = (db.semesterExams && db.semesterExams[dateStr]) || '';
 
               html += `
                 <td>
                   <div class="sem-day-cell-num ${specialClass} ${isToday ? 'is-today' : ''} ${isPassed ? 'sem-day-passed' : ''}" 
                        onclick="promptEditSemesterDayExam('${dateStr}', '${curDay}/${mObj.month+1}')" 
-                       title="${curDay}/${mObj.month+1}${eventLabel ? ' • ' + eventLabel : ''}${examName ? ' | ' + examName : ' (לחץ להוספת מבחן)'}">
+                       title="${curDay}/${mObj.month+1}${eventLabel ? ' • ' + eventLabel : ''}${shabbatName ? ' • ' + shabbatName : ''}${examName ? ' | ' + examName : ' (לחץ להוספת מבחן)'}">
                     <span style="font-size:0.86rem; line-height:1;">${curDay}</span>
                     ${eventLabel ? `<span class="sem-special-event-label">${eventLabel}</span>` : ''}
+                    ${shabbatName ? `<span class="sem-shabbat-label">${shabbatName}</span>` : ''}
                     ${examName ? `<span class="sem-day-exam-tag">${examName}</span>` : ''}
                   </div>
                 </td>
@@ -2350,12 +2495,21 @@
       renderSemesterCalendarView();
     }
 
-    /* 5. יעדי סמסטר ומעקב צעדים - תצוגה ממוקדת, צבעים לכל נושא, גרירה וספירת צ'ופרים */
+    /* 5. יעדי סמסטר ומעקב צעדים - מצב רגיל ומורחב, תתי-יעדים, מיון, גרירה וספירת צ'ופרים */
     function toggleSemesterGoalsDrawer() {
       const drawer = document.getElementById('semesterGoalsDrawer');
       const isVisible = drawer.style.display === 'block';
       drawer.style.display = isVisible ? 'none' : 'block';
       if (!isVisible) renderSemesterGoals();
+    }
+
+    // החלפת מצב הרחבה של חלון היעדים (רחב / צר)
+    function toggleGoalsDrawerExpand() {
+      const drawer = document.getElementById('semesterGoalsDrawer');
+      const btn = document.getElementById('btnToggleExpandDrawer');
+      const isExpanded = drawer.classList.toggle('expanded');
+      btn.textContent = isExpanded ? '⤡' : '⤢';
+      btn.title = isExpanded ? 'כווץ חלון' : 'הרחב חלון';
     }
 
     function renderSemesterGoals() {
@@ -2365,7 +2519,7 @@
       container.innerHTML = '';
 
       let totalPending = 0;
-      let totalRewardsEarned = 0; // סכימת צ'ופרים (לפי 5 צעדים ביעד מסוים)
+      let totalRewardsEarned = 0;
       const categories = db.semesterGoals || defaultSemesterGoals;
 
       if (categories.length === 0) {
@@ -2401,7 +2555,8 @@
             <div style="display:flex; gap:6px; align-items:center;">
               <button onclick="promptEditCategory(${catIdx})" style="background:none; border:none; color:#cbd5e1; font-size:0.8rem; cursor:pointer;" title="ערוך שם נושא או צבע">✏️</button>
               <button onclick="promptDeleteCategory(${catIdx})" style="background:none; border:none; color:#ef4444; font-size:0.8rem; cursor:pointer;" title="מחק נושא זה">🗑️</button>
-              <button onclick="promptAddGoalToCat(${catIdx})" style="background:${cat.color}; color:#fff; border:none; border-radius:6px; padding:3px 9px; font-size:0.75rem; font-weight:800; cursor:pointer;">+ יעד</button>
+              <!-- כפתור הוספת יעד אחיד וזהה בכחול-תכלת לכל הנושאים -->
+              <button class="btn-add-goal-universal" onclick="promptAddGoalToCat(${catIdx})">+ יעד</button>
             </div>
           </div>
 
@@ -2416,14 +2571,14 @@
           const stepsCount = (item.steps && item.steps.length) || 0;
           const subtasks = item.subtasks || [];
           
-          // בדיקה אם הושג צ'ופר ביעד זה (5 צעדים)
+          // צ'ופר בכל כפולה של 5 צעדים ביעד מסוים
           const goalRewards = Math.floor(stepsCount / 5);
           totalRewardsEarned += goalRewards;
           const hasReward = goalRewards > 0;
 
           const box = document.createElement('div');
           box.className = `sem-goal-box ${item.done ? 'done' : ''} ${hasReward ? 'has-reward' : ''}`;
-          // רקע בגוון צבע הנושא + מסגרת
+          // רקע וצבע מותאם לערכת הנושא
           box.style.background = hexToRgba(cat.color, 0.14);
           box.style.border = `1px solid ${hexToRgba(cat.color, 0.38)}`;
           
@@ -2438,7 +2593,8 @@
               <div style="display:flex; align-items:center; gap:4px;">
                 <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, -1)" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;" title="הזז יעד למעלה" ${itemIdx === 0 ? 'disabled style="opacity:0.2;"' : ''}>▲</button>
                 <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, 1)" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;" title="הזז יעד למטה" ${itemIdx === cat.items.length - 1 ? 'disabled style="opacity:0.2;"' : ''}>▼</button>
-                <button class="btn-step-plus" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים">+ צעד</button>
+                <!-- כפתור צעד בצבע הייחודי של הנושא -->
+                <button class="btn-step-plus" style="background:${cat.color};" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים">+ צעד</button>
                 ${stepsCount > 0 ? `<span class="steps-pill" onclick="openStepsModal(${catIdx}, ${itemIdx})" title="לחץ לפתיחת יומן הצעדים המפורט">🏆 ${stepsCount} צעדים</span>` : ''}
                 <button onclick="deleteGoalFromCat(${catIdx}, ${itemIdx})" style="background:none; border:none; color:#71717a; font-size:0.82rem; cursor:pointer; padding:0 3px;" title="מחק יעד">✕</button>
               </div>
@@ -2506,17 +2662,6 @@
       const temp = items[itemIdx];
       items[itemIdx] = items[targetIdx];
       items[targetIdx] = temp;
-      saveDB();
-      renderSemesterGoals();
-    }
-
-    // מיון אוטומטי של יעדים בנושא לפי מספר צעדים מהגבוה לנמוך
-    function sortCategoryBySteps(catIdx) {
-      db.semesterGoals[catIdx].items.sort((a, b) => {
-        const countA = (a.steps && a.steps.length) || 0;
-        const countB = (b.steps && b.steps.length) || 0;
-        return countB - countA;
-      });
       saveDB();
       renderSemesterGoals();
     }
