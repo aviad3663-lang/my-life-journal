@@ -67,7 +67,7 @@
 
     .app-container {
       width: 100%;
-      max-width: 1240px;
+      max-width: 1260px;
       background: var(--bg-overlay);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -211,6 +211,19 @@
       padding: 16px;
     }
 
+    /* עיצוב מעודד ומספק למשימות שהושלמו (בכל חלקי האתר) */
+    .goal-item.done, .quick-task-item.done, .sem-goal-box.done, .project-task-item.done {
+      background: rgba(34, 197, 94, 0.16) !important;
+      border: 1px solid rgba(34, 197, 94, 0.45) !important;
+      color: #86efac !important;
+      opacity: 0.95 !important;
+      transition: all 0.25s ease;
+    }
+    .goal-item.done span, .quick-task-item.done span, .sem-goal-box.done span.title-txt, .project-task-item.done span {
+      text-decoration: line-through;
+      color: #bbf7d0 !important;
+    }
+
     /* 1. תצוגה יומית */
     .daily-layout {
       display: grid;
@@ -296,14 +309,6 @@
       cursor: pointer;
     }
     .goal-item input[type="checkbox"] { accent-color: #3b82f6; cursor: pointer; width: 16px; height: 16px; flex-shrink: 0; }
-    .goal-item.done {
-      background: rgba(0,0,0,0.2);
-      opacity: 0.55;
-    }
-    .goal-item.done span {
-      text-decoration: line-through;
-      color: var(--text-muted);
-    }
 
     .daily-reflection-box {
       background: rgba(0,0,0,0.25);
@@ -381,25 +386,118 @@
       margin-top: 4px;
     }
 
-    /* 2. תצוגה שבועית */
-    .weekly-boxes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
-    @media (max-width: 800px) { .weekly-boxes-grid { grid-template-columns: 1fr; } }
-    .weekly-box-card { border-radius: 14px; padding: 15px; display: flex; flex-direction: column; gap: 9px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
-    .weekly-box-card.card-core { background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(168, 85, 247, 0.22)); border: 1px solid rgba(168, 85, 247, 0.5); }
-    .weekly-box-card.card-tasks { background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(234, 88, 12, 0.22)); border: 1px solid rgba(245, 158, 11, 0.5); }
-    .weekly-box-card.card-habits { background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(20, 184, 166, 0.22)); border: 1px solid rgba(16, 185, 129, 0.5); }
-    .weekly-box-card h4 { font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    /* 2. תצוגה שבועית חדשה - פריסה רחבה וניהולית עם 3 משבצות זמן (בוקר, צהריים, ערב) */
+    .weekly-schedule-board {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    @media (max-width: 1024px) {
+      .weekly-schedule-board {
+        grid-template-columns: repeat(7, minmax(180px, 1fr));
+      }
+    }
+    .weekly-day-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .weekly-day-card.today {
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+    }
+    .weekly-day-header {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 8px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .weekly-day-header .day-name { font-size: 0.95rem; font-weight: 800; color: #f8fafc; }
+    .weekly-day-header .day-sub { font-size: 0.78rem; color: #cbd5e1; margin-top: 2px; }
+    
+    .weekly-day-slots-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 8px;
+      flex: 1;
+    }
+    .weekly-time-slot {
+      border-radius: 8px;
+      padding: 7px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 120px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.25);
+    }
+    .weekly-time-slot.slot-morning {
+      border-top: 3px solid #f59e0b;
+    }
+    .weekly-time-slot.slot-afternoon {
+      border-top: 3px solid #38bdf8;
+    }
+    .weekly-time-slot.slot-evening {
+      border-top: 3px solid #a855f7;
+    }
+    .slot-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .slot-add-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      padding: 1px 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .slot-add-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
-    .weekly-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-    @media (max-width: 900px) { .weekly-grid { grid-template-columns: repeat(2, 1fr); } }
-    .week-day-col { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 380px; cursor: pointer; transition: all 0.2s; }
-    .week-day-col.today { border: 2px solid #3b82f6; }
-    .week-day-col.is-holiday { background: var(--holiday-bg); border-color: var(--holiday-border); }
-    .week-day-col.is-shabbat { background: var(--shabbat-bg); border-color: var(--shabbat-border); }
-    .week-day-col:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.4); }
-    .week-day-header { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; text-align: center; }
+    /* משבצת פגישה / שיעור צבעונית בלוח השבועי */
+    .slot-event-chip {
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 0.8rem;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .slot-event-chip .chip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      opacity: 0.9;
+      font-weight: 700;
+    }
+    .slot-event-chip .chip-del {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.75rem;
+      padding: 0 2px;
+      opacity: 0.75;
+    }
+    .slot-event-chip .chip-del:hover { opacity: 1; }
 
-    /* 3. תצוגה חודשית - עיצוב חדש, מודרני, קריא וברור לפס המטרות */
+    /* 3. תצוגה חודשית - פס תצוגה מקדימה */
     .month-day-preview-bar {
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.98));
       border: 1.5px solid #38bdf8;
@@ -464,14 +562,6 @@
       font-size: 0.84rem;
       color: #f1f5f9;
       line-height: 1.35;
-    }
-    .preview-item-row.done {
-      opacity: 0.55;
-      background: rgba(0, 0, 0, 0.2);
-    }
-    .preview-item-row.done span {
-      text-decoration: line-through;
-      color: #94a3b8;
     }
 
     .month-names-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 700; color: var(--text-muted); font-size: 0.88rem; margin-bottom: 8px; }
@@ -546,7 +636,6 @@
       transition: width 0.5s ease;
     }
 
-    /* רשת חודשי הסמסטר - טור יחיד רחב ויציב */
     .sem-calendar-single-column {
       display: flex;
       flex-direction: column;
@@ -622,7 +711,6 @@
     .sem-day-cell-num.is-exam-b { background: rgba(99, 102, 241, 0.25); border-color: #6366f1; color: #c7d2fe; font-weight: 800; }
     .sem-day-cell-num.is-sem-b-start { background: rgba(249, 115, 22, 0.3); border-color: #f97316; color: #ffedd5; font-weight: 900; }
     
-    /* ימים שכבר עברנו מתחילת הסמסטר: צבע מעודכן ובולט + סימון ✓ */
     .sem-day-cell-num.sem-day-passed {
       background: rgba(16, 185, 129, 0.18) !important;
       border: 1px solid rgba(52, 211, 153, 0.5) !important;
@@ -637,9 +725,7 @@
       color: #34d399;
       font-weight: 900;
     }
-    .sem-day-cell-num.sem-day-passed:hover {
-      background: rgba(16, 185, 129, 0.28) !important;
-    }
+    .sem-day-cell-num.sem-day-passed:hover { background: rgba(16, 185, 129, 0.28) !important; }
 
     .sem-day-cell-num.is-today {
       border: 2px solid #22c55e !important;
@@ -667,7 +753,6 @@
       border: 1px solid rgba(52, 211, 153, 0.3);
     }
 
-    /* כיתוב אירוע מיוחד בתוך המשבצת */
     .sem-special-event-label {
       font-size: 0.62rem;
       line-height: 1.1;
@@ -679,8 +764,6 @@
       max-width: 100%;
       display: block;
     }
-
-    /* כיתוב שם שבת ופרשה */
     .sem-shabbat-label {
       font-size: 0.62rem;
       line-height: 1.1;
@@ -693,8 +776,6 @@
       max-width: 100%;
       display: block;
     }
-
-    /* תגית שם מבחן מקוצר על גבי יום הלוח */
     .sem-day-exam-tag {
       font-size: 0.62rem;
       background: #0284c7;
@@ -712,12 +793,96 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
 
-    /* 5. תצוגה שנתית */
-    .year-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    /* 5. לשונית פרויקטים ומשימות עומק */
+    .projects-dashboard {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+      border: 1px solid #a855f7;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 16px;
+    }
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      border-top: 5px solid;
+    }
+    .project-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .project-card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f8fafc;
+      line-height: 1.35;
+    }
+    .project-progress-wrap {
+      width: 100%;
+      height: 7px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .project-progress-fill {
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.3s ease;
+    }
+    .project-tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 240px;
+      overflow-y: auto;
+      padding-left: 4px;
+    }
+    .project-task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 6px 9px;
+      font-size: 0.84rem;
+      color: #f1f5f9;
+    }
+    .project-task-input {
+      width: 100%;
+      background: rgba(0,0,0,0.35);
+      border: 1px dashed #64748b;
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: #fff;
+      font-size: 0.82rem;
+      outline: none;
+    }
+    .project-task-input:focus { border-color: #38bdf8; border-style: solid; }
+
+    /* 6. תצוגה שנתית - 12 חודשי השנה העברית המלאה */
+    .year-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
     @media (max-width: 900px) { .year-grid { grid-template-columns: repeat(2, 1fr); } }
     .year-month-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
     .year-month-card:hover { border-color: #3b82f6; transform: translateY(-3px); }
-    .year-hebrew-title { font-size: 1.4rem; font-weight: 800; color: #60a5fa; margin-bottom: 6px; }
+    .year-hebrew-title { font-size: 1.35rem; font-weight: 800; color: #60a5fa; margin-bottom: 6px; }
     .year-greg-sub { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
 
     /* פנקס מהיר צהוב צף (שמאל למטה) */
@@ -792,14 +957,6 @@
       color: #f5f5f4;
       transition: all 0.15s;
     }
-    .quick-task-item.done {
-      opacity: 0.5;
-      background: #1c1917;
-    }
-    .quick-task-item.done span {
-      text-decoration: line-through;
-      color: #a8a29e;
-    }
 
     /* כפתור יעדים - ממוקם בגובה שורת הציטוטים */
     #btnSemesterGoalsToggle {
@@ -854,7 +1011,7 @@
       transition: width 0.25s ease, max-width 0.25s ease;
     }
     #semesterGoalsDrawer.expanded {
-      width: 960px; /* מצב מורחב */
+      width: 960px;
       max-width: 96vw;
     }
 
@@ -894,7 +1051,6 @@
     }
     .sem-goals-action-btn:hover { background: rgba(255,255,255,0.2); }
 
-    /* תזכורת צ'ופר יחידה ומרוכזת למעלה בקטן */
     .sem-single-top-reminder {
       background: rgba(234, 179, 8, 0.12);
       border-bottom: 1px dashed rgba(234, 179, 8, 0.35);
@@ -905,7 +1061,6 @@
       font-weight: 600;
     }
 
-    /* רשת יעדים - תומכת בטור אחד ברגיל וב-2 טורים במורחב */
     #semGoalsListContainer {
       padding: 12px;
       max-height: 560px;
@@ -962,7 +1117,6 @@
       transform: scale(1.2);
     }
 
-    /* כפתור הוספת יעד - אחיד וזהה לכולם בצבע כחול-תכלת */
     .btn-add-goal-universal {
       background: #0284c7 !important;
       color: #ffffff !important;
@@ -984,11 +1138,6 @@
       margin-bottom: 7px;
       transition: all 0.2s;
     }
-    .sem-goal-box.has-reward {
-      border: 1.5px solid #facc15 !important;
-      background: linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(39, 39, 42, 0.95)) !important;
-      box-shadow: 0 0 12px rgba(250, 204, 21, 0.35);
-    }
     .sem-goal-main-row {
       display: flex;
       align-items: center;
@@ -996,15 +1145,7 @@
       gap: 8px;
       font-size: 0.83rem;
     }
-    .sem-goal-box.done {
-      opacity: 0.55;
-    }
-    .sem-goal-box.done span.title-txt {
-      text-decoration: line-through;
-      color: #a1a1aa;
-    }
 
-    /* כפתור הצעד - מקבל את צבע הנושא */
     .btn-step-plus {
       border: none;
       border-radius: 6px;
@@ -1017,6 +1158,18 @@
       transition: opacity 0.15s;
     }
     .btn-step-plus:hover { opacity: 0.88; }
+
+    .btn-to-project {
+      background: #8b5cf6;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 3px 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-to-project:hover { background: #7c3aed; }
 
     .steps-pill {
       background: rgba(34, 197, 94, 0.2);
@@ -1037,7 +1190,6 @@
       font-weight: 900;
     }
 
-    /* רשימת תתי-יעדים / צעדים בדרך - קומפקטיים וצרים */
     .subtasks-container {
       margin-top: 6px;
       padding-top: 6px;
@@ -1196,9 +1348,10 @@
     <div class="nav-toolbar">
       <div class="view-switcher">
         <button id="btnDaily" onclick="switchView('daily')">יומית</button>
-        <button id="btnWeekly" onclick="switchView('weekly')">שבועית</button>
+        <button id="btnWeekly" onclick="switchView('weekly')">שבועית 🗓️</button>
         <button id="btnMonthly" class="active" onclick="switchView('monthly')">חודשית</button>
         <button id="btnSemester" onclick="switchView('semester')">סמסטר 🎓</button>
+        <button id="btnProjects" onclick="switchView('projects')">פרויקטים 🚀</button>
         <button id="btnYearly" onclick="switchView('yearly')">שנתית</button>
       </div>
 
@@ -1264,39 +1417,21 @@
       </div>
     </div>
 
-    <!-- 2. תצוגה שבועית -->
+    <!-- 2. תצוגה שבועית חדשה - פריסה רחבה עם שעות ו-3 משבצות ליום (בוקר, צהריים, ערב) -->
     <div id="viewWeekly" class="view-container">
-      <div class="weekly-boxes-grid">
-        <div class="weekly-box-card card-core">
-          <h4>🌟 יעדי שיא לשבוע זה</h4>
-          <div class="goals-input-row">
-            <textarea id="wGoal1Input" class="fast-textarea" rows="1" placeholder="הוסף יעד מרכזי..."></textarea>
-            <button class="btn-primary" onclick="addWeeklyCardGoal('core')">+</button>
+      <div class="panel" style="overflow-x:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <h3 style="margin:0; color:#38bdf8; font-size:1.15rem;">🗓️ לוח ניהול שבועי מובנה</h3>
+            <div style="font-size:0.8rem; color:#94a3b8; margin-top:2px;">חלוקה מובנית לבוקר (9-13), צהריים (13-17) וערב (17-23) • הוסף שיעורים ופגישות צבעוניות</div>
           </div>
-          <ul class="goals-list" id="wList_core"></ul>
         </div>
-        <div class="weekly-box-card card-tasks">
-          <h4>⚡ משימות ופרויקטים</h4>
-          <div class="goals-input-row">
-            <textarea id="wGoal2Input" class="fast-textarea" rows="1" placeholder="הוסף משימה..."></textarea>
-            <button class="btn-primary" onclick="addWeeklyCardGoal('tasks')">+</button>
-          </div>
-          <ul class="goals-list" id="wList_tasks"></ul>
-        </div>
-        <div class="weekly-box-card card-habits">
-          <h4>🌱 הרגלים ובריאות</h4>
-          <div class="goals-input-row">
-            <textarea id="wGoal3Input" class="fast-textarea" rows="1" placeholder="הוסף הרגל יומי..."></textarea>
-            <button class="btn-primary" onclick="addWeeklyCardGoal('habits')">+</button>
-          </div>
-          <ul class="goals-list" id="wList_habits"></ul>
-        </div>
-      </div>
 
-      <div class="weekly-grid" id="weeklyGrid"></div>
+        <div class="weekly-schedule-board" id="weeklyScheduleBoard"></div>
+      </div>
     </div>
 
-    <!-- 3. תצוגה חודשית - פס תצוגה מקדימה משודרג, ברור ומסודר -->
+    <!-- 3. תצוגה חודשית - פס תצוגה מקדימה משודרג וברור -->
     <div id="viewMonthly" class="view-container active">
       <div class="panel">
         <div id="monthDayPreviewBar" class="month-day-preview-bar" style="display:none;">
@@ -1309,7 +1444,6 @@
           </div>
 
           <div class="preview-bar-grid">
-            <!-- כרטיס יעדי שבוע מסודר -->
             <div class="preview-section-card">
               <div class="preview-section-header">
                 <span style="color:#fbbf24;">🌟 יעדי השבוע</span>
@@ -1318,7 +1452,6 @@
               <div id="prevBarWeeklyGoals" class="preview-items-list"></div>
             </div>
 
-            <!-- כרטיס מטלות היום מסודר -->
             <div class="preview-section-card">
               <div class="preview-section-header">
                 <span style="color:#38bdf8;">🎯 מטלות היום</span>
@@ -1376,7 +1509,24 @@
       </div>
     </div>
 
-    <!-- 5. תצוגה שנתית -->
+    <!-- 5. תצוגת פרויקטים ומשימות עומק -->
+    <div id="viewProjects" class="view-container">
+      <div class="projects-dashboard">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h2 style="font-size:1.35rem; color:#c084fc; margin:0;">🚀 לוח פרויקטים ומשימות עומק</h2>
+            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:3px;">ניהול תוכניות פעולה, צפייה בהקלטות ומטלות מפורטות לפרויקטים וקורסים</div>
+          </div>
+          <button onclick="promptAddNewProject()" style="background:#8b5cf6; color:#fff; border:none; border-radius:8px; padding:7px 14px; font-weight:bold; cursor:pointer;">+ פרויקט חדש</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="projects-grid" id="projectsGridContainer"></div>
+      </div>
+    </div>
+
+    <!-- 6. תצוגה שנתית - 12 חודשי השנה העברית המלאה -->
     <div id="viewYearly" class="view-container">
       <div class="panel" style="margin-bottom: 16px;">
         <h3>🌟 יעדים למחזור השנה</h3>
@@ -1411,7 +1561,7 @@
     </div>
   </div>
 
-  <!-- חלונית יעדים לסמסטר ומעקב צעדים (תומכת במצב רגיל ובמצב מורחב) -->
+  <!-- חלונית יעדים לסמסטר ומעקב צעדים -->
   <div id="semesterGoalsDrawer">
     <div class="sem-goals-header">
       <h3 class="sem-goals-header-title">יעדים לסמסטר</h3>
@@ -1421,7 +1571,6 @@
       </div>
     </div>
     
-    <!-- תזכורת צ'ופר יחידה ומרוכזת למעלה בקטן -->
     <div class="sem-single-top-reminder">
       ✨ <strong>תזכורת:</strong> אם הגעתי ל-5 צעדים ביעד מסוים – מצ'פר את עצמי! 🎁
     </div>
@@ -1430,9 +1579,7 @@
       <span style="font-size:0.8rem; color:#a1a1aa;">גרירת ⠿ לשינוי סדר • Enter לתת-יעד</span>
       <button onclick="promptAddNewCategory()" style="background:#f97316; color:#fff; border:none; border-radius:6px; padding:3px 9px; font-size:0.75rem; font-weight:bold; cursor:pointer;">+ נושא חדש</button>
     </div>
-    <div id="semGoalsListContainer">
-      <!-- קטגוריות ויעדים ייטענו כאן -->
-    </div>
+    <div id="semGoalsListContainer"></div>
   </div>
 
   <!-- חלון צף מעוצב לרשימת הצעדים (Steps Modal) -->
@@ -1578,7 +1725,6 @@
       console.warn("Firebase Init Error:", err);
     }
 
-    // המרת צבע HEX ל-RGBA עבור רקע תואם
     function hexToRgba(hex, alpha = 1) {
       if (!hex || typeof hex !== 'string') return `rgba(59, 130, 246, ${alpha})`;
       hex = hex.replace('#', '');
@@ -1591,7 +1737,6 @@
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
 
-    // 16 צבעים מגוונים לבחירה
     const availableCategoryColors = [
       { code: "#38bdf8", name: "תכלת שמיים" },
       { code: "#3b82f6", name: "כחול רויאל" },
@@ -1647,7 +1792,7 @@
         color: "#8b5cf6",
         items: [
           { id: "p1", text: "תכנון שבועי ויומי עקבי במרחב האישי", done: false, steps: [], subtasks: [] },
-          { id: "p2", text: "מלחמה נחושה בדחיינות וחיזוק המיקוד והמשמעת", done: false, steps: [], subtasks: [] }
+          { id: "p2", text: "מלחמה נחושה בדחיינות וחיזוק המיקוד והמשמעת", done: false, steps: [] }
         ]
       }
     ];
@@ -1658,16 +1803,20 @@
       dailyGoals: {},
       dailyReflections: {},
       weeklyBoxes: {},
+      weeklySlotsEvents: {}, // אירועים ופגישות לשבוע לפי משבצות זמן (בוקר, צהריים, ערב)
       yearlyGoals: [],
       quickTasks: [],
+      projects: [], // פרויקטים ומשימות עומק
       semesterGoals: defaultSemesterGoals,
       semesterExams: {},
       parshiotCache: {}
     };
 
     if (!db.dailyReflections) db.dailyReflections = {};
+    if (!db.weeklySlotsEvents) db.weeklySlotsEvents = {};
     if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
     if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
+    if (!Array.isArray(db.projects)) db.projects = [];
     if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
     if (!db.semesterExams) db.semesterExams = {};
 
@@ -1794,15 +1943,20 @@
       return `${d.getFullYear()}-W${week}`;
     }
 
+    // כל 12 חודשי השנה העברית המלאה לפי הסדר (מתשרי ועד אלול)
     const hebrewYearCycle = [
-      { name: "אלול", targetDate: new Date(2026, 7, 18), gregSpan: "אוגוסט - ספטמבר 2026" },
       { name: "תשרי", targetDate: new Date(2026, 8, 15), gregSpan: "ספטמבר - אוקטובר 2026" },
       { name: "מרחשוון", targetDate: new Date(2026, 9, 15), gregSpan: "אוקטובר - נובמבר 2026" },
       { name: "כסלו", targetDate: new Date(2026, 10, 15), gregSpan: "נובמבר - דצמבר 2026" },
       { name: "טבת", targetDate: new Date(2026, 11, 15), gregSpan: "דצמבר 2026 - ינואר 2027" },
       { name: "שבט", targetDate: new Date(2027, 0, 15), gregSpan: "ינואר - פברואר 2027" },
-      { name: "אדר א׳", targetDate: new Date(2027, 1, 15), gregSpan: "פברואר - מרץ 2027" },
-      { name: "אדר ב׳", targetDate: new Date(2027, 2, 15), gregSpan: "מרץ - אפריל 2027" }
+      { name: "אדר", targetDate: new Date(2027, 1, 15), gregSpan: "פברואר - מרץ 2027" },
+      { name: "ניסן", targetDate: new Date(2027, 2, 15), gregSpan: "מרץ - אפריל 2027" },
+      { name: "אייר", targetDate: new Date(2027, 3, 15), gregSpan: "אפריל - מאי 2027" },
+      { name: "סיוון", targetDate: new Date(2027, 4, 15), gregSpan: "מאי - יוני 2027" },
+      { name: "תמוז", targetDate: new Date(2027, 5, 15), gregSpan: "יוני - יולי 2027" },
+      { name: "אב", targetDate: new Date(2027, 6, 15), gregSpan: "יולי - אוגוסט 2027" },
+      { name: "אלול", targetDate: new Date(2027, 7, 15), gregSpan: "אוגוסט - ספטמבר 2027" }
     ];
 
     function init() {
@@ -1814,6 +1968,7 @@
       renderCurrentView();
       renderQuickTasks();
       renderSemesterGoals();
+      renderProjectsBoard();
 
       currentQuoteIndex = new Date().getDate() % timeQuotes.length;
       document.getElementById('timeQuoteDisplay').textContent = timeQuotes[currentQuoteIndex];
@@ -1834,9 +1989,6 @@
 
       attachEnter('dailyGoalInput', addDailyGoal);
       attachEnter('quickTaskInput', addQuickTask);
-      attachEnter('wGoal1Input', () => addWeeklyCardGoal('core'));
-      attachEnter('wGoal2Input', () => addWeeklyCardGoal('tasks'));
-      attachEnter('wGoal3Input', () => addWeeklyCardGoal('habits'));
       attachEnter('yearlyGoalInput', addYearlyGoal);
     }
 
@@ -1851,7 +2003,7 @@
 
     function switchView(view) {
       activeView = view;
-      ['daily', 'weekly', 'monthly', 'semester', 'yearly'].forEach(v => {
+      ['daily', 'weekly', 'monthly', 'semester', 'projects', 'yearly'].forEach(v => {
         const el = document.getElementById(`view${v.charAt(0).toUpperCase() + v.slice(1)}`);
         const btn = document.getElementById(`btn${v.charAt(0).toUpperCase() + v.slice(1)}`);
         if (el) el.classList.toggle('active', v === view);
@@ -1879,9 +2031,10 @@
 
     function renderCurrentView() {
       if (activeView === 'daily') renderDailyView();
-      else if (activeView === 'weekly') renderWeeklyView();
+      else if (activeView === 'weekly') renderWeeklyScheduleBoard();
       else if (activeView === 'monthly') renderMonthlyView();
       else if (activeView === 'semester') renderSemesterCalendarView();
+      else if (activeView === 'projects') renderProjectsBoard();
       else if (activeView === 'yearly') renderYearlyView();
     }
 
@@ -2059,7 +2212,7 @@
       saveDB();
       renderDailyEntries(dateKey);
       renderMonthlyView();
-      if (activeView === 'weekly') renderWeeklyView();
+      if (activeView === 'weekly') renderWeeklyScheduleBoard();
     }
 
     function openLightbox(src) {
@@ -2072,8 +2225,8 @@
       document.getElementById('imageLightboxModal').style.display = 'none';
     }
 
-    /* 2. תצוגה שבועית */
-    function renderWeeklyView() {
+    /* 2. תצוגה שבועית חדשה - פריסה רחבה עם 3 משבצות ליום (בוקר, צהריים, ערב) ואירועים צבעוניים */
+    function renderWeeklyScheduleBoard() {
       const startOfWeek = new Date(anchorDate);
       startOfWeek.setDate(anchorDate.getDate() - anchorDate.getDay());
       const endOfWeek = new Date(startOfWeek);
@@ -2086,93 +2239,108 @@
       document.getElementById('currentFocusTitle').innerText = 
         `${startOfWeek.getDate()}/${startOfWeek.getMonth()+1} - ${endOfWeek.getDate()}/${endOfWeek.getMonth()+1} | ${hebStart.hebrewDay}-${hebEnd.hebrewDay} ב${hebStart.monthName}`;
 
-      renderWeeklyCardList('core', weekKey);
-      renderWeeklyCardList('tasks', weekKey);
-      renderWeeklyCardList('habits', weekKey);
-
-      const grid = document.getElementById('weeklyGrid');
-      grid.innerHTML = '';
+      const board = document.getElementById('weeklyScheduleBoard');
+      board.innerHTML = '';
       const todayStr = formatDateKey(new Date());
+
+      const slotDefs = [
+        { key: 'morning', name: '🌅 בוקר', hours: '09:00 - 13:00', cssClass: 'slot-morning' },
+        { key: 'afternoon', name: '☀️ צהריים', hours: '13:00 - 17:00', cssClass: 'slot-afternoon' },
+        { key: 'evening', name: '🌙 ערב', hours: '17:00 - 23:00', cssClass: 'slot-evening' }
+      ];
 
       for (let i = 0; i < 7; i++) {
         const day = new Date(startOfWeek);
         day.setDate(startOfWeek.getDate() + i);
         const dKey = formatDateKey(day);
         const heb = getHebrewDateInfo(day);
-        const dayEntries = db.entries[dKey] || [];
+        const isToday = (dKey === todayStr);
 
-        const col = document.createElement('div');
-        const isHol = !!heb.holiday;
-        const isShab = !!heb.shabbat;
-        col.className = `week-day-col ${dKey === todayStr ? 'today' : ''} ${isHol ? 'is-holiday' : ''} ${isShab ? 'is-shabbat' : ''}`;
-        col.onclick = () => { anchorDate = day; switchView('daily'); };
-        
-        col.innerHTML = `
-          <div class="week-day-header">
-            <div style="font-weight:700;">${['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'][i]}</div>
-            <div style="font-size:0.8rem; color:#cbd5e1; font-weight:600;">${day.getDate()}/${day.getMonth()+1} • ${heb.hebrewDay}</div>
-            ${heb.holiday ? `<div style="color:var(--holiday-text); font-size:0.75rem; font-weight:600; margin-top:2px;">${heb.holiday}</div>` : ''}
-            ${heb.shabbat ? `<div style="color:var(--shabbat-text); font-size:0.75rem; font-weight:600; margin-top:2px;">${heb.shabbat}</div>` : ''}
+        const dayCard = document.createElement('div');
+        dayCard.className = `weekly-day-card ${isToday ? 'today' : ''}`;
+
+        let headerBadge = heb.holiday || (i === 6 ? heb.shabbat : '');
+
+        dayCard.innerHTML = `
+          <div class="weekly-day-header">
+            <div class="day-name">${['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'][i]}</div>
+            <div class="day-sub">${day.getDate()}/${day.getMonth()+1} • ${heb.hebrewDay}</div>
+            ${headerBadge ? `<div style="font-size:0.72rem; color:#facc15; font-weight:700; margin-top:2px;">${headerBadge}</div>` : ''}
           </div>
-          <div style="display:flex; flex-direction:column; gap:5px; margin-top:6px;">
-            ${dayEntries.map(e => `
-              <div class="entry-pill-mini cat-${e.cat}">${e.title}</div>
-            `).join('')}
-          </div>
+          <div class="weekly-day-slots-container" id="daySlots_${dKey}"></div>
         `;
-        grid.appendChild(col);
+
+        board.appendChild(dayCard);
+        const slotsContainer = dayCard.querySelector(`#daySlots_${dKey}`);
+
+        slotDefs.forEach(slot => {
+          const slotBox = document.createElement('div');
+          slotBox.className = `weekly-time-slot ${slot.cssClass}`;
+
+          const slotEvents = (db.weeklySlotsEvents && db.weeklySlotsEvents[dKey] && db.weeklySlotsEvents[dKey][slot.key]) || [];
+
+          slotBox.innerHTML = `
+            <div class="slot-title-row">
+              <span>${slot.name} <small style="font-weight:normal; opacity:0.8;">(${slot.hours})</small></span>
+              <button class="slot-add-btn" onclick="promptAddWeeklySlotEvent('${dKey}', '${slot.key}', '${slot.name}')" title="הוסף פגישה / שיעור / אירוע">+</button>
+            </div>
+            <div id="slotEvents_${dKey}_${slot.key}" style="display:flex; flex-direction:column; gap:5px;">
+              ${slotEvents.map((ev, evIdx) => `
+                <div class="slot-event-chip" style="background:${ev.color || '#0284c7'};">
+                  <div class="chip-header">
+                    <span>${ev.time || slot.hours}</span>
+                    <button class="chip-del" onclick="deleteWeeklySlotEvent('${dKey}', '${slot.key}', ${evIdx})" title="מחק">✕</button>
+                  </div>
+                  <strong style="line-height:1.25;">${ev.title}</strong>
+                </div>
+              `).join('')}
+            </div>
+          `;
+
+          slotsContainer.appendChild(slotBox);
+        });
       }
     }
 
-    function renderWeeklyCardList(cardKey, weekKey) {
-      const list = document.getElementById(`wList_${cardKey}`);
-      list.innerHTML = '';
-      if (!db.weeklyBoxes[weekKey]) db.weeklyBoxes[weekKey] = { core: [], tasks: [], habits: [] };
-      const items = db.weeklyBoxes[weekKey][cardKey] || [];
+    // הוספת פגישה/שיעור למשבצת בלוח השבועי
+    function promptAddWeeklySlotEvent(dKey, slotKey, slotName) {
+      const title = prompt(`הזן שם פגישה / שיעור / אירוע עבור משבצת ${slotName}:`);
+      if (!title || !title.trim()) return;
 
-      items.forEach((item, idx) => {
-        const li = document.createElement('li');
-        li.className = `goal-item ${item.done ? 'done' : ''}`;
-        li.onclick = (e) => { if (e.target.tagName !== 'BUTTON') toggleWeeklyCardGoal(weekKey, cardKey, idx); };
-        li.innerHTML = `
-          <div style="display:flex; align-items:center; gap:8px;">
-            <input type="checkbox" ${item.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleWeeklyCardGoal('${weekKey}', '${cardKey}', ${idx})">
-            <span style="white-space:pre-wrap;">${item.text}</span>
-          </div>
-          <button onclick="removeWeeklyCardGoal('${weekKey}', '${cardKey}', ${idx})" style="padding:1px 5px; font-size:0.75rem;">✕</button>
-        `;
-        list.appendChild(li);
+      const timeSpan = prompt("שעות האירוע (למשל: 10:00-11:30 | או השאר ריק עבור שעות המשבצת):", "");
+
+      // בחירת צבע מתוך המאגר
+      const colorsList = availableCategoryColors.slice(0, 8).map((c, i) => `${i+1}. ${c.name}`).join('\n');
+      const colorNum = prompt(`בחר צבע עבור הפגישה מתוך הרשימה (1-8):\n${colorsList}`, "1");
+      let chosenColor = "#0284c7";
+      const idx = parseInt(colorNum, 10);
+      if (!isNaN(idx) && idx >= 1 && idx <= 8) {
+        chosenColor = availableCategoryColors[idx - 1].code;
+      }
+
+      if (!db.weeklySlotsEvents) db.weeklySlotsEvents = {};
+      if (!db.weeklySlotsEvents[dKey]) db.weeklySlotsEvents[dKey] = {};
+      if (!db.weeklySlotsEvents[dKey][slotKey]) db.weeklySlotsEvents[dKey][slotKey] = [];
+
+      db.weeklySlotsEvents[dKey][slotKey].push({
+        id: Date.now(),
+        title: title.trim(),
+        time: timeSpan ? timeSpan.trim() : '',
+        color: chosenColor
       });
-    }
 
-    function addWeeklyCardGoal(cardKey) {
-      const inputId = cardKey === 'core' ? 'wGoal1Input' : (cardKey === 'tasks' ? 'wGoal2Input' : 'wGoal3Input');
-      const input = document.getElementById(inputId);
-      const text = input.value.trim();
-      if (!text) return;
-      const weekKey = getWeekKey(anchorDate);
-      if (!db.weeklyBoxes[weekKey]) db.weeklyBoxes[weekKey] = { core: [], tasks: [], habits: [] };
-      if (!db.weeklyBoxes[weekKey][cardKey]) db.weeklyBoxes[weekKey][cardKey] = [];
-      db.weeklyBoxes[weekKey][cardKey].push({ text, done: false });
-      input.value = '';
       saveDB();
-      renderWeeklyCardList(cardKey, weekKey);
+      renderWeeklyScheduleBoard();
     }
 
-    function toggleWeeklyCardGoal(weekKey, cardKey, idx) {
-      db.weeklyBoxes[weekKey][cardKey][idx].done = !db.weeklyBoxes[weekKey][cardKey][idx].done;
+    function deleteWeeklySlotEvent(dKey, slotKey, evIdx) {
+      if (!db.weeklySlotsEvents || !db.weeklySlotsEvents[dKey] || !db.weeklySlotsEvents[dKey][slotKey]) return;
+      db.weeklySlotsEvents[dKey][slotKey].splice(evIdx, 1);
       saveDB();
-      renderWeeklyCardList(cardKey, weekKey);
+      renderWeeklyScheduleBoard();
     }
 
-    function removeWeeklyCardGoal(weekKey, cardKey, idx) {
-      if (!db.weeklyBoxes || !db.weeklyBoxes[weekKey] || !db.weeklyBoxes[weekKey][cardKey]) return;
-      db.weeklyBoxes[weekKey][cardKey].splice(idx, 1);
-      saveDB();
-      renderWeeklyCardList(cardKey, weekKey);
-    }
-
-    /* 3. תצוגה חודשית - פס תצוגה מקדימה משודרג וברור */
+    /* 3. תצוגה חודשית */
     function renderMonthlyView() {
       let startOfHebrewMonth = new Date(anchorDate);
       while (getHebrewDateInfo(startOfHebrewMonth).dayNum > 1) {
@@ -2250,7 +2418,6 @@
       document.getElementById('prevBarDateTitle').textContent = gregName;
       document.getElementById('prevBarHebrewTitle').textContent = `• ${heb.hebrewDayAndMonth} ${heb.holiday ? '('+heb.holiday+')' : ''}`;
 
-      // יעדי השבוע
       const weeklyBox = (db.weeklyBoxes && db.weeklyBoxes[weekKey]) || { core: [], tasks: [], habits: [] };
       const weekGoals = [...(weeklyBox.core || []), ...(weeklyBox.tasks || []), ...(weeklyBox.habits || [])];
       const wContainer = document.getElementById('prevBarWeeklyGoals');
@@ -2270,7 +2437,6 @@
         `).join('');
       }
 
-      // מטלות היום
       const dGoals = (db.dailyGoals && db.dailyGoals[dKey]) || [];
       const dContainer = document.getElementById('prevBarDailyTasks');
       const dCountEl = document.getElementById('prevBarDailyCount');
@@ -2309,7 +2475,6 @@
       const today = new Date();
       const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-      // חישוב שבוע נוכחי בסמסטר
       let currentWeekNum = 0;
       if (todayMid >= semStart) {
         const diffDays = Math.floor((todayMid - semStart) / (1000 * 60 * 60 * 24));
@@ -2346,13 +2511,12 @@
         statusBadge.textContent = `סמסטר א׳ נפתח ב-11.10.2026`;
       }
 
-      // חודשי הסמסטר בטור יחיד - שמות נקיים בלבד ללא סוגריים
       const monthsToRender = [
         { year: 2026, month: 9, name: "אוקטובר 2026 • תשרי-חשוון" },
         { year: 2026, month: 10, name: "נובמבר 2026 • חשוון-כסלו" },
         { year: 2026, month: 11, name: "דצמבר 2026 • כסלו-טבת" },
         { year: 2027, month: 0, name: "ינואר 2027 • טבת-שבט" },
-        { year: 2027, month: 1, name: "פברואר 2027 • שבט-אדר א׳" }
+        { year: 2027, month: 1, name: "פברואר 2027 • שבט-אדר" }
       ];
 
       const container = document.getElementById('semCalendarMonthsContainer');
@@ -2420,7 +2584,6 @@
               let specialClass = isBeforeSem ? 'before-sem' : 'regular-sem';
               let eventLabel = '';
 
-              // אירועים ומועדים מדויקים לפי הלו"ז המעודכן
               if (dateStr >= "2026-12-05" && dateStr <= "2026-12-12") {
                 specialClass = 'is-holiday';
                 eventLabel = 'חנוכה 🕎';
@@ -2447,7 +2610,6 @@
                 eventLabel = 'סמסטר ב׳ 🚀';
               }
 
-              // שמות שבתות בכל יום שבת
               let shabbatName = '';
               if (d === 6) {
                 const hebDateInfo = getHebrewDateInfo(thisDate);
@@ -2480,7 +2642,6 @@
       });
     }
 
-    // הוספה/עריכה של שם מבחן ביום מסוים בלוח השנה
     function promptEditSemesterDayExam(dateStr, displayDate) {
       if (!db.semesterExams) db.semesterExams = {};
       const current = db.semesterExams[dateStr] || '';
@@ -2495,7 +2656,159 @@
       renderSemesterCalendarView();
     }
 
-    /* 5. יעדי סמסטר ומעקב צעדים - מצב רגיל ומורחב, תתי-יעדים, מיון, גרירה וספירת צ'ופרים */
+    /* 5. לוח פרויקטים ומשימות עומק (Projects Board) */
+    function renderProjectsBoard() {
+      const container = document.getElementById('projectsGridContainer');
+      container.innerHTML = '';
+
+      const projects = db.projects || [];
+      if (projects.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align:center; padding:35px 20px; color:#94a3b8;">
+            <div style="font-size:2.5rem; margin-bottom:10px;">🚀</div>
+            <h3 style="color:#cbd5e1; margin-bottom:6px;">עדיין אין פרויקטים פעילים</h3>
+            <p style="font-size:0.88rem; max-width:450px; margin:0 auto;">
+              לחץ למעלה על <strong>"+ פרויקט חדש"</strong>, או היכנס לחלון ה-<strong>"🎯 יעדים"</strong> ולחץ על כפתור <strong>"📁 לפרויקט"</strong> ליד כל יעד שתרצה לקדם!
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      projects.forEach((proj, pIdx) => {
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.style.borderTopColor = proj.color || '#8b5cf6';
+
+        const tasks = proj.tasks || [];
+        const completed = tasks.filter(t => t.done).length;
+        const total = tasks.length;
+        const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        card.innerHTML = `
+          <div class="project-card-header">
+            <div>
+              <span style="font-size:0.74rem; background:${hexToRgba(proj.color || '#8b5cf6', 0.25)}; color:${proj.color || '#c084fc'}; padding:2px 7px; border-radius:4px; font-weight:800;">
+                ${proj.catTitle || 'פרויקט'}
+              </span>
+              <div class="project-card-title" style="margin-top:6px;">${proj.title}</div>
+            </div>
+            <button onclick="deleteProject(${pIdx})" style="background:none; border:none; color:#ef4444; font-size:0.85rem; cursor:pointer;" title="מחק פרויקט זה">✕</button>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; color:#94a3b8;">
+            <span>התקדמות: <strong>${pct}%</strong> (${completed}/${total})</span>
+            ${pct === 100 && total > 0 ? '<span style="color:#22c55e; font-weight:800;">הושלם במלואו! 🏆</span>' : ''}
+          </div>
+          <div class="project-progress-wrap">
+            <div class="project-progress-fill" style="width:${pct}%; background:${proj.color || '#8b5cf6'};"></div>
+          </div>
+
+          <div class="project-tasks-list" id="projectTasks_${pIdx}">
+            ${tasks.map((t, tIdx) => `
+              <div class="project-task-item ${t.done ? 'done' : ''}">
+                <label style="display:flex; align-items:center; gap:8px; flex:1; cursor:pointer;">
+                  <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleProjectTask(${pIdx}, ${tIdx})" style="width:16px; height:16px; cursor:pointer;">
+                  <span style="line-height:1.3;">${t.text}</span>
+                </label>
+                <button onclick="deleteProjectTask(${pIdx}, ${tIdx})" style="background:none; border:none; color:#ef4444; font-size:0.75rem; cursor:pointer; padding:0 3px;">✕</button>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="margin-top:4px;">
+            <input type="text" id="projTaskInput_${pIdx}" class="project-task-input" placeholder="+ הוסף משימה / הקלטה / מטלה (Enter)..." onkeydown="if(event.key==='Enter'){ event.preventDefault(); addProjectTask(${pIdx}); }">
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function promptAddNewProject() {
+      const title = prompt("הזן שם עבור הפרויקט החדש (למשל: יישומים באופטיקה פיזיקלית):");
+      if (!title || !title.trim()) return;
+
+      const catTitle = prompt("שם תחום / נושא (למשל: קורסים אקדמיים):", "לימודים");
+      const chosenColor = availableCategoryColors[Math.floor(Math.random() * availableCategoryColors.length)].code;
+
+      if (!Array.isArray(db.projects)) db.projects = [];
+      db.projects.unshift({
+        id: "proj_" + Date.now(),
+        title: title.trim(),
+        catTitle: catTitle ? catTitle.trim() : 'פרויקט',
+        color: chosenColor,
+        tasks: []
+      });
+
+      saveDB();
+      renderProjectsBoard();
+    }
+
+    // הוספת יעד ישירות מה-Drawer אל הפרויקטים
+    function addGoalAsProject(catIdx, itemIdx) {
+      const cat = db.semesterGoals[catIdx];
+      const item = cat.items[itemIdx];
+
+      if (!Array.isArray(db.projects)) db.projects = [];
+
+      // בדיקה אם הפרויקט כבר קיים
+      const exists = db.projects.some(p => p.title === item.text);
+      if (exists) {
+        alert(`הפרויקט "${item.text}" כבר קיים בלוח הפרויקטים!`);
+        switchView('projects');
+        toggleSemesterGoalsDrawer();
+        return;
+      }
+
+      // העברת תתי היעדים אם קיימים
+      const initialTasks = (item.subtasks || []).map(st => ({ text: st.text, done: false }));
+
+      db.projects.unshift({
+        id: "proj_" + Date.now(),
+        title: item.text,
+        catTitle: cat.title,
+        color: cat.color,
+        tasks: initialTasks
+      });
+
+      saveDB();
+      alert(`היעד נוסף בהצלחה ללוח הפרויקטים! 🚀\nפתח את לשונית "פרויקטים" כדי לעבוד עליו.`);
+      renderProjectsBoard();
+    }
+
+    function addProjectTask(pIdx) {
+      const input = document.getElementById(`projTaskInput_${pIdx}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      if (!Array.isArray(db.projects[pIdx].tasks)) db.projects[pIdx].tasks = [];
+      db.projects[pIdx].tasks.push({ text: text, done: false, id: Date.now() });
+      input.value = '';
+      saveDB();
+      renderProjectsBoard();
+    }
+
+    function toggleProjectTask(pIdx, tIdx) {
+      db.projects[pIdx].tasks[tIdx].done = !db.projects[pIdx].tasks[tIdx].done;
+      saveDB();
+      renderProjectsBoard();
+    }
+
+    function deleteProjectTask(pIdx, tIdx) {
+      db.projects[pIdx].tasks.splice(tIdx, 1);
+      saveDB();
+      renderProjectsBoard();
+    }
+
+    function deleteProject(pIdx) {
+      if (!confirm(`האם למחוק את הפרויקט "${db.projects[pIdx].title}" וכל המשימות שבו?`)) return;
+      db.projects.splice(pIdx, 1);
+      saveDB();
+      renderProjectsBoard();
+    }
+
+    /* 6. יעדי סמסטר ומעקב צעדים */
     function toggleSemesterGoalsDrawer() {
       const drawer = document.getElementById('semesterGoalsDrawer');
       const isVisible = drawer.style.display === 'block';
@@ -2503,7 +2816,6 @@
       if (!isVisible) renderSemesterGoals();
     }
 
-    // החלפת מצב הרחבה של חלון היעדים (רחב / צר)
     function toggleGoalsDrawerExpand() {
       const drawer = document.getElementById('semesterGoalsDrawer');
       const btn = document.getElementById('btnToggleExpandDrawer');
@@ -2528,7 +2840,6 @@
       }
 
       categories.forEach((cat, catIdx) => {
-        // מיון אוטומטי של יעדים בכל נושא לפי כמות צעדים מהגבוה לנמוך
         if (Array.isArray(cat.items)) {
           cat.items.sort((a, b) => {
             const countA = (a.steps && a.steps.length) || 0;
@@ -2555,7 +2866,6 @@
             <div style="display:flex; gap:6px; align-items:center;">
               <button onclick="promptEditCategory(${catIdx})" style="background:none; border:none; color:#cbd5e1; font-size:0.8rem; cursor:pointer;" title="ערוך שם נושא או צבע">✏️</button>
               <button onclick="promptDeleteCategory(${catIdx})" style="background:none; border:none; color:#ef4444; font-size:0.8rem; cursor:pointer;" title="מחק נושא זה">🗑️</button>
-              <!-- כפתור הוספת יעד אחיד וזהה בכחול-תכלת לכל הנושאים -->
               <button class="btn-add-goal-universal" onclick="promptAddGoalToCat(${catIdx})">+ יעד</button>
             </div>
           </div>
@@ -2571,14 +2881,12 @@
           const stepsCount = (item.steps && item.steps.length) || 0;
           const subtasks = item.subtasks || [];
           
-          // צ'ופר בכל כפולה של 5 צעדים ביעד מסוים
           const goalRewards = Math.floor(stepsCount / 5);
           totalRewardsEarned += goalRewards;
           const hasReward = goalRewards > 0;
 
           const box = document.createElement('div');
           box.className = `sem-goal-box ${item.done ? 'done' : ''} ${hasReward ? 'has-reward' : ''}`;
-          // רקע וצבע מותאם לערכת הנושא
           box.style.background = hexToRgba(cat.color, 0.14);
           box.style.border = `1px solid ${hexToRgba(cat.color, 0.38)}`;
           
@@ -2591,16 +2899,15 @@
                 ${hasReward ? `<span class="reward-tag-celebration" title="הגעת ל-5 צעדים ביעד זה! מגיע לך צ'ופר!">🎁 צ'ופר! (${goalRewards})</span>` : ''}
               </div>
               <div style="display:flex; align-items:center; gap:4px;">
+                <button class="btn-to-project" onclick="addGoalAsProject(${catIdx}, ${itemIdx})" title="הפוך יעד זה לפרויקט עומק בלשונית הפרויקטים">📁 לפרויקט</button>
                 <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, -1)" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;" title="הזז יעד למעלה" ${itemIdx === 0 ? 'disabled style="opacity:0.2;"' : ''}>▲</button>
                 <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, 1)" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;" title="הזז יעד למטה" ${itemIdx === cat.items.length - 1 ? 'disabled style="opacity:0.2;"' : ''}>▼</button>
-                <!-- כפתור צעד בצבע הייחודי של הנושא -->
                 <button class="btn-step-plus" style="background:${cat.color};" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים">+ צעד</button>
                 ${stepsCount > 0 ? `<span class="steps-pill" onclick="openStepsModal(${catIdx}, ${itemIdx})" title="לחץ לפתיחת יומן הצעדים המפורט">🏆 ${stepsCount} צעדים</span>` : ''}
                 <button onclick="deleteGoalFromCat(${catIdx}, ${itemIdx})" style="background:none; border:none; color:#71717a; font-size:0.82rem; cursor:pointer; padding:0 3px;" title="מחק יעד">✕</button>
               </div>
             </div>
 
-            <!-- רשימת תתי-יעדים בדרך (קומפקטית, עדינה ופחות בולטת) -->
             <div class="subtasks-container">
               <div id="subtasksList_${catIdx}_${itemIdx}" style="display:flex; flex-direction:column; gap:3px;">
                 ${subtasks.map((st, stIdx) => `
@@ -2614,7 +2921,6 @@
                 `).join('')}
               </div>
 
-              <!-- תיבת הוספת תת-יעד ב-Enter בלבד (ללא כפתור כחול) -->
               <input type="text" id="subtaskInput_${catIdx}_${itemIdx}" class="subtask-input-compact" placeholder="+ הוסף תת-יעד / צעד בדרך (לחץ Enter)..." onkeydown="if(event.key==='Enter'){ event.preventDefault(); addSubtaskToGoal(${catIdx}, ${itemIdx}); }">
             </div>
           `;
@@ -2622,12 +2928,10 @@
         });
       });
 
-      // עדכון מונה הצ'ופרים החיצוני על גבי המסך הראשי
       if (rewardsCountEl) rewardsCountEl.textContent = totalRewardsEarned;
       if (rewardsBadge) rewardsBadge.style.display = totalRewardsEarned > 0 ? 'inline-block' : 'inline-block';
     }
 
-    // גרירה והחלפת סדר נושאים (Drag & Drop)
     function handleCatDragStart(e, idx) {
       draggedCatIndex = idx;
       e.dataTransfer.effectAllowed = 'move';
@@ -2654,7 +2958,6 @@
       draggedCatIndex = null;
     }
 
-    // שינוי סדר יעדים בתוך נושא
     function moveGoalInCat(catIdx, itemIdx, direction) {
       const items = db.semesterGoals[catIdx].items;
       const targetIdx = itemIdx + direction;
@@ -2666,7 +2969,6 @@
       renderSemesterGoals();
     }
 
-    // הוספת תת-יעד בדרך (ע"י Enter)
     function addSubtaskToGoal(catIdx, itemIdx) {
       const input = document.getElementById(`subtaskInput_${catIdx}_${itemIdx}`);
       const text = input.value.trim();
@@ -2680,14 +2982,12 @@
       renderSemesterGoals();
     }
 
-    // מחיקת תת-יעד
     function deleteSubtask(catIdx, itemIdx, stIdx) {
       db.semesterGoals[catIdx].items[itemIdx].subtasks.splice(stIdx, 1);
       saveDB();
       renderSemesterGoals();
     }
 
-    // לחיצה על ✔ בתת-יעד: מוחק מתתי-היעדים ורושם אוטומטית כצעד שבוצע
     function completeSubtaskAsStep(catIdx, itemIdx, stIdx) {
       const item = db.semesterGoals[catIdx].items[itemIdx];
       const subtask = item.subtasks[stIdx];
@@ -2708,7 +3008,6 @@
       checkAndNotifyGoalReward(item);
     }
 
-    // בדיקת צ'ופר ברמת היעד הבודד (בכל כפולה של 5 צעדים)
     function checkAndNotifyGoalReward(item) {
       const stepsCount = (item.steps && item.steps.length) || 0;
       if (stepsCount > 0 && stepsCount % 5 === 0) {
@@ -2806,7 +3105,6 @@
       checkAndNotifyGoalReward(item);
     }
 
-    // פתיחת חלון צף מעוצב לרשימת הצעדים (קריא וחד)
     function openStepsModal(catIdx, itemIdx) {
       currentStepsGoalContext = { catIdx, itemIdx };
       const item = db.semesterGoals[catIdx].items[itemIdx];
@@ -2884,7 +3182,7 @@
       renderSemesterGoals();
     }
 
-    /* 6. תצוגה שנתית */
+    /* 7. תצוגה שנתית - 12 חודשי השנה העברית המלאה */
     function renderYearlyView() {
       document.getElementById('currentFocusTitle').innerText = `תשפ״ו - תשפ״ז`;
       renderYearlyGoals();
@@ -3236,8 +3534,10 @@
                 if (cloudStr !== localStr) {
                   db = JSON.parse(JSON.stringify(cloudData));
                   if (!db.dailyReflections) db.dailyReflections = {};
+                  if (!db.weeklySlotsEvents) db.weeklySlotsEvents = {};
                   if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
                   if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
+                  if (!Array.isArray(db.projects)) db.projects = [];
                   if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
                   if (!db.semesterExams) db.semesterExams = {};
                   localStorage.setItem('hebrew_life_journal_v8', JSON.stringify(db));
@@ -3245,6 +3545,7 @@
                   renderCurrentView();
                   renderQuickTasks();
                   renderSemesterGoals();
+                  renderProjectsBoard();
                   console.log("סנכרון ענן התקבל בהצלחה!");
                 }
               }
@@ -3337,8 +3638,10 @@
         if (parsed && typeof parsed === 'object') {
           db = JSON.parse(JSON.stringify(parsed));
           if (!db.dailyReflections) db.dailyReflections = {};
+          if (!db.weeklySlotsEvents) db.weeklySlotsEvents = {};
           if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
           if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
+          if (!Array.isArray(db.projects)) db.projects = [];
           if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
           if (!db.semesterExams) db.semesterExams = {};
           saveDB();
@@ -3346,7 +3649,8 @@
           renderCurrentView();
           renderQuickTasks();
           renderSemesterGoals();
-          alert("כל הנתונים, הלו\"ז, הרשומות, הסמסטר והפנקס שוחזרו בהצלחה!");
+          renderProjectsBoard();
+          alert("כל הנתונים, הלו\"ז, הרשומות, הפרויקטים, הסמסטר והפנקס שוחזרו בהצלחה!");
         } else {
           throw new Error();
         }
@@ -3384,17 +3688,6 @@
           icsLines.push(`DTSTART:${startIso}`);
           icsLines.push(`DTEND:${endIso}`);
           icsLines.push(`DESCRIPTION:לו"ז מתוך יומן החיים`);
-          icsLines.push("END:VEVENT");
-        });
-      });
-
-      Object.keys(db.entries || {}).forEach(dKey => {
-        db.entries[dKey].forEach(e => {
-          const startIso = dKey.replace(/-/g, '');
-          icsLines.push("BEGIN:VEVENT");
-          icsLines.push(`SUMMARY:${e.title}`);
-          icsLines.push(`DTSTART;VALUE=DATE:${startIso}`);
-          icsLines.push(`DESCRIPTION:${e.text.replace(/\n/g, '\\n')}`);
           icsLines.push("END:VEVENT");
         });
       });
