@@ -211,7 +211,7 @@
       padding: 16px;
     }
 
-    /* עיצוב מעודד ומספק למשימות שהושלמו */
+    /* עיצוב מספק ומעודד למשימות שהושלמו */
     .goal-item.done, .quick-task-item.done, .sem-goal-box.done, .project-task-item.done {
       background: rgba(34, 197, 94, 0.18) !important;
       border: 1px solid rgba(34, 197, 94, 0.5) !important;
@@ -386,41 +386,29 @@
       margin-top: 4px;
     }
 
-    /* 2. תצוגה שבועית: לוח שעות מובנה בסגנון Google Calendar עם 3 רקעים נפרדים */
+    /* 2. תצוגה שבועית: לוח שעות מובנה בסגנון Google Calendar */
     .weekly-timeline-wrapper {
       display: flex;
       flex-direction: column;
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.8);
       overflow: hidden;
     }
-    .weekly-timeline-scroll {
-      height: 640px;
-      overflow-y: scroll;
-      position: relative;
-    }
-    /* כותרת דביקה בראש הגלילה המבטיחה יישור מושלם עם עמודות השעות */
-    .weekly-timeline-sticky-header {
-      position: sticky;
-      top: 0;
-      z-index: 30;
+    .weekly-timeline-header-row {
       display: flex;
-      background: #0f172a;
       border-bottom: 1px solid var(--card-border);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      background: rgba(255, 255, 255, 0.04);
     }
     .weekly-time-gutter-header {
-      width: 70px;
-      min-width: 70px;
-      max-width: 70px;
+      width: 65px;
       flex-shrink: 0;
       border-left: 1px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.76rem;
-      font-weight: 800;
+      font-weight: 700;
       color: #94a3b8;
     }
     .weekly-day-headers-grid {
@@ -436,17 +424,18 @@
     .weekly-day-header-cell.today {
       background: rgba(56, 189, 248, 0.15);
     }
-    .weekly-day-header-cell .day-name { font-size: 0.94rem; font-weight: 800; color: #f8fafc; }
+    .weekly-day-header-cell .day-name { font-size: 0.92rem; font-weight: 800; color: #f8fafc; }
     .weekly-day-header-cell .day-sub { font-size: 0.78rem; color: #cbd5e1; margin-top: 2px; }
 
-    .weekly-timeline-grid-body {
-      display: flex;
+    /* אזור הגלילה מעלה/מטה עבור השעות */
+    .weekly-timeline-scroll {
+      height: 640px;
+      overflow-y: auto;
       position: relative;
+      display: flex;
     }
     .weekly-time-gutter {
-      width: 70px;
-      min-width: 70px;
-      max-width: 70px;
+      width: 65px;
       flex-shrink: 0;
       border-left: 1px solid var(--card-border);
       background: rgba(0,0,0,0.25);
@@ -455,22 +444,15 @@
     .weekly-hour-marker {
       height: 52px;
       box-sizing: border-box;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       font-size: 0.74rem;
       color: #94a3b8;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 3px;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 2px;
       font-weight: 600;
     }
-    .weekly-hour-marker.marker-morning { background: rgba(245, 158, 11, 0.06); }
-    .weekly-hour-marker.marker-afternoon { background: rgba(2, 132, 199, 0.06); }
-    .weekly-hour-marker.marker-evening { background: rgba(139, 92, 246, 0.06); }
-    .weekly-hour-marker.divider-morning { border-bottom: 2.5px dashed #f59e0b !important; }
-    .weekly-hour-marker.divider-afternoon { border-bottom: 2.5px dashed #38bdf8 !important; }
-
     .weekly-days-columns-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -490,51 +472,38 @@
       box-sizing: border-box;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
-    /* 3 צבעי רקע מעודנים לבוקר, צהריים וערב */
-    .weekly-grid-line.line-morning { background: rgba(245, 158, 11, 0.07); }
-    .weekly-grid-line.line-afternoon { background: rgba(2, 132, 199, 0.07); }
-    .weekly-grid-line.line-evening { background: rgba(139, 92, 246, 0.07); }
-    /* פסי הפרדה ברורים בין חלקי היום */
-    .weekly-grid-line.line-divider-morning { border-bottom: 2.5px dashed rgba(245, 158, 11, 0.6) !important; }
-    .weekly-grid-line.line-divider-afternoon { border-bottom: 2.5px dashed rgba(56, 189, 248, 0.6) !important; }
-
-    /* משבצת אירוע ממורכזת אנכית ואופקית */
+    /* משבצת אירוע שנמתחת לאורך השעות */
     .timeline-event-block {
       position: absolute;
       left: 4px;
       right: 4px;
-      border-radius: 8px;
-      padding: 6px 8px;
+      border-radius: 6px;
+      padding: 4px 6px;
       color: #fff;
-      font-size: 0.8rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      font-size: 0.78rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.35);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: center; /* מרכוז אנכי */
-      align-items: center;     /* מרכוז אופקי */
-      text-align: center;      /* טקסט ממורכז */
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      justify-content: flex-start;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       z-index: 5;
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
+      transition: transform 0.15s;
     }
     .timeline-event-block:hover {
       transform: scale(1.02);
       z-index: 10;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
     }
     .timeline-event-time {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 800;
-      opacity: 0.95;
-      text-align: center;
+      opacity: 0.9;
     }
     .timeline-event-title {
       font-weight: 700;
       line-height: 1.25;
-      margin-top: 3px;
-      text-align: center;
+      margin-top: 1px;
       white-space: normal;
       word-break: break-word;
     }
@@ -921,66 +890,7 @@
     }
     .project-task-input:focus { border-color: #38bdf8; border-style: solid; }
 
-    /* 6. לשונית פתקים ותזכורות (Sticky Notes Board) */
-    .notes-dashboard {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
-      border: 1.5px solid #facc15;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    }
-    .notes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-    }
-    .sticky-note-card {
-      border-radius: 14px;
-      padding: 16px;
-      min-height: 190px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-      border: 1px solid rgba(255,255,255,0.15);
-      transition: transform 0.2s, box-shadow 0.2s;
-      position: relative;
-    }
-    .sticky-note-card:hover {
-      transform: translateY(-3px) rotate(-0.5deg);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.5);
-    }
-    .note-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
-    .note-title {
-      font-weight: 800;
-      font-size: 1.05rem;
-      line-height: 1.3;
-    }
-    .note-content {
-      font-size: 0.9rem;
-      line-height: 1.45;
-      white-space: pre-wrap;
-      word-break: break-word;
-      flex: 1;
-    }
-    .note-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 12px;
-      padding-top: 8px;
-      border-top: 1px dashed rgba(0,0,0,0.15);
-      font-size: 0.72rem;
-      opacity: 0.85;
-    }
-
-    /* 7. תצוגה שנתית - 12 חודשי השנה העברית המלאה */
+    /* 6. תצוגה שנתית - 12 חודשי השנה העברית המלאה */
     .year-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -1224,7 +1134,6 @@
       transform: scale(1.2);
     }
 
-    /* כפתור הוספת יעד אחיד בכחול-תכלת לכל הנושאים */
     .btn-add-goal-universal {
       background: #0284c7 !important;
       color: #ffffff !important;
@@ -1245,6 +1154,11 @@
       padding: 8px 11px;
       margin-bottom: 7px;
       transition: all 0.2s;
+    }
+    .sem-goal-box.has-reward {
+      border: 1.5px solid #facc15 !important;
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(39, 39, 42, 0.95)) !important;
+      box-shadow: 0 0 12px rgba(250, 204, 21, 0.35);
     }
     .sem-goal-main-row {
       display: flex;
@@ -1361,12 +1275,12 @@
       background: rgba(0,0,0,0.45);
     }
 
-    /* חלון צף מעוצב לרשימת הצעדים */
+    /* חלון צף מודרני מעוצב ומרווח ליומן הצעדים */
     #stepsLogModal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.78);
+      background: rgba(0,0,0,0.8);
       backdrop-filter: blur(8px);
       align-items: center;
       justify-content: center;
@@ -1398,7 +1312,7 @@
       gap: 10px;
     }
 
-    /* מערכת חלונות קופצים מעוצבת אישית (Custom Popup Modal) */
+    /* מערכת חלונות קופצים מעוצבת אישית (Universal Custom Popup Dialogs) */
     #customPopupBackdrop {
       display: none;
       position: fixed;
@@ -1490,11 +1404,6 @@
       <!-- כפתורי סרגל עליון צמודים כרגיל לצד שמאל -->
       <div class="header-controls">
         <div class="primary-auth-row">
-          <!-- מונה מטבעות רשמי שנצבר מצ'ופרים והישגים -->
-          <span class="user-badge" style="background:rgba(234,179,8,0.18); border:1px solid #facc15; color:#fef08a; font-weight:800; font-size:0.82rem;" title="מטבעות שנצברו מהישגים וצ'ופרים">
-            🪙 <span id="coinTotalDisplay">0</span> מטבעות
-          </span>
-
           <button class="btn-tool" style="background:#0284c7; color:#fff; font-weight:700; padding:5px 10px; font-size:0.8rem;" onclick="copyBackupToDocs()" title="העתק קוד גיבוי מלא ללוח להדבקה במסמך Google Docs">
             📋 גיבוי ל-Docs
           </button>
@@ -1539,7 +1448,6 @@
         <button id="btnWeekly" onclick="switchView('weekly')">שבועית 🗓️</button>
         <button id="btnMonthly" class="active" onclick="switchView('monthly')">חודשית</button>
         <button id="btnSemester" onclick="switchView('semester')">סמסטר 🎓</button>
-        <button id="btnNotes" onclick="switchView('notes')">פתקים 📌</button>
         <button id="btnYearly" onclick="switchView('yearly')">שנתית</button>
       </div>
 
@@ -1550,7 +1458,7 @@
         <button onclick="navigateDate(1)">הבא ›</button>
       </div>
 
-      <!-- כפתור פרויקטים לצד כפתור הוספת רשומה חדשה -->
+      <!-- כפתור פרויקטים הועבר לכאן לצד כפתור הוספת רשומה חדשה -->
       <div style="display:flex; gap:8px;">
         <button id="btnProjects" class="btn-primary" style="background:#8b5cf6;" onclick="switchView('projects')">🚀 פרויקטים</button>
         <button class="btn-primary" onclick="openAddEntryModal()">+ רשומה חדשה</button>
@@ -1609,27 +1517,25 @@
       </div>
     </div>
 
-    <!-- 2. תצוגה שבועית: לוח שעות מובנה בסגנון Google Calendar עם 3 רקעים נפרדים -->
+    <!-- 2. תצוגה שבועית חדשה - בסגנון Google Calendar עם שעות נמתחות וגלילה מעלה/מטה -->
     <div id="viewWeekly" class="view-container">
       <div class="panel">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
           <div>
             <h3 style="margin:0; color:#38bdf8; font-size:1.15rem;">🗓️ לוח זמנים שבועי מובנה</h3>
-            <div style="font-size:0.8rem; color:#94a3b8; margin-top:2px;">חלוקה מובנית לבוקר, צהריים וערב • פגישות ואירועים ממורכזים בדיוק לשעותיהם</div>
+            <div style="font-size:0.8rem; color:#94a3b8; margin-top:2px;">ציר זמן מ-07:00 עד 23:00 • לחץ על כל יום להוספת פגישה/שיעור שנמתחים במדויק</div>
           </div>
           <button class="btn-primary" onclick="openAddWeeklyEventDialog()" style="padding:5px 12px; font-size:0.8rem;">+ הוסף אירוע/שיעור</button>
         </div>
 
         <div class="weekly-timeline-wrapper">
+          <div class="weekly-timeline-header-row">
+            <div class="weekly-time-gutter-header">שעה</div>
+            <div class="weekly-day-headers-grid" id="weeklyDayHeadersGrid"></div>
+          </div>
           <div class="weekly-timeline-scroll" id="weeklyTimelineScroll">
-            <div class="weekly-timeline-sticky-header">
-              <div class="weekly-time-gutter-header">שעה</div>
-              <div class="weekly-day-headers-grid" id="weeklyDayHeadersGrid"></div>
-            </div>
-            <div class="weekly-timeline-grid-body">
-              <div class="weekly-time-gutter" id="weeklyTimeGutter"></div>
-              <div class="weekly-days-columns-grid" id="weeklyDaysColumnsGrid"></div>
-            </div>
+            <div class="weekly-time-gutter" id="weeklyTimeGutter"></div>
+            <div class="weekly-days-columns-grid" id="weeklyDaysColumnsGrid"></div>
           </div>
         </div>
       </div>
@@ -1730,24 +1636,7 @@
       </div>
     </div>
 
-    <!-- 6. לשונית פתקים ותזכורות (Sticky Notes Board) -->
-    <div id="viewNotes" class="view-container">
-      <div class="notes-dashboard">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-          <div>
-            <h2 style="font-size:1.35rem; color:#facc15; margin:0;">📌 פתקים ותזכורות אישיות</h2>
-            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:3px;">מקום חופשי לכתוב לעצמך מחשבות, תזכורות מהירות ופתקיות צבעוניות</div>
-          </div>
-          <button onclick="promptAddNewNote()" style="background:#eab308; color:#1c1917; border:none; border-radius:8px; padding:8px 16px; font-weight:800; cursor:pointer;">+ פתק חדש</button>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="notes-grid" id="notesGridContainer"></div>
-      </div>
-    </div>
-
-    <!-- 7. תצוגה שנתית - 12 חודשי השנה העברית המלאה -->
+    <!-- 6. תצוגה שנתית - 12/13 חודשי השנה העברית המלאה -->
     <div id="viewYearly" class="view-container">
       <div class="panel" style="margin-bottom: 16px;">
         <h3>🌟 יעדים למחזור השנה</h3>
@@ -1793,7 +1682,7 @@
     </div>
     
     <div class="sem-single-top-reminder">
-      ✨ <strong>תזכורת:</strong> אם הגעתי ל-5 צעדים ביעד מסוים – מגיע לי צ'ופר! (+50 מטבעות 🪙)
+      ✨ <strong>תזכורת:</strong> אם הגעתי ל-5 צעדים ביעד מסוים – מצ'פר את עצמי! 🎁
     </div>
 
     <div style="padding:8px 14px; background:#27272a; display:flex; justify-content:space-between; align-items:center;">
@@ -1992,15 +1881,6 @@
       { code: "#14b8a6", name: "טורקיז ים" }
     ];
 
-    const noteColorPresets = [
-      { bg: "linear-gradient(135deg, #fef08a, #fde047)", border: "#eab308", text: "#713f12", name: "צהוב קלאסי" },
-      { bg: "linear-gradient(135deg, #bbf7d0, #86efac)", border: "#22c55e", text: "#14532d", name: "ירוק מרענן" },
-      { bg: "linear-gradient(135deg, #fed7aa, #fdba74)", border: "#f97316", text: "#7c2d12", name: "כתום חמים" },
-      { bg: "linear-gradient(135deg, #bae6fd, #7dd3fc)", border: "#0284c7", text: "#0c4a6e", name: "תכלת שקט" },
-      { bg: "linear-gradient(135deg, #fbcfe8, #f472b6)", border: "#db2777", text: "#831843", name: "ורוד פסטל" },
-      { bg: "linear-gradient(135deg, #e9d5ff, #c084fc)", border: "#9333ea", text: "#581c87", name: "סגול השראה" }
-    ];
-
     const defaultSemesterGoals = [
       {
         id: "cat_studies",
@@ -2048,12 +1928,10 @@
       dailyGoals: {},
       dailyReflections: {},
       weeklyBoxes: {},
-      weeklyTimelineEvents: {},
+      weeklyTimelineEvents: {}, // אירועים עם זמנים מדויקים לשבוע
       yearlyGoals: [],
       quickTasks: [],
       projects: [],
-      notes: [],
-      coins: 0,
       semesterGoals: defaultSemesterGoals,
       semesterExams: {},
       parshiotCache: {}
@@ -2064,8 +1942,6 @@
     if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
     if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
     if (!Array.isArray(db.projects)) db.projects = [];
-    if (!Array.isArray(db.notes)) db.notes = [];
-    if (typeof db.coins !== 'number') db.coins = 0;
     if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
     if (!db.semesterExams) db.semesterExams = {};
 
@@ -2078,62 +1954,1002 @@
     let draggedCatIndex = null;
     let customPopupCallback = null;
 
-    function updateCoinsDisplay() {
-      const el = document.getElementById('coinTotalDisplay');
-      if (el) el.textContent = db.coins || 0;
+    // מאגר משפטי מוסר, חז"ל והגות כללית מורחב
+    const timeQuotes = [
+      "״רַבִּי טַרְפוֹן אוֹמֵר: הַיּוֹם קָצָר וְהַמְּלָאכָה מְרֻבָּה, וְהַפּוֹעֲלִים עֲצֵלִים, וְהַשָּׂכָר הַרְבֵּה, וּבַעַל הַבַּיִת דּוֹחֵק.״ (מסכת אבות ב, טו)",
+      "״יָמָיו כְּצֵל עוֹבֵר – לֹא כְּצִלּוֹ שֶׁל כּוֹתֶל וְלֹא כְּצִלּוֹ שֶׁל אִילָן, אֶלָּא כְּצִלּוֹ שֶׁל עוֹף הַפּוֹרֵחַ.״ (מדרש רבה)",
+      "״הֶעָבָר אַיִן, וְהֶעָתִיד עֲדַיִן, וְהַהֹוֶה כְּהֶרֶף עַיִן – דְּאָגָה מִנַּיִן? קוּם וּפְעַל עִם אֵ-ל!״ (פלא יועץ)",
+      "״אַל תֹּאמַר לִכְשֶׁאֶפָּנֶה אֶשְׁנֶה, שֶׁמָּא לֹא תִפָּנֶה.״ (מסכת אבות ב, ד)",
+      "״הַזְּמַן הוּא הַחַיִּים עַצְמָם; הַמְּאַבֵּד אֶת זְמַנּוֹ – מְאַבֵּד אֶת חַיָּיו וְעַצְמוּתוֹ.״ (החפץ חיים זצ״ל)",
+      "״כָּל מַה שֶּׁבְּכֹחֲךָ לַעֲשׂוֹת עֲשֵׂה – כִּי הַשָּׁעָה הַחוֹלֶפֶת שׁוּב לֹא תָּשׁוּב לְעוֹלָם.״ (הגר״א מווילנא)",
+      "״עוֹלָם חֶסֶד יִבָּנֶה – נִבְרֵאתָ כְּדֵי לְהֵיטִיב, לְהָאִיר וּלְהַרְבּוֹת טוֹב בָּעוֹלָם בְּכָל יוֹם מֵחָדָשׁ.״",
+      "״אִם אֵין אֲנִי לִי, מִי לִי? וּכְשֶׁאֲנִי לְעַצְמִי, מָה אֲנִי? וְאִם לֹא עַכְשָׁיו, אֵימָתַי?״ (אבות א, יד)",
+      "״הָאֹמֶץ אֵינוֹ הֵעָדֵר הַפַּחַד, אֶלָּא הַהַכָּרָה שֶׁיֵּשׁ דָּבָר חָשׁוּב מִמֶּנּוּ – תָּעֵז, תַּחְלֹם, תִּתְעַקֵּשׁ וְאַל תְּוַתֵּר!״",
+      "״לֹא עָלֶיךָ הַמְּלָאכָה לִגְמֹר, וְלֹא אַתָּה בֶן חוֹרִין לִבָּטֵל מִמֶּנָּה.״ (מסכת אבות ב, טז)",
+      "״שֶׁבַע יִפּוֹל צַדִּיק וָקָם – נְפִילָה אֵינָהּ כִּשָּׁלוֹן, אֶלָּא הַזְדַּמְּנוּת לִצְמֹחַ וְלָקוּם חָזָק וְחָכָם יוֹתֵר.״",
+      "״אַל תִּסְתַּכֵּל רַק עַל הַפִּסְגָּה – שִׂים לֵב לַדֶּרֶךְ, שְׂמַח בְּכָל צַעַד וּתְהֵנֶה מֵהַהִתְקַדְּמוּת שֶׁעָשִׂיתָ הַיּוֹם.״",
+      "״אֵין דָּבָר הָעוֹמֵד בִּפְנֵי הָרָצוֹן – כְּשֶׁאָדָם רוֹצֶה בֶּאֱמֶת וּמַאֲמִין בְּכֹחוֹתָיו, נִפְתָּחִים לוֹ שְׁעָרִים.״",
+      "״הַזְּמַן יָקָר מִכָּל פְּנִינִים, כִּי בְּכָל רֶגַע וָרֶגַע יָכוֹל אָדָם לִקְנוֹת עוֹלָמוֹ בְּמַעֲשֶׂה טוֹב. (שערי תשובה)״",
+      "״הַשָּׁעוֹן אֵינוֹ רַק מוֹדֵד אֶת הַזְּמַן – הוּא מַזְכִּיר לָנוּ שֶׁיֵּשׁ לָנוּ שְׁלִיחוּת חַד-פַּעֲמִית בָּעוֹלָם הַזֶּה.״",
+      "״רְצוֹנוֹ שֶׁל אָדָם – כְּבוֹדוֹ. כָּל צַעַד קָטָן שֶׁל מַאֲמָץ מְקָרֵב אוֹתְךָ אֶל הַיַּעַד שֶׁהִצַּבְתָּ לְעַצְמְךָ.״",
+      "״גְּדוֹלָה גְּמִילוּת חֲסָדִים יוֹתֵר מִן הַצְּדָקָה – לְהַקְשִׁיב, לְעוֹדֵד וּלְשַׂמֵּחַ אָדָם אַחֵר זוֹ הַצְלָחָה אֲמִתִּית.״",
+      "״מִי שֶׁרוֹצֶה לְהַדְלִיק אוֹר גָּדוֹל, צָרִיךְ לְהַתְחִיל בְּנֵר קָטָן וּלְהַתְמִיד בּוֹ יוֹם יוֹם בְּסַבְלָנוּת.״",
+      "״אַל תִּתֵּן לַסְּפֵקוֹת שֶׁל הַיּוֹם לַעֲצֹר אֶת הַהַצְלָחוֹת שֶׁל הַמָּחָר – הַאֲמֵן בְּעַצְמְךָ וּצְעַד קָדִימָה.״",
+      "״אֵיזֶהוּ עָשִׁיר? הַשָּׂמֵחַ בְּחֶלְקוֹ – וּמִי שֶׁמְּנַצֵּל אֶת זְמַנּוֹ לִבְנִיָּה, צְמִיחָה וְעֶזְרָה לַזּוּלַת.״"
+    ];
+    let currentQuoteIndex = 0;
+
+    function rotateTimeQuote() {
+      currentQuoteIndex = (currentQuoteIndex + 1) % timeQuotes.length;
+      document.getElementById('timeQuoteDisplay').textContent = timeQuotes[currentQuoteIndex];
     }
 
-    /* 6. לשונית פתקים ותזכורות (Sticky Notes Board) */
-    function renderNotesBoard() {
-      const container = document.getElementById('notesGridContainer');
+    /* מערכת פופאפים מודרנית במקום alert / prompt */
+    function showCustomAlert(title, message, icon = "✨") {
+      document.getElementById('customPopupIcon').textContent = icon;
+      document.getElementById('customPopupTitle').textContent = title;
+      document.getElementById('customPopupBody').innerHTML = message.replace(/\n/g, '<br>');
+      document.getElementById('customPopupInputContainer').style.display = 'none';
+      
+      const actions = document.getElementById('customPopupActions');
+      actions.innerHTML = `<button class="btn-primary" onclick="closeCustomPopup(true)">אישור</button>`;
+      
+      document.getElementById('customPopupBackdrop').style.display = 'flex';
+    }
+
+    function showCustomConfirm(title, message, onConfirm, icon = "❓") {
+      document.getElementById('customPopupIcon').textContent = icon;
+      document.getElementById('customPopupTitle').textContent = title;
+      document.getElementById('customPopupBody').innerHTML = message.replace(/\n/g, '<br>');
+      document.getElementById('customPopupInputContainer').style.display = 'none';
+      
+      const actions = document.getElementById('customPopupActions');
+      actions.innerHTML = `
+        <button style="background:rgba(255,255,255,0.1); border:1px solid #475569;" onclick="closeCustomPopup(false)">ביטול</button>
+        <button class="btn-primary" style="background:#ef4444;" onclick="closeCustomPopup(true)">אישור</button>
+      `;
+      customPopupCallback = (res) => { if (res) onConfirm(); };
+      document.getElementById('customPopupBackdrop').style.display = 'flex';
+    }
+
+    function showCustomPrompt(title, subtitle, defaultValue = "", callback, icon = "✏️") {
+      document.getElementById('customPopupIcon').textContent = icon;
+      document.getElementById('customPopupTitle').textContent = title;
+      document.getElementById('customPopupBody').innerHTML = subtitle ? subtitle.replace(/\n/g, '<br>') : '';
+      
+      const inputWrap = document.getElementById('customPopupInputContainer');
+      const input = document.getElementById('customPopupInput');
+      inputWrap.style.display = 'flex';
+      input.value = defaultValue;
+      
+      const actions = document.getElementById('customPopupActions');
+      actions.innerHTML = `
+        <button style="background:rgba(255,255,255,0.1); border:1px solid #475569;" onclick="closeCustomPopup(null)">ביטול</button>
+        <button class="btn-primary" onclick="closeCustomPopup(document.getElementById('customPopupInput').value)">שמור</button>
+      `;
+      
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          closeCustomPopup(input.value);
+        }
+      };
+
+      customPopupCallback = callback;
+      document.getElementById('customPopupBackdrop').style.display = 'flex';
+      setTimeout(() => input.focus(), 50);
+    }
+
+    function closeCustomPopup(result) {
+      document.getElementById('customPopupBackdrop').style.display = 'none';
+      if (customPopupCallback) {
+        const cb = customPopupCallback;
+        customPopupCallback = null;
+        cb(result);
+      }
+    }
+
+    function toHebrewNumeral(n) {
+      const map = {
+        1: "א׳", 2: "ב׳", 3: "ג׳", 4: "ד׳", 5: "ה׳", 6: "ו׳", 7: "ז׳", 8: "ח׳", 9: "ט׳", 10: "י׳",
+        11: "י״א", 12: "י״ב", 13: "י״ג", 14: "י״ד", 15: "ט״ו", 16: "ט״ז", 17: "י״ז", 18: "י״ח", 19: "י״ט", 20: "כ׳",
+        21: "כ״א", 22: "כ״ב", 23: "כ״ג", 24: "כ״ד", 25: "כ״ה", 26: "כ״ו", 27: "כ״ז", 28: "כ״ח", 29: "כ״ט", 30: "ל׳"
+      };
+      return map[n] || String(n);
+    }
+
+    async function fetchParshiotForYear(gregYear) {
+      if (db.parshiotCache && db.parshiotCache[`year_${gregYear}`]) return;
+      try {
+        const res = await fetch(`https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=${gregYear}&month=x&ss=on&s=on&i=on&lg=h`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.items) {
+          if (!db.parshiotCache) db.parshiotCache = {};
+          data.items.forEach(item => {
+            if (item.category === 'parashat' && item.date) {
+              db.parshiotCache[item.date] = item.hebrew.replace('פרשת ', '');
+            }
+          });
+          db.parshiotCache[`year_${gregYear}`] = true;
+          saveDB();
+          renderCurrentView();
+        }
+      } catch (e) {}
+    }
+
+    function getHebrewDateInfo(date) {
+      const monthName = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(date);
+      const dayNum = parseInt(new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric' }).format(date), 10);
+      const yearStr = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { year: 'numeric' }).format(date);
+
+      const hebrewDay = toHebrewNumeral(dayNum);
+      const hebrewStr = `${hebrewDay} ב${monthName} ${yearStr}`;
+      const hebrewDayAndMonth = `${hebrewDay} ב${monthName}`;
+
+      let holiday = '';
+      let holidayType = '';
+
+      if (monthName.includes('תשרי')) {
+        if (dayNum === 1 || dayNum === 2) { holiday = 'ראש השנה 🍎'; holidayType = 'holiday'; }
+        else if (dayNum === 3) { holiday = 'צום גדליה'; holidayType = 'fast'; }
+        else if (dayNum === 9) { holiday = 'ערב כיפור'; holidayType = 'memorial'; }
+        else if (dayNum === 10) { holiday = 'יום כיפור 🕊️'; holidayType = 'memorial'; }
+        else if (dayNum === 14) { holiday = 'ערב סוכות'; holidayType = 'holiday'; }
+        else if (dayNum === 15) { holiday = 'סוכות 🌿'; holidayType = 'holiday'; }
+        else if (dayNum >= 16 && dayNum <= 20) { holiday = 'חוה״מ סוכות'; holidayType = 'holiday'; }
+        else if (dayNum === 21) { holiday = 'הושענא רבה'; holidayType = 'holiday'; }
+        else if (dayNum === 22) { holiday = 'שמחת תורה 🎉'; holidayType = 'celebration'; }
+      } else if (monthName.includes('כסלו')) {
+        if (dayNum >= 25) { holiday = 'חנוכה 🕎'; holidayType = 'celebration'; }
+      } else if (monthName.includes('טבת')) {
+        if (dayNum <= 2 || dayNum === 3) { holiday = 'חנוכה 🕎'; holidayType = 'celebration'; }
+        else if (dayNum === 10) { holiday = 'צום י׳ בטבת'; holidayType = 'fast'; }
+      } else if (monthName.includes('שבט')) {
+        if (dayNum === 15) { holiday = 'ט״ו בשבט 🌳'; holidayType = 'celebration'; }
+      } else if (monthName.includes('אדר')) {
+        if (dayNum === 13) { holiday = 'תענית אסתר'; holidayType = 'fast'; }
+        else if (dayNum === 14) { holiday = 'פורים 🎭'; holidayType = 'celebration'; }
+        else if (dayNum === 15) { holiday = 'שושן פורים 🎭'; holidayType = 'celebration'; }
+      }
+
+      let shabbat = '';
+      if (date.getDay() === 6) {
+        const dKey = formatDateKey(date);
+        const parasha = (db.parshiotCache && db.parshiotCache[dKey]);
+        if (parasha) shabbat = `פרשת ${parasha}`;
+        else { shabbat = 'שבת קודש'; fetchParshiotForYear(date.getFullYear()); }
+      }
+
+      return { hebrewStr, hebrewDay, hebrewDayAndMonth, dayNum, holiday, holidayType, shabbat, monthName, yearStr };
+    }
+
+    function formatDateKey(d) {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function getWeekKey(d) {
+      const onejan = new Date(d.getFullYear(), 0, 1);
+      const week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+      return `${d.getFullYear()}-W${week}`;
+    }
+
+    // כל חודשי השנה העברית המלאה לפי הסדר (תשרי עד אלול, כולל אדר א' ואדר ב' לשנה מעוברת)
+    const hebrewYearCycle = [
+      { name: "תשרי", targetDate: new Date(2026, 8, 15), gregSpan: "ספטמבר - אוקטובר 2026" },
+      { name: "מרחשוון", targetDate: new Date(2026, 9, 15), gregSpan: "אוקטובר - נובמבר 2026" },
+      { name: "כסלו", targetDate: new Date(2026, 10, 15), gregSpan: "נובמבר - דצמבר 2026" },
+      { name: "טבת", targetDate: new Date(2026, 11, 15), gregSpan: "דצמבר 2026 - ינואר 2027" },
+      { name: "שבט", targetDate: new Date(2027, 0, 15), gregSpan: "ינואר - פברואר 2027" },
+      { name: "אדר א׳", targetDate: new Date(2027, 1, 15), gregSpan: "פברואר - מרץ 2027" },
+      { name: "אדר ב׳", targetDate: new Date(2027, 2, 15), gregSpan: "מרץ - אפריל 2027" },
+      { name: "ניסן", targetDate: new Date(2027, 3, 15), gregSpan: "אפריל - מאי 2027" },
+      { name: "אייר", targetDate: new Date(2027, 4, 15), gregSpan: "מאי - יוני 2027" },
+      { name: "סיוון", targetDate: new Date(2027, 5, 15), gregSpan: "יוני - יולי 2027" },
+      { name: "תמוז", targetDate: new Date(2027, 6, 15), gregSpan: "יולי - אוגוסט 2027" },
+      { name: "אב", targetDate: new Date(2027, 7, 15), gregSpan: "אוגוסט 2027" },
+      { name: "אלול", targetDate: new Date(2027, 8, 10), gregSpan: "ספטמבר 2027" }
+    ];
+
+    function init() {
+      initAuthListener();
+      initEnterKeyListeners();
+      fetchParshiotForYear(new Date().getFullYear());
+      fetchParshiotForYear(new Date().getFullYear() + 1);
+      renderHeaderToday();
+      renderCurrentView();
+      renderQuickTasks();
+      renderSemesterGoals();
+      renderProjectsBoard();
+
+      currentQuoteIndex = new Date().getDate() % timeQuotes.length;
+      document.getElementById('timeQuoteDisplay').textContent = timeQuotes[currentQuoteIndex];
+    }
+
+    function initEnterKeyListeners() {
+      const attachEnter = (inputId, callback) => {
+        const el = document.getElementById(inputId);
+        if (el) {
+          el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              callback();
+            }
+          });
+        }
+      };
+
+      attachEnter('dailyGoalInput', addDailyGoal);
+      attachEnter('quickTaskInput', addQuickTask);
+      attachEnter('yearlyGoalInput', addYearlyGoal);
+    }
+
+    function renderHeaderToday() {
+      const now = new Date();
+      const gregStr = new Intl.DateTimeFormat('he-IL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(now);
+      const heb = getHebrewDateInfo(now);
+      const badge = heb.holiday || heb.shabbat;
+      document.getElementById('headerGregorian').innerText = gregStr;
+      document.getElementById('headerHebrew').innerText = `${heb.hebrewStr} ${badge ? '• ' + badge : ''}`;
+    }
+
+    function switchView(view) {
+      activeView = view;
+      ['daily', 'weekly', 'monthly', 'semester', 'projects', 'yearly'].forEach(v => {
+        const el = document.getElementById(`view${v.charAt(0).toUpperCase() + v.slice(1)}`);
+        const btn = document.getElementById(`btn${v.charAt(0).toUpperCase() + v.slice(1)}`);
+        if (el) el.classList.toggle('active', v === view);
+        if (btn) btn.classList.toggle('active', v === view);
+      });
+      renderCurrentView();
+    }
+
+    function navigateDate(delta) {
+      if (activeView === 'daily') anchorDate.setDate(anchorDate.getDate() + delta);
+      else if (activeView === 'weekly') anchorDate.setDate(anchorDate.getDate() + (delta * 7));
+      else if (activeView === 'monthly') {
+        const currentMonthName = getHebrewDateInfo(anchorDate).monthName;
+        let idx = hebrewYearCycle.findIndex(m => currentMonthName.includes(m.name) || m.name.includes(currentMonthName));
+        if (idx !== -1 && hebrewYearCycle[idx + delta]) anchorDate = new Date(hebrewYearCycle[idx + delta].targetDate);
+        else anchorDate.setDate(anchorDate.getDate() + (delta * 30));
+      } else if (activeView === 'yearly') anchorDate.setFullYear(anchorDate.getFullYear() + delta);
+      renderCurrentView();
+    }
+
+    function goToToday() {
+      anchorDate = new Date();
+      renderCurrentView();
+    }
+
+    function renderCurrentView() {
+      if (activeView === 'daily') renderDailyView();
+      else if (activeView === 'weekly') renderWeeklyTimelineView();
+      else if (activeView === 'monthly') renderMonthlyView();
+      else if (activeView === 'semester') renderSemesterCalendarView();
+      else if (activeView === 'projects') renderProjectsBoard();
+      else if (activeView === 'yearly') renderYearlyView();
+    }
+
+    /* 1. תצוגה יומית */
+    function renderDailyView() {
+      const dateKey = formatDateKey(anchorDate);
+      const isToday = (dateKey === formatDateKey(new Date()));
+      const currentHourNow = new Date().getHours();
+
+      const greg = new Intl.DateTimeFormat('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' }).format(anchorDate);
+      const heb = getHebrewDateInfo(anchorDate);
+      document.getElementById('currentFocusTitle').innerText = `${greg} | ${heb.hebrewDay} ב${heb.monthName}`;
+
+      const dBadge = document.getElementById('dailyBadge');
+      if (heb.holiday) {
+        dBadge.style.display = 'inline-block';
+        dBadge.innerText = heb.holiday;
+        dBadge.style.background = 'var(--holiday-bg)';
+        dBadge.style.border = '1px solid var(--holiday-border)';
+        dBadge.style.color = 'var(--holiday-text)';
+      } else if (heb.shabbat) {
+        dBadge.style.display = 'inline-block';
+        dBadge.innerText = heb.shabbat;
+        dBadge.style.background = 'var(--shabbat-bg)';
+        dBadge.style.border = '1px solid var(--shabbat-border)';
+        dBadge.style.color = 'var(--shabbat-text)';
+      } else {
+        dBadge.style.display = 'none';
+      }
+
+      const scheduleContainer = document.getElementById('hourlyScheduleList');
+      scheduleContainer.innerHTML = '';
+      const daySchedule = db.schedules[dateKey] || {};
+
+      for (let h = 6; h <= 23; h++) {
+        const timeStr = `${String(h).padStart(2, '0')}:00`;
+        const val = daySchedule[timeStr] || '';
+        
+        let periodClass = 'morning';
+        let periodIcon = '☀';
+        if (h >= 12 && h <= 17) { periodClass = 'afternoon'; periodIcon = '🌤️'; }
+        else if (h >= 18) { periodClass = 'evening'; periodIcon = '🌙'; }
+
+        const isCurrentSlot = isToday && (h === currentHourNow);
+        const row = document.createElement('div');
+        row.className = `hour-row ${periodClass} ${isCurrentSlot ? 'current-hour' : ''}`;
+
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'hour-label';
+        labelDiv.innerHTML = `${periodIcon} ${timeStr} ${isCurrentSlot ? '<span class="current-hour-tag">עכשיו</span>' : ''}`;
+
+        const inputEl = document.createElement('input');
+        inputEl.type = 'text';
+        inputEl.className = 'hour-input';
+        inputEl.value = val;
+        inputEl.placeholder = 'משימה לשעה זו...';
+        inputEl.addEventListener('change', () => saveScheduleHour(dateKey, timeStr, inputEl.value));
+
+        row.appendChild(labelDiv);
+        row.appendChild(inputEl);
+        scheduleContainer.appendChild(row);
+      }
+
+      renderDailyGoals(dateKey);
+      loadDailyReflection(dateKey);
+      renderDailyEntries(dateKey);
+    }
+
+    function saveScheduleHour(dateKey, hour, val) {
+      if (!db.schedules[dateKey]) db.schedules[dateKey] = {};
+      if (val.trim()) db.schedules[dateKey][hour] = val.trim();
+      else delete db.schedules[dateKey][hour];
+      saveDB();
+    }
+
+    function renderDailyGoals(dateKey) {
+      const list = document.getElementById('dailyGoalsList');
+      list.innerHTML = '';
+      const goals = db.dailyGoals[dateKey] || [];
+      goals.forEach((g, idx) => {
+        const li = document.createElement('li');
+        li.className = `goal-item ${g.done ? 'done' : ''}`;
+        li.onclick = (e) => { if (e.target.tagName !== 'BUTTON') toggleDailyGoal(dateKey, idx); };
+        li.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" ${g.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleDailyGoal('${dateKey}', ${idx})">
+            <span style="white-space:pre-wrap;">${g.text}</span>
+          </div>
+          <button onclick="removeDailyGoal('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem;">✕</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function addDailyGoal() {
+      const input = document.getElementById('dailyGoalInput');
+      const text = input.value.trim();
+      if (!text) return;
+      const dateKey = formatDateKey(anchorDate);
+      if (!db.dailyGoals[dateKey]) db.dailyGoals[dateKey] = [];
+      db.dailyGoals[dateKey].push({ text, done: false });
+      input.value = '';
+      saveDB();
+      renderDailyGoals(dateKey);
+    }
+
+    function toggleDailyGoal(dateKey, idx) {
+      db.dailyGoals[dateKey][idx].done = !db.dailyGoals[dateKey][idx].done;
+      saveDB();
+      renderDailyGoals(dateKey);
+    }
+
+    function removeDailyGoal(dateKey, idx) {
+      if (!db.dailyGoals || !db.dailyGoals[dateKey]) return;
+      db.dailyGoals[dateKey].splice(idx, 1);
+      if (db.dailyGoals[dateKey].length === 0) delete db.dailyGoals[dateKey];
+      saveDB();
+      renderDailyGoals(dateKey);
+    }
+
+    function loadDailyReflection(dateKey) {
+      const ref = (db.dailyReflections && db.dailyReflections[dateKey]) || {};
+      document.getElementById('refRating').value = ref.rating || '';
+      document.getElementById('refWorked').value = ref.worked || '';
+      document.getElementById('refChallenges').value = ref.challenges || '';
+      document.getElementById('refImprove').value = ref.improve || '';
+    }
+
+    function saveDailyReflection() {
+      const dateKey = formatDateKey(anchorDate);
+      if (!db.dailyReflections) db.dailyReflections = {};
+      db.dailyReflections[dateKey] = {
+        rating: document.getElementById('refRating').value,
+        worked: document.getElementById('refWorked').value.trim(),
+        challenges: document.getElementById('refChallenges').value.trim(),
+        improve: document.getElementById('refImprove').value.trim()
+      };
+      saveDB();
+    }
+
+    function renderDailyEntries(dateKey) {
+      const container = document.getElementById('dailyEntriesList');
+      container.innerHTML = '';
+      const entries = db.entries[dateKey] || [];
+      if (entries.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-muted); font-size:0.85rem;">אין רשומות עדיין. לחץ למעלה על "+ רשומה חדשה".</div>';
+        return;
+      }
+      entries.forEach((e, idx) => {
+        const card = document.createElement('div');
+        card.className = `entry-card cat-${e.cat}`;
+        const catName = e.cat === 'plan' ? 'תכנון יומי' : (e.cat === 'insight' ? 'תובנה וחידוש' : 'חוויה וזיכרון');
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="entry-badge">${catName}</span>
+            <div style="display:flex; gap:6px;">
+              <button type="button" onclick="editEntry('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem;">ערוך ✏️</button>
+              <button type="button" onclick="deleteEntry('${dateKey}', ${idx})" style="padding:2px 6px; font-size:0.75rem; color:#ef4444;">מחק ✕</button>
+            </div>
+          </div>
+          <h4 style="font-size:0.95rem;">${e.title}</h4>
+          <p style="font-size:0.88rem; color:#cbd5e1; white-space:pre-wrap;">${e.text}</p>
+          ${e.externalUrl ? `<a href="${e.externalUrl}" target="_blank" class="doc-link-pill">🔗 פתח מסמך מורחב (Docs) ↗</a>` : ''}
+          ${e.img ? `<img src="${e.img}" class="entry-img-thumb" onclick="openLightbox('${e.img}')" title="לחץ להגדלה">` : ''}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function deleteEntry(dateKey, idx) {
+      showCustomConfirm("מחיקת רשומה", "האם אתה בטוח שברצונך למחוק רשומה זו?", () => {
+        if (!db.entries || !db.entries[dateKey]) return;
+        db.entries[dateKey].splice(idx, 1);
+        if (db.entries[dateKey].length === 0) delete db.entries[dateKey];
+        saveDB();
+        renderDailyEntries(dateKey);
+        renderMonthlyView();
+        if (activeView === 'weekly') renderWeeklyTimelineView();
+      });
+    }
+
+    function openLightbox(src) {
+      const modal = document.getElementById('imageLightboxModal');
+      document.getElementById('lightboxImgTarget').src = src;
+      modal.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+      document.getElementById('imageLightboxModal').style.display = 'none';
+    }
+
+    /* 2. תצוגה שבועית: לוח שעות מובנה בסגנון Google Calendar */
+    function renderWeeklyTimelineView() {
+      const startOfWeek = new Date(anchorDate);
+      startOfWeek.setDate(anchorDate.getDate() - anchorDate.getDay());
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+      const hebStart = getHebrewDateInfo(startOfWeek);
+      const hebEnd = getHebrewDateInfo(endOfWeek);
+
+      document.getElementById('currentFocusTitle').innerText = 
+        `${startOfWeek.getDate()}/${startOfWeek.getMonth()+1} - ${endOfWeek.getDate()}/${endOfWeek.getMonth()+1} | ${hebStart.hebrewDay}-${hebEnd.hebrewDay} ב${hebStart.monthName}`;
+
+      const headerGrid = document.getElementById('weeklyDayHeadersGrid');
+      const timeGutter = document.getElementById('weeklyTimeGutter');
+      const daysColumnsGrid = document.getElementById('weeklyDaysColumnsGrid');
+
+      headerGrid.innerHTML = '';
+      timeGutter.innerHTML = '';
+      daysColumnsGrid.innerHTML = '';
+
+      const todayStr = formatDateKey(new Date());
+      const hourHeight = 52; // גובה כל שעה בפיקסלים
+      const startHour = 7;
+      const endHour = 23;
+      const totalHours = endHour - startHour + 1;
+
+      // ציור ציר השעות
+      for (let h = startHour; h <= endHour; h++) {
+        const marker = document.createElement('div');
+        marker.className = 'weekly-hour-marker';
+        marker.textContent = `${String(h).padStart(2,'0')}:00`;
+        timeGutter.appendChild(marker);
+      }
+
+      // ציור 7 הימים
+      for (let i = 0; i < 7; i++) {
+        const day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + i);
+        const dKey = formatDateKey(day);
+        const heb = getHebrewDateInfo(day);
+        const isToday = (dKey === todayStr);
+
+        // 1. כותרת היום
+        const headCell = document.createElement('div');
+        headCell.className = `weekly-day-header-cell ${isToday ? 'today' : ''}`;
+        let badge = heb.holiday || (i === 6 ? heb.shabbat : '');
+        headCell.innerHTML = `
+          <div class="day-name">${['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'][i]}</div>
+          <div class="day-sub">${day.getDate()}/${day.getMonth()+1} • ${heb.hebrewDay}</div>
+          ${badge ? `<div style="font-size:0.72rem; color:#facc15; font-weight:800; margin-top:2px;">${badge}</div>` : ''}
+        `;
+        headerGrid.appendChild(headCell);
+
+        // 2. עמודת היום עם קווי שעות אופקיים
+        const col = document.createElement('div');
+        col.className = `weekly-day-column ${isToday ? 'today' : ''}`;
+        col.style.height = `${totalHours * hourHeight}px`;
+
+        for (let h = 0; h < totalHours; h++) {
+          const line = document.createElement('div');
+          line.className = 'weekly-grid-line';
+          col.appendChild(line);
+        }
+
+        // לחיצה על העמודה מוסיפה אירוע באותו יום
+        col.onclick = (e) => {
+          if (e.target.closest('.timeline-event-block')) return;
+          const rect = col.getBoundingClientRect();
+          const clickY = e.clientY - rect.top;
+          const clickedHourFrac = startHour + (clickY / hourHeight);
+          const hourFloor = Math.floor(clickedHourFrac);
+          const defaultStart = `${String(hourFloor).padStart(2,'0')}:00`;
+          const defaultEnd = `${String(hourFloor + 1).padStart(2,'0')}:00`;
+          promptAddTimelineEvent(dKey, defaultStart, defaultEnd);
+        };
+
+        // ציור האירועים שנמתחים על פני השעות
+        const dayEvents = (db.weeklyTimelineEvents && db.weeklyTimelineEvents[dKey]) || [];
+        dayEvents.forEach((ev, evIdx) => {
+          const block = document.createElement('div');
+          block.className = 'timeline-event-block';
+          block.style.background = ev.color || '#3b82f6';
+
+          // חישוב מיקום עליון וגובה לפי שעת התחלה וסיום
+          const [sh, sm] = (ev.startTime || "09:00").split(':').map(Number);
+          const [eh, em] = (ev.endTime || "10:00").split(':').map(Number);
+
+          const startDecimal = sh + (sm / 60);
+          const endDecimal = Math.max(startDecimal + 0.5, eh + (em / 60));
+
+          const topPos = (startDecimal - startHour) * hourHeight;
+          const blockHeight = Math.max(28, (endDecimal - startDecimal) * hourHeight);
+
+          block.style.top = `${topPos}px`;
+          block.style.height = `${blockHeight}px`;
+
+          block.innerHTML = `
+            <div class="timeline-event-time">${ev.startTime} - ${ev.endTime}</div>
+            <div class="timeline-event-title">${ev.title}</div>
+          `;
+
+          block.onclick = (e) => {
+            e.stopPropagation();
+            showCustomConfirm("מחיקת אירוע", `האם למחוק את האירוע:\n"${ev.title}"?`, () => {
+              db.weeklyTimelineEvents[dKey].splice(evIdx, 1);
+              saveDB();
+              renderWeeklyTimelineView();
+            });
+          };
+
+          col.appendChild(block);
+        });
+
+        daysColumnsGrid.appendChild(col);
+      }
+    }
+
+    // הוספת אירוע/שיעור שנמתח בלוח השבועי
+    function promptAddTimelineEvent(dKey, defStart = "09:00", defEnd = "10:30") {
+      showCustomPrompt("הוספת אירוע / שיעור", "הזן שם פגישה, שיעור או משימה לשבוע:", "", (title) => {
+        if (!title || !title.trim()) return;
+
+        showCustomPrompt("שעות האירוע", "הזן שעת התחלה וסיום (למשל 09:30-11:00):", `${defStart}-${defEnd}`, (timeStr) => {
+          let [sTime, eTime] = (timeStr || `${defStart}-${defEnd}`).split('-');
+          sTime = (sTime || defStart).trim();
+          eTime = (eTime || defEnd).trim();
+
+          const chosenColor = availableCategoryColors[Math.floor(Math.random() * availableCategoryColors.length)].code;
+
+          if (!db.weeklyTimelineEvents) db.weeklyTimelineEvents = {};
+          if (!db.weeklyTimelineEvents[dKey]) db.weeklyTimelineEvents[dKey] = [];
+
+          db.weeklyTimelineEvents[dKey].push({
+            id: Date.now(),
+            title: title.trim(),
+            startTime: sTime,
+            endTime: eTime,
+            color: chosenColor
+          });
+
+          saveDB();
+          renderWeeklyTimelineView();
+        });
+      });
+    }
+
+    function openAddWeeklyEventDialog() {
+      const dKey = formatDateKey(anchorDate);
+      promptAddTimelineEvent(dKey);
+    }
+
+    /* 3. תצוגה חודשית */
+    function renderMonthlyView() {
+      let startOfHebrewMonth = new Date(anchorDate);
+      while (getHebrewDateInfo(startOfHebrewMonth).dayNum > 1) {
+        startOfHebrewMonth.setDate(startOfHebrewMonth.getDate() - 1);
+      }
+
+      const hebMonthInfo = getHebrewDateInfo(startOfHebrewMonth);
+      const activeHebMonthName = hebMonthInfo.monthName;
+
+      const hebrewMonthDays = [];
+      let cur = new Date(startOfHebrewMonth);
+      while (getHebrewDateInfo(cur).monthName === activeHebMonthName) {
+        hebrewMonthDays.push(new Date(cur));
+        cur.setDate(cur.getDate() + 1);
+      }
+
+      const firstGreg = hebrewMonthDays[0];
+      const lastGreg = hebrewMonthDays[hebrewMonthDays.length - 1];
+      document.getElementById('currentFocusTitle').innerText = 
+        `חודש ${activeHebMonthName} ${hebMonthInfo.yearStr} (${firstGreg.getDate()}/${firstGreg.getMonth()+1} - ${lastGreg.getDate()}/${lastGreg.getMonth()+1})`;
+
+      const firstDayOfWeek = firstGreg.getDay();
+      const grid = document.getElementById('monthlyGrid');
+      grid.innerHTML = '';
+      const todayStr = formatDateKey(new Date());
+
+      for (let i = 0; i < firstDayOfWeek; i++) {
+        grid.innerHTML += `<div class="month-day-cell empty"></div>`;
+      }
+
+      hebrewMonthDays.forEach(curDate => {
+        const dKey = formatDateKey(curDate);
+        const heb = getHebrewDateInfo(curDate);
+        const entries = db.entries[dKey] || [];
+        const cell = document.createElement('div');
+        const isShab = !!heb.shabbat;
+        let holidayClass = heb.holidayType ? `has-${heb.holidayType}` : '';
+        const isSelected = selectedPreviewDate && (formatDateKey(selectedPreviewDate) === dKey);
+
+        cell.className = `month-day-cell ${dKey === todayStr ? 'today' : ''} ${isSelected ? 'selected-day' : ''} ${holidayClass} ${isShab ? 'has-shabbat' : ''}`;
+        cell.onclick = () => selectMonthDayForPreview(curDate);
+        cell.ondblclick = () => { anchorDate = curDate; switchView('daily'); };
+
+        const entriesPills = entries.slice(0, 3).map(e => `<div class="entry-pill-mini cat-${e.cat}">${e.title}</div>`).join('');
+
+        cell.innerHTML = `
+          <div class="cell-top">
+            <span class="heb-num-main">${heb.hebrewDay}</span>
+            <span class="greg-num-sub">${curDate.getDate()}/${curDate.getMonth()+1}</span>
+          </div>
+          ${heb.holiday ? `<div class="cell-holiday ${heb.holidayType}">${heb.holiday}</div>` : ''}
+          ${heb.shabbat ? `<div class="cell-shabbat">${heb.shabbat}</div>` : ''}
+          <div class="cell-entries-list">${entriesPills}</div>
+        `;
+        grid.appendChild(cell);
+      });
+
+      if (selectedPreviewDate) updateMonthPreviewBar(selectedPreviewDate);
+    }
+
+    function selectMonthDayForPreview(date) {
+      selectedPreviewDate = date;
+      document.querySelectorAll('.month-day-cell').forEach(c => c.classList.remove('selected-day'));
+      renderMonthlyView();
+      updateMonthPreviewBar(date);
+    }
+
+    function updateMonthPreviewBar(date) {
+      const bar = document.getElementById('monthDayPreviewBar');
+      const dKey = formatDateKey(date);
+      const weekKey = getWeekKey(date);
+      const heb = getHebrewDateInfo(date);
+      const gregName = new Intl.DateTimeFormat('he-IL', { weekday: 'long', day: 'numeric', month: 'numeric' }).format(date);
+
+      document.getElementById('prevBarDateTitle').textContent = gregName;
+      document.getElementById('prevBarHebrewTitle').textContent = `• ${heb.hebrewDayAndMonth} ${heb.holiday ? '('+heb.holiday+')' : ''}`;
+
+      const weeklyBox = (db.weeklyBoxes && db.weeklyBoxes[weekKey]) || { core: [], tasks: [], habits: [] };
+      const weekGoals = [...(weeklyBox.core || []), ...(weeklyBox.tasks || []), ...(weeklyBox.habits || [])];
+      const wContainer = document.getElementById('prevBarWeeklyGoals');
+      const wCountEl = document.getElementById('prevBarWeeklyCount');
+
+      const doneW = weekGoals.filter(g => g.done).length;
+      wCountEl.textContent = weekGoals.length > 0 ? `(${doneW}/${weekGoals.length} הושלמו)` : '';
+
+      if (weekGoals.length === 0) {
+        wContainer.innerHTML = '<div style="color:#64748b; font-size:0.8rem; padding:6px 0;">אין יעדים מוגדרים לשבוע זה</div>';
+      } else {
+        wContainer.innerHTML = weekGoals.map(g => `
+          <div class="preview-item-row ${g.done ? 'done' : ''}">
+            <span style="color:#fbbf24; font-size:0.85rem;">${g.done ? '✔' : '▫'}</span>
+            <span>${g.text}</span>
+          </div>
+        `).join('');
+      }
+
+      const dGoals = (db.dailyGoals && db.dailyGoals[dKey]) || [];
+      const dContainer = document.getElementById('prevBarDailyTasks');
+      const dCountEl = document.getElementById('prevBarDailyCount');
+
+      const doneD = dGoals.filter(g => g.done).length;
+      dCountEl.textContent = dGoals.length > 0 ? `(${doneD}/${dGoals.length} בוצעו)` : '';
+
+      if (dGoals.length === 0) {
+        dContainer.innerHTML = '<div style="color:#64748b; font-size:0.8rem; padding:6px 0;">אין מטלות ליום זה</div>';
+      } else {
+        dContainer.innerHTML = dGoals.map(g => `
+          <div class="preview-item-row ${g.done ? 'done' : ''}">
+            <span style="color:#38bdf8; font-size:0.85rem;">${g.done ? '✔' : '▫'}</span>
+            <span>${g.text}</span>
+          </div>
+        `).join('');
+      }
+
+      bar.style.display = 'flex';
+    }
+
+    function openSelectedDayDailyView() {
+      if (selectedPreviewDate) {
+        anchorDate = new Date(selectedPreviewDate);
+        switchView('daily');
+      }
+    }
+
+    /* 4. לוח שנה סמסטריאלי מלא - טור יחיד לגלילה נוחה, כותרות נקיות, שמות שבתות, שמות מבחנים וסימון ימים שעברו (ללא מקרא) */
+    function renderSemesterCalendarView() {
+      document.getElementById('currentFocusTitle').innerText = `לוח שנה סמסטר א׳ • תשפ״ז`;
+
+      const semStart = new Date(2026, 9, 11); // 11 באוקטובר 2026
+      const examsStart = new Date(2027, 0, 24); // 24 בינואר 2027
+      const semEnd = new Date(2027, 1, 28); // 28 בפברואר 2027
+      const today = new Date();
+      const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+      let currentWeekNum = 0;
+      if (todayMid >= semStart) {
+        const diffDays = Math.floor((todayMid - semStart) / (1000 * 60 * 60 * 24));
+        currentWeekNum = Math.floor(diffDays / 7) + 1;
+      }
+
+      document.getElementById('semStatCurWeek').textContent = currentWeekNum > 0 ? (currentWeekNum <= 14 ? `שבוע ${currentWeekNum} מתוך 14` : `שבוע ${currentWeekNum}`) : 'טרם החל';
+      
+      const remWeeks = Math.max(0, 14 - currentWeekNum);
+      document.getElementById('semStatRemainingWeeks').textContent = `${remWeeks} שבועות`;
+
+      const diffExams = Math.ceil((examsStart - todayMid) / (1000 * 60 * 60 * 24));
+      document.getElementById('semStatDaysToExams').textContent = diffExams > 0 ? `${diffExams} ימים` : (todayMid <= semEnd ? "בתקופת מבחנים!" : "הסתיימו");
+
+      let progressPct = 0;
+      if (todayMid >= semStart && todayMid <= semEnd) {
+        progressPct = Math.round(((todayMid - semStart) / (semEnd - semStart)) * 100);
+      } else if (todayMid > semEnd) progressPct = 100;
+      
+      document.getElementById('semProgressBarFill').style.width = `${progressPct}%`;
+      document.getElementById('semStatProgressPct').textContent = `${progressPct}%`;
+
+      const statusBadge = document.getElementById('semesterCurrentStatusBadge');
+      if (currentWeekNum >= 1 && currentWeekNum <= 14) {
+        statusBadge.textContent = `אתה נמצא כעת בשבוע ${currentWeekNum} מתוך 14 שבועות הוראה`;
+        statusBadge.style.background = '#22c55e';
+      } else if (currentWeekNum > 14 && currentWeekNum <= 18) {
+        statusBadge.textContent = `תקופת בחינות מועדי א׳`;
+        statusBadge.style.background = '#a855f7';
+      } else if (currentWeekNum > 18) {
+        statusBadge.textContent = `חופשת סמסטר / מועדי ב׳ סמסטר א׳`;
+        statusBadge.style.background = '#6366f1';
+      } else {
+        statusBadge.textContent = `סמסטר א׳ נפתח ב-11.10.2026`;
+      }
+
+      const monthsToRender = [
+        { year: 2026, month: 9, name: "אוקטובר 2026 • תשרי-חשוון" },
+        { year: 2026, month: 10, name: "נובמבר 2026 • חשוון-כסלו" },
+        { year: 2026, month: 11, name: "דצמבר 2026 • כסלו-טבת" },
+        { year: 2027, month: 0, name: "ינואר 2027 • טבת-שבט" },
+        { year: 2027, month: 1, name: "פברואר 2027 • שבט-אדר" }
+      ];
+
+      const container = document.getElementById('semCalendarMonthsContainer');
       container.innerHTML = '';
 
-      const notes = db.notes || [];
-      if (notes.length === 0) {
+      monthsToRender.forEach(mObj => {
+        const block = document.createElement('div');
+        block.className = 'sem-month-block';
+
+        let html = `
+          <div class="sem-month-title">
+            <span>${mObj.name}</span>
+          </div>
+          <table class="sem-month-table">
+            <thead>
+              <tr>
+                <th style="width:75px;">שבוע</th>
+                <th>א׳</th><th>ב׳</th><th>ג׳</th><th>ד׳</th><th>ה׳</th><th>ו׳</th><th>שבת</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        const daysInMonth = new Date(mObj.year, mObj.month + 1, 0).getDate();
+        let curDay = 1;
+        
+        while (curDay <= daysInMonth) {
+          html += `<tr>`;
+          
+          const weekRowStartDate = new Date(mObj.year, mObj.month, curDay);
+          const dayOfWeek = weekRowStartDate.getDay();
+          const sundayOfThisWeek = new Date(weekRowStartDate);
+          sundayOfThisWeek.setDate(weekRowStartDate.getDate() - dayOfWeek);
+
+          const saturdayOfThisWeek = new Date(sundayOfThisWeek);
+          saturdayOfThisWeek.setDate(sundayOfThisWeek.getDate() + 6);
+          const isWeekPassed = (saturdayOfThisWeek < todayMid && saturdayOfThisWeek >= semStart);
+
+          let semWeekLabel = "--";
+          let isCurWeekRow = false;
+          if (sundayOfThisWeek >= semStart) {
+            const diffDaysFromStart = Math.floor((sundayOfThisWeek - semStart) / (1000 * 60 * 60 * 24));
+            const wNum = Math.floor(diffDaysFromStart / 7) + 1;
+            if (wNum <= 14) semWeekLabel = `שבוע ${wNum}`;
+            else if (wNum <= 17) semWeekLabel = `מועד א׳`;
+            else if (wNum <= 18) semWeekLabel = `חופשה/ב׳`;
+            else semWeekLabel = `מועד ב׳`;
+
+            if (wNum === currentWeekNum) isCurWeekRow = true;
+          }
+
+          html += `<td><span class="sem-week-badge-col ${isCurWeekRow ? 'is-cur-week' : ''} ${isWeekPassed ? 'sem-week-passed' : ''}">${semWeekLabel}</span></td>`;
+
+          for (let d = 0; d < 7; d++) {
+            if ((curDay === 1 && d < dayOfWeek) || curDay > daysInMonth) {
+              html += `<td><div class="sem-day-cell-num empty"></div></td>`;
+            } else {
+              const thisDate = new Date(mObj.year, mObj.month, curDay);
+              const thisDateMid = new Date(thisDate.getFullYear(), thisDate.getMonth(), thisDate.getDate());
+              const dateStr = formatDateKey(thisDate);
+              const isToday = (dateStr === formatDateKey(today));
+              const isPassed = (thisDateMid < todayMid && thisDateMid >= semStart);
+              const isBeforeSem = (thisDate < semStart);
+
+              let specialClass = isBeforeSem ? 'before-sem' : 'regular-sem';
+              let eventLabel = '';
+
+              if (dateStr >= "2026-12-05" && dateStr <= "2026-12-12") {
+                specialClass = 'is-holiday';
+                eventLabel = 'חנוכה 🕎';
+              } else if (dateStr === "2026-12-20") {
+                specialClass = 'is-fast';
+                eventLabel = 'צום י׳ בטבת ⚡';
+              } else if (dateStr === "2027-01-21") {
+                specialClass = 'is-celebration';
+                eventLabel = 'סיום הוראה';
+              } else if (dateStr === "2027-01-23") {
+                specialClass = 'is-celebration';
+                eventLabel = 'ט״ו בשבט 🌳';
+              } else if (dateStr >= "2027-01-24" && dateStr <= "2027-02-12") {
+                specialClass = 'is-exam-a';
+                eventLabel = 'מועד א׳ 📝';
+              } else if (dateStr >= "2027-02-14" && dateStr <= "2027-02-16") {
+                specialClass = 'is-sem-break';
+                eventLabel = 'חופשת סמסטר 🏖️';
+              } else if (dateStr >= "2027-02-17" && dateStr <= "2027-02-27") {
+                specialClass = 'is-exam-b';
+                eventLabel = 'מועד ב׳';
+              } else if (dateStr === "2027-02-28") {
+                specialClass = 'is-sem-b-start';
+                eventLabel = 'סמסטר ב׳ 🚀';
+              }
+
+              let shabbatName = '';
+              if (d === 6) {
+                const hebDateInfo = getHebrewDateInfo(thisDate);
+                shabbatName = hebDateInfo.shabbat || 'שבת קודש';
+              }
+
+              const examName = (db.semesterExams && db.semesterExams[dateStr]) || '';
+
+              html += `
+                <td>
+                  <div class="sem-day-cell-num ${specialClass} ${isToday ? 'is-today' : ''} ${isPassed ? 'sem-day-passed' : ''}" 
+                       onclick="promptEditSemesterDayExam('${dateStr}', '${curDay}/${mObj.month+1}')" 
+                       title="${curDay}/${mObj.month+1}${eventLabel ? ' • ' + eventLabel : ''}${shabbatName ? ' • ' + shabbatName : ''}${examName ? ' | ' + examName : ' (לחץ להוספת מבחן)'}">
+                    <span style="font-size:0.86rem; line-height:1;">${curDay}</span>
+                    ${eventLabel ? `<span class="sem-special-event-label">${eventLabel}</span>` : ''}
+                    ${shabbatName ? `<span class="sem-shabbat-label">${shabbatName}</span>` : ''}
+                    ${examName ? `<span class="sem-day-exam-tag">${examName}</span>` : ''}
+                  </div>
+                </td>
+              `;
+              curDay++;
+            }
+          }
+          html += `</tr>`;
+        }
+
+        html += `</tbody></table>`;
+        block.innerHTML = html;
+        container.appendChild(block);
+      });
+    }
+
+    function promptEditSemesterDayExam(dateStr, displayDate) {
+      if (!db.semesterExams) db.semesterExams = {};
+      const current = db.semesterExams[dateStr] || '';
+      showCustomPrompt(`מבחן / מטלה לתאריך ${displayDate}`, "הזן שם מבחן מקוצר (למשל: אינפי 1, פיזיקה | ריק למחיקה):", current, (entered) => {
+        if (entered === null) return;
+        if (entered.trim()) {
+          db.semesterExams[dateStr] = entered.trim();
+        } else {
+          delete db.semesterExams[dateStr];
+        }
+        saveDB();
+        renderSemesterCalendarView();
+      });
+    }
+
+    /* 5. לוח פרויקטים ססגוני ומעוצב */
+    function renderProjectsBoard() {
+      const container = document.getElementById('projectsGridContainer');
+      container.innerHTML = '';
+
+      const projects = db.projects || [];
+      if (projects.length === 0) {
         container.innerHTML = `
-          <div style="grid-column: 1 / -1; text-align:center; padding:40px 20px; color:#94a3b8;">
-            <div style="font-size:3rem; margin-bottom:10px;">📌</div>
-            <h3 style="color:#cbd5e1; margin-bottom:6px;">לוח הפתקים ריק כרגע</h3>
-            <p style="font-size:0.88rem; max-width:440px; margin:0 auto; line-height:1.5;">
-              לחץ למעלה על <strong>"+ פתק חדש"</strong> כדי לכתוב תזכורת, רעיון או פתקית צבעונית!
+          <div style="grid-column: 1 / -1; text-align:center; padding:35px 20px; color:#94a3b8;">
+            <div style="font-size:2.5rem; margin-bottom:10px;">🚀</div>
+            <h3 style="color:#cbd5e1; margin-bottom:6px;">עדיין אין פרויקטים פעילים</h3>
+            <p style="font-size:0.88rem; max-width:480px; margin:0 auto; line-height:1.5;">
+              לחץ למעלה על <strong>"+ פרויקט חדש מיעד"</strong> כדי לבחור יעד מרשימת היעדים שלך, או לחץ על הנקודה <strong>(●)</strong> ליד כל יעד בחלון היעדים!
             </p>
           </div>
         `;
         return;
       }
 
-      const sorted = [...notes].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
-
-      sorted.forEach((note) => {
-        const actualIdx = db.notes.findIndex(n => n.id === note.id);
+      projects.forEach((proj, pIdx) => {
         const card = document.createElement('div');
-        card.className = 'sticky-note-card';
+        card.className = 'project-card';
+        card.style.borderTopColor = proj.color || '#8b5cf6';
+        card.style.background = `linear-gradient(180deg, ${hexToRgba(proj.color || '#8b5cf6', 0.12)}, rgba(24, 32, 44, 0.85))`;
 
-        const colorTheme = noteColorPresets[note.colorIdx || 0] || noteColorPresets[0];
-        card.style.background = colorTheme.bg;
-        card.style.borderColor = colorTheme.border;
-        card.style.color = colorTheme.text;
+        const tasks = proj.tasks || [];
+        const completed = tasks.filter(t => t.done).length;
+        const total = tasks.length;
+        const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
         card.innerHTML = `
-          <div>
-            <div class="note-header">
-              <div style="display:flex; align-items:center; gap:6px;">
-                <button onclick="togglePinNote(${actualIdx})" style="background:none; border:none; cursor:pointer; font-size:1.1rem; padding:0;" title="${note.pinned ? 'בטל נעיצה' : 'נעץ בראש הלוח'}">
-                  ${note.pinned ? '📌' : '📍'}
-                </button>
-                <div class="note-title">${note.title || 'תזכורת'}</div>
-              </div>
-              <div style="display:flex; gap:4px;">
-                <button onclick="cycleNoteColor(${actualIdx})" style="background:none; border:none; cursor:pointer; font-size:0.9rem;" title="החלף צבע פתק">🎨</button>
-                <button onclick="editNoteText(${actualIdx})" style="background:none; border:none; cursor:pointer; font-size:0.9rem;" title="ערוך פתק">✏️</button>
-                <button onclick="deleteNote(${actualIdx})" style="background:none; border:none; cursor:pointer; font-size:0.9rem; color:#dc2626;" title="מחק פתק">✕</button>
-              </div>
+          <div class="project-card-header">
+            <div>
+              <span style="font-size:0.75rem; background:${hexToRgba(proj.color || '#8b5cf6', 0.28)}; color:${proj.color || '#c084fc'}; padding:3px 8px; border-radius:6px; font-weight:800; border:1px solid ${hexToRgba(proj.color || '#8b5cf6', 0.5)};">
+                ${proj.catTitle || 'פרויקט'}
+              </span>
+              <div class="project-card-title" style="margin-top:6px;">${proj.title}</div>
             </div>
-            <div class="note-content">${note.content || ''}</div>
+            <button onclick="deleteProject(${pIdx})" style="background:none; border:none; color:#ef4444; font-size:0.9rem; cursor:pointer;" title="מחק פרויקט זה">✕</button>
           </div>
-          <div class="note-footer">
-            <span>📅 ${note.date || ''}</span>
-            <span>${note.pinned ? 'נעוץ בראש 📌' : ''}</span>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:#cbd5e1;">
+            <span>התקדמות: <strong>${pct}%</strong> (${completed}/${total})</span>
+            ${pct === 100 && total > 0 ? '<span style="color:#22c55e; font-weight:800;">הושלם במלואו! 🏆</span>' : ''}
+          </div>
+          <div class="project-progress-wrap">
+            <div class="project-progress-fill" style="width:${pct}%; background:${proj.color || '#8b5cf6'};"></div>
+          </div>
+
+          <div class="project-tasks-list" id="projectTasks_${pIdx}">
+            ${tasks.map((t, tIdx) => `
+              <div class="project-task-item ${t.done ? 'done' : ''}">
+                <label style="display:flex; align-items:center; gap:8px; flex:1; cursor:pointer;">
+                  <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleProjectTask(${pIdx}, ${tIdx})" style="width:16px; height:16px; cursor:pointer;">
+                  <span style="line-height:1.35;">${t.text}</span>
+                </label>
+                <button onclick="deleteProjectTask(${pIdx}, ${tIdx})" style="background:none; border:none; color:#ef4444; font-size:0.75rem; cursor:pointer; padding:0 3px;">✕</button>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="margin-top:4px;">
+            <input type="text" id="projTaskInput_${pIdx}" class="project-task-input" placeholder="+ הוסף משימה / הקלטה / מטלה (Enter)..." onkeydown="if(event.key==='Enter'){ event.preventDefault(); addProjectTask(${pIdx}); }">
           </div>
         `;
 
@@ -2141,61 +2957,111 @@
       });
     }
 
-    function promptAddNewNote() {
-      showCustomPrompt("פתק חדש", "כותרת לפתק (אופציונלי):", "", (title) => {
-        showCustomPrompt("תוכן הפתק", "כתוב כאן את התוכן של הפתק / תזכורת:", "", (content) => {
-          if (!content || !content.trim()) return;
-
-          if (!Array.isArray(db.notes)) db.notes = [];
-          const now = new Date();
-          const dateStr = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-
-          db.notes.unshift({
-            id: Date.now(),
-            title: title ? title.trim() : 'תזכורת',
-            content: content.trim(),
-            date: dateStr,
-            colorIdx: Math.floor(Math.random() * noteColorPresets.length),
-            pinned: false
-          });
-
-          saveDB();
-          renderNotesBoard();
+    // פתיחת דיאלוג לבחירת יעד בלבד להפיכה לפרויקט
+    function openSelectGoalForProjectDialog() {
+      const categories = db.semesterGoals || defaultSemesterGoals;
+      let allGoals = [];
+      categories.forEach((cat, cIdx) => {
+        (cat.items || []).forEach((it, iIdx) => {
+          allGoals.push({ catIdx: cIdx, itemIdx: iIdx, catTitle: cat.title, text: it.text, color: cat.color });
         });
       });
-    }
 
-    function editNoteText(idx) {
-      const note = db.notes[idx];
-      showCustomPrompt("עריכת כותרת", "ערוך את כותרת הפתק:", note.title, (newTitle) => {
-        showCustomPrompt("עריכת תוכן", "ערוך את תוכן הפתק:", note.content, (newContent) => {
-          if (newContent && newContent.trim()) {
-            note.title = newTitle ? newTitle.trim() : note.title;
-            note.content = newContent.trim();
-            saveDB();
-            renderNotesBoard();
-          }
-        });
+      if (allGoals.length === 0) {
+        showCustomAlert("אין יעדים", "לא נמצאו יעדים ברשימת היעדים שלך. הוסף קודם יעד בחלון היעדים!", "ℹ️");
+        return;
+      }
+
+      let optionsHtml = `
+        <div style="font-size:0.86rem; color:#cbd5e1; margin-bottom:8px;">בחר יעד מתוך הרשימה שלך להפיכה לפרויקט פעיל:</div>
+        <div style="max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;">
+      `;
+
+      allGoals.forEach(g => {
+        optionsHtml += `
+          <div onclick="addGoalAsProjectDirect(${g.catIdx}, ${g.itemIdx})" style="background:${hexToRgba(g.color, 0.15)}; border:1px solid ${hexToRgba(g.color, 0.45)}; border-radius:8px; padding:8px 12px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:background 0.15s;" onmouseover="this.style.background='${hexToRgba(g.color, 0.3)}'" onmouseout="this.style.background='${hexToRgba(g.color, 0.15)}'">
+            <div>
+              <span style="font-size:0.72rem; color:${g.color}; font-weight:800; display:block;">${g.catTitle}</span>
+              <strong style="color:#fff; font-size:0.88rem;">${g.text}</strong>
+            </div>
+            <span style="color:#38bdf8; font-weight:800; font-size:0.8rem;">בחר ↗</span>
+          </div>
+        `;
       });
+      optionsHtml += `</div>`;
+
+      document.getElementById('customPopupIcon').textContent = "🎯";
+      document.getElementById('customPopupTitle').textContent = "הוספת פרויקט מתוך יעד";
+      document.getElementById('customPopupBody').innerHTML = optionsHtml;
+      document.getElementById('customPopupInputContainer').style.display = 'none';
+      document.getElementById('customPopupActions').innerHTML = `<button class="btn-primary" onclick="closeCustomPopup(null)">סגור</button>`;
+      document.getElementById('customPopupBackdrop').style.display = 'flex';
     }
 
-    function togglePinNote(idx) {
-      db.notes[idx].pinned = !db.notes[idx].pinned;
+    function addGoalAsProjectDirect(catIdx, itemIdx) {
+      closeCustomPopup(null);
+      addGoalAsProject(catIdx, itemIdx);
+    }
+
+    // הוספת יעד כפרויקט
+    function addGoalAsProject(catIdx, itemIdx) {
+      const cat = db.semesterGoals[catIdx];
+      const item = cat.items[itemIdx];
+
+      if (!Array.isArray(db.projects)) db.projects = [];
+
+      const exists = db.projects.some(p => p.title === item.text);
+      if (exists) {
+        showCustomAlert("פרויקט קיים", `הפרויקט "${item.text}" כבר קיים בלוח הפרויקטים!`, "ℹ️");
+        switchView('projects');
+        return;
+      }
+
+      const initialTasks = (item.subtasks || []).map(st => ({ text: st.text, done: false }));
+
+      db.projects.unshift({
+        id: "proj_" + Date.now(),
+        title: item.text,
+        catTitle: cat.title,
+        color: cat.color,
+        tasks: initialTasks
+      });
+
       saveDB();
-      renderNotesBoard();
+      showCustomAlert("נוסף בהצלחה!", `היעד "${item.text}" הומר בהצלחה לפרויקט פעיל! 🚀`, "🎉");
+      renderProjectsBoard();
+      switchView('projects');
     }
 
-    function cycleNoteColor(idx) {
-      db.notes[idx].colorIdx = ((db.notes[idx].colorIdx || 0) + 1) % noteColorPresets.length;
+    function addProjectTask(pIdx) {
+      const input = document.getElementById(`projTaskInput_${pIdx}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      if (!Array.isArray(db.projects[pIdx].tasks)) db.projects[pIdx].tasks = [];
+      db.projects[pIdx].tasks.push({ text: text, done: false, id: Date.now() });
+      input.value = '';
       saveDB();
-      renderNotesBoard();
+      renderProjectsBoard();
     }
 
-    function deleteNote(idx) {
-      showCustomConfirm("מחיקת פתק", "האם למחוק פתק זה?", () => {
-        db.notes.splice(idx, 1);
+    function toggleProjectTask(pIdx, tIdx) {
+      db.projects[pIdx].tasks[tIdx].done = !db.projects[pIdx].tasks[tIdx].done;
+      saveDB();
+      renderProjectsBoard();
+    }
+
+    function deleteProjectTask(pIdx, tIdx) {
+      db.projects[pIdx].tasks.splice(tIdx, 1);
+      saveDB();
+      renderProjectsBoard();
+    }
+
+    function deleteProject(pIdx) {
+      showCustomConfirm("מחיקת פרויקט", `האם למחוק את הפרויקט "${db.projects[pIdx].title}" וכל המשימות שבו?`, () => {
+        db.projects.splice(pIdx, 1);
         saveDB();
-        renderNotesBoard();
+        renderProjectsBoard();
       });
     }
 
@@ -2231,7 +3097,6 @@
       }
 
       categories.forEach((cat, catIdx) => {
-        // מיון אוטומטי של יעדים בכל נושא לפי כמות צעדים מהגבוה לנמוך
         if (Array.isArray(cat.items)) {
           cat.items.sort((a, b) => {
             const countA = (a.steps && a.steps.length) || 0;
@@ -2258,7 +3123,6 @@
             <div style="display:flex; gap:6px; align-items:center;">
               <button onclick="promptEditCategory(${catIdx})" style="background:none; border:none; color:#cbd5e1; font-size:0.8rem; cursor:pointer;" title="ערוך שם נושא או צבע">✏️</button>
               <button onclick="promptDeleteCategory(${catIdx})" style="background:none; border:none; color:#ef4444; font-size:0.8rem; cursor:pointer;" title="מחק נושא זה">🗑️</button>
-              <!-- כפתור הוספת יעד אחיד בכחול-תכלת לכל הנושאים -->
               <button class="btn-add-goal-universal" onclick="promptAddGoalToCat(${catIdx})">+ יעד</button>
             </div>
           </div>
@@ -2283,7 +3147,6 @@
           box.style.background = hexToRgba(cat.color, 0.14);
           box.style.border = `1px solid ${hexToRgba(cat.color, 0.38)}`;
           
-          // הוסרו חצי למעלה ולמטה ליד היעד לניקיון מלא
           box.innerHTML = `
             <div class="sem-goal-main-row">
               <div style="display:flex; align-items:center; gap:7px; flex:1;">
@@ -2292,8 +3155,10 @@
                 <span class="title-txt" style="color:#ffffff; font-weight:600;">${item.text}</span>
                 ${hasReward ? `<span class="reward-tag-celebration" title="הגעת ל-5 צעדים ביעד זה! מגיע לך צ'ופר!">🎁 צ'ופר! (${goalRewards})</span>` : ''}
               </div>
-              <div style="display:flex; align-items:center; gap:5px;">
+              <div style="display:flex; align-items:center; gap:4px;">
                 <button class="btn-dot-to-project" onclick="addGoalAsProject(${catIdx}, ${itemIdx})" title="הפוך לפרויקט פעיל בלשונית הפרויקטים">●</button>
+                <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, -1)" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;" title="הזז יעד למעלה" ${itemIdx === 0 ? 'disabled style="opacity:0.2;"' : ''}>▲</button>
+                <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, 1)" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;" title="הזז יעד למטה" ${itemIdx === cat.items.length - 1 ? 'disabled style="opacity:0.2;"' : ''}>▼</button>
                 <button class="btn-step-plus" style="background:${cat.color};" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים">+ צעד</button>
                 ${stepsCount > 0 ? `<span class="steps-pill" onclick="openStepsModal(${catIdx}, ${itemIdx})" title="לחץ לפתיחת יומן הצעדים המפורט">🏆 ${stepsCount} צעדים</span>` : ''}
                 <button onclick="deleteGoalFromCat(${catIdx}, ${itemIdx})" style="background:none; border:none; color:#71717a; font-size:0.82rem; cursor:pointer; padding:0 3px;" title="מחק יעד">✕</button>
@@ -2322,7 +3187,6 @@
 
       if (rewardsCountEl) rewardsCountEl.textContent = totalRewardsEarned;
       if (rewardsBadge) rewardsBadge.style.display = totalRewardsEarned > 0 ? 'inline-block' : 'inline-block';
-      updateCoinsDisplay();
     }
 
     function handleCatDragStart(e, idx) {
@@ -2349,6 +3213,17 @@
     function handleCatDragEnd(e) {
       e.currentTarget.style.opacity = '1';
       draggedCatIndex = null;
+    }
+
+    function moveGoalInCat(catIdx, itemIdx, direction) {
+      const items = db.semesterGoals[catIdx].items;
+      const targetIdx = itemIdx + direction;
+      if (targetIdx < 0 || targetIdx >= items.length) return;
+      const temp = items[itemIdx];
+      items[itemIdx] = items[targetIdx];
+      items[targetIdx] = temp;
+      saveDB();
+      renderSemesterGoals();
     }
 
     function addSubtaskToGoal(catIdx, itemIdx) {
@@ -2390,14 +3265,10 @@
       checkAndNotifyGoalReward(item);
     }
 
-    // בדיקת צ'ופר בכל כפולה של 5 צעדים ביעד מסוים + הענקת 50 מטבעות!
     function checkAndNotifyGoalReward(item) {
       const stepsCount = (item.steps && item.steps.length) || 0;
       if (stepsCount > 0 && stepsCount % 5 === 0) {
-        db.coins = (db.coins || 0) + 50;
-        saveDB();
-        updateCoinsDisplay();
-        showCustomAlert("מזל טוב! צ'ופר הושג! 🎁", `הגעת ל-${stepsCount} צעדים ביעד:\n"${item.text}"!\n\nקיבלת +50 מטבעות! 🪙✨\nסה"כ מטבעות שנצברו: ${db.coins}\n\nזה הזמן לעצור, לשמוח בהתקדמות ולפנק את עצמך בצ'ופר שמגיע לך! ☕🍰`, "🎉");
+        showCustomAlert("מזל טוב! צ'ופר הושג! 🎁", `הגעת ל-${stepsCount} צעדים ביעד:\n"${item.text}"!\n\nזה הזמן לעצור, לשמוח בהתקדמות ולפנק את עצמך בצ'ופר שמגיע לך! ☕🍰`, "🎉");
       }
     }
 
@@ -2937,8 +3808,6 @@
                   if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
                   if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
                   if (!Array.isArray(db.projects)) db.projects = [];
-                  if (!Array.isArray(db.notes)) db.notes = [];
-                  if (typeof db.coins !== 'number') db.coins = 0;
                   if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
                   if (!db.semesterExams) db.semesterExams = {};
                   localStorage.setItem('hebrew_life_journal_v8', JSON.stringify(db));
@@ -2947,8 +3816,6 @@
                   renderQuickTasks();
                   renderSemesterGoals();
                   renderProjectsBoard();
-                  renderNotesBoard();
-                  updateCoinsDisplay();
                   console.log("סנכרון ענן התקבל בהצלחה!");
                 }
               }
@@ -3045,8 +3912,6 @@
             if (!Array.isArray(db.yearlyGoals)) db.yearlyGoals = [];
             if (!Array.isArray(db.quickTasks)) db.quickTasks = [];
             if (!Array.isArray(db.projects)) db.projects = [];
-            if (!Array.isArray(db.notes)) db.notes = [];
-            if (typeof db.coins !== 'number') db.coins = 0;
             if (!db.semesterGoals) db.semesterGoals = defaultSemesterGoals;
             if (!db.semesterExams) db.semesterExams = {};
             saveDB();
@@ -3055,9 +3920,7 @@
             renderQuickTasks();
             renderSemesterGoals();
             renderProjectsBoard();
-            renderNotesBoard();
-            updateCoinsDisplay();
-            showCustomAlert("שוחזר בהצלחה", "כל הנתונים, הלו״ז השבועי, הרשומות, הפרויקטים, הפתקים והסמסטר שוחזרו בהצלחה!", "🎉");
+            showCustomAlert("שוחזר בהצלחה", "כל הנתונים, הלו״ז השבועי, הרשומות, הפרויקטים והסמסטר שוחזרו בהצלחה!", "🎉");
           } else {
             throw new Error();
           }
