@@ -1384,6 +1384,84 @@
 
     .lightbox-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
     .lightbox-img { max-width: 90vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; }
+
+    /* ===== תצוגה שבועית: בוקר / צהריים / ערב ===== */
+    .weekly-day-headers-grid,
+    .weekly-days-columns-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+    .weekly-timeline-header-row { overflow-y: hidden; scrollbar-gutter: stable; }
+    .weekly-timeline-scroll { scrollbar-gutter: stable; }
+
+    .weekly-grid-line.period-morning,   .weekly-hour-marker.period-morning   { background: rgba(245, 158, 11, 0.09); }
+    .weekly-grid-line.period-afternoon, .weekly-hour-marker.period-afternoon { background: rgba(56, 189, 248, 0.08); }
+    .weekly-grid-line.period-evening,   .weekly-hour-marker.period-evening   { background: rgba(139, 92, 246, 0.12); }
+
+    .weekly-grid-line.period-start,
+    .weekly-hour-marker.period-start { border-top: 2px solid rgba(255, 255, 255, 0.35); }
+
+    .weekly-hour-marker { flex-direction: column; align-items: center; gap: 2px; }
+    .period-label { font-size: 0.66rem; font-weight: 800; }
+    .period-morning .period-label   { color: #fbbf24; }
+    .period-afternoon .period-label { color: #38bdf8; }
+    .period-evening .period-label   { color: #c4b5fd; }
+
+    .timeline-event-block {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ===== פתקים ===== */
+    .notes-hero {
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.18), rgba(56, 189, 248, 0.12));
+      border: 1px solid rgba(234, 179, 8, 0.4);
+      border-radius: 16px;
+      padding: 18px 22px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .notes-hero-label { font-size: 0.78rem; color: #94a3b8; margin-bottom: 6px; }
+    .notes-credo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fef08a;
+      outline: none;
+      line-height: 1.4;
+      padding: 2px 8px;
+      border-radius: 8px;
+    }
+    .notes-credo:focus { background: rgba(0, 0, 0, 0.3); }
+    .notes-add-row { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
+    .notes-add-row .fast-textarea { min-width: 200px; }
+    .notes-filters { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0; }
+    .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+    .sticky-note {
+      border-radius: 4px 4px 16px 4px;
+      padding: 12px 14px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: #1c1917;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    }
+    .sticky-note:nth-child(odd)  { transform: rotate(-0.7deg); }
+    .sticky-note:nth-child(even) { transform: rotate(0.6deg); }
+    .sticky-note-top { display: flex; justify-content: space-between; align-items: center; }
+    .sticky-note-type { font-size: 0.78rem; font-weight: 800; }
+    .sticky-note button { background: none; border: none; color: #1c1917; padding: 2px 5px; font-size: 0.85rem; }
+    .sticky-note button:hover { background: rgba(0, 0, 0, 0.1); }
+    .sticky-note-text {
+      flex: 1;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      outline: none;
+      border-radius: 6px;
+      padding: 2px 4px;
+    }
+    .sticky-note-text:focus { background: rgba(255, 255, 255, 0.45); }
+    .sticky-note-date { font-size: 0.7rem; opacity: 0.6; }
   </style>
 </head>
 <body>
@@ -1461,6 +1539,7 @@
       <!-- כפתור פרויקטים הועבר לכאן לצד כפתור הוספת רשומה חדשה -->
       <div style="display:flex; gap:8px;">
         <button id="btnProjects" class="btn-primary" style="background:#8b5cf6;" onclick="switchView('projects')">🚀 פרויקטים</button>
+        <button id="btnNotes" class="btn-primary" style="background:#eab308; color:#1c1917;" onclick="switchView('notes')">📌 פתקים</button>
         <button class="btn-primary" onclick="openAddEntryModal()">+ רשומה חדשה</button>
       </div>
     </div>
@@ -1633,6 +1712,30 @@
 
       <div class="panel">
         <div class="projects-grid" id="projectsGridContainer"></div>
+      </div>
+    </div>
+
+    <!-- 7. פתקים אישיים -->
+    <div id="viewNotes" class="view-container">
+      <div class="notes-hero">
+        <div class="notes-hero-label">האידיאל שלי (לחץ כדי לערוך)</div>
+        <div class="notes-credo" id="notesCredoText" contenteditable="true" spellcheck="false" onblur="saveNotesCredo(this.innerText)"></div>
+      </div>
+
+      <div class="panel">
+        <div class="notes-add-row">
+          <select id="noteTypeSelect" class="reflection-rating-select" style="color:#f1f5f9;">
+            <option value="reminder">🔔 תזכורת</option>
+            <option value="remember">⚠️ לא לשכוח</option>
+            <option value="ideal">🌟 אידיאל</option>
+            <option value="free">✍️ כתיבה חופשית</option>
+          </select>
+          <textarea id="noteInput" class="fast-textarea" rows="2" placeholder="כתוב לעצמך משהו... (Enter להוספה | Shift+Enter שורה חדשה)"
+                    onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); addStickyNote(); }"></textarea>
+          <button class="btn-primary" onclick="addStickyNote()">הוסף פתק</button>
+        </div>
+        <div class="notes-filters" id="notesFilters"></div>
+        <div class="notes-grid" id="notesGrid"></div>
       </div>
     </div>
 
@@ -2195,7 +2298,7 @@
 
     function switchView(view) {
       activeView = view;
-      ['daily', 'weekly', 'monthly', 'semester', 'projects', 'yearly'].forEach(v => {
+      ['daily', 'weekly', 'monthly', 'semester', 'projects', 'notes', 'yearly'].forEach(v => {
         const el = document.getElementById(`view${v.charAt(0).toUpperCase() + v.slice(1)}`);
         const btn = document.getElementById(`btn${v.charAt(0).toUpperCase() + v.slice(1)}`);
         if (el) el.classList.toggle('active', v === view);
@@ -2227,6 +2330,7 @@
       else if (activeView === 'monthly') renderMonthlyView();
       else if (activeView === 'semester') renderSemesterCalendarView();
       else if (activeView === 'projects') renderProjectsBoard();
+      else if (activeView === 'notes') renderNotesView();
       else if (activeView === 'yearly') renderYearlyView();
     }
 
@@ -2448,8 +2552,10 @@
       // ציור ציר השעות
       for (let h = startHour; h <= endHour; h++) {
         const marker = document.createElement('div');
-        marker.className = 'weekly-hour-marker';
-        marker.textContent = `${String(h).padStart(2,'0')}:00`;
+        const period = h >= 18 ? 'evening' : (h >= 12 ? 'afternoon' : 'morning');
+        const periodLabel = h === 7 ? '☀ בוקר' : (h === 12 ? '🌤️ צהריים' : (h === 18 ? '🌙 ערב' : ''));
+        marker.className = `weekly-hour-marker period-${period} ${(h === 12 || h === 18) ? 'period-start' : ''}`;
+        marker.innerHTML = `<span>${String(h).padStart(2,'0')}:00</span>${periodLabel ? `<span class="period-label">${periodLabel}</span>` : ''}`;
         timeGutter.appendChild(marker);
       }
 
@@ -2479,7 +2585,9 @@
 
         for (let h = 0; h < totalHours; h++) {
           const line = document.createElement('div');
-          line.className = 'weekly-grid-line';
+          const hr = startHour + h;
+          const period = hr >= 18 ? 'evening' : (hr >= 12 ? 'afternoon' : 'morning');
+          line.className = `weekly-grid-line period-${period} ${(hr === 12 || hr === 18) ? 'period-start' : ''}`;
           col.appendChild(line);
         }
 
@@ -3157,8 +3265,6 @@
               </div>
               <div style="display:flex; align-items:center; gap:4px;">
                 <button class="btn-dot-to-project" onclick="addGoalAsProject(${catIdx}, ${itemIdx})" title="הפוך לפרויקט פעיל בלשונית הפרויקטים">●</button>
-                <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, -1)" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;" title="הזז יעד למעלה" ${itemIdx === 0 ? 'disabled style="opacity:0.2;"' : ''}>▲</button>
-                <button onclick="moveGoalInCat(${catIdx}, ${itemIdx}, 1)" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;" title="הזז יעד למטה" ${itemIdx === cat.items.length - 1 ? 'disabled style="opacity:0.2;"' : ''}>▼</button>
                 <button class="btn-step-plus" style="background:${cat.color};" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים">+ צעד</button>
                 ${stepsCount > 0 ? `<span class="steps-pill" onclick="openStepsModal(${catIdx}, ${itemIdx})" title="לחץ לפתיחת יומן הצעדים המפורט">🏆 ${stepsCount} צעדים</span>` : ''}
                 <button onclick="deleteGoalFromCat(${catIdx}, ${itemIdx})" style="background:none; border:none; color:#71717a; font-size:0.82rem; cursor:pointer; padding:0 3px;" title="מחק יעד">✕</button>
@@ -4119,6 +4225,113 @@
       win.document.close();
       win.focus();
       setTimeout(() => { win.print(); }, 400);
+    }
+
+    /* ===== פתקים אישיים ===== */
+    const noteTypes = {
+      reminder: { label: '🔔 תזכורת',        bg: '#fef08a' },
+      remember: { label: '⚠️ לא לשכוח',      bg: '#fecdd3' },
+      ideal:    { label: '🌟 אידיאל',        bg: '#bbf7d0' },
+      free:     { label: '✍️ כתיבה חופשית',  bg: '#bae6fd' }
+    };
+    let notesFilter = 'all';
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function renderNotesView() {
+      document.getElementById('currentFocusTitle').innerText = '📌 הפתקים שלי';
+      if (!Array.isArray(db.stickyNotes)) db.stickyNotes = [];
+
+      const credoEl = document.getElementById('notesCredoText');
+      if (document.activeElement !== credoEl) credoEl.textContent = db.notesCredo || 'לחיות כל רגע ורגע';
+
+      const filters = [['all', 'הכל']].concat(Object.entries(noteTypes).map(([k, v]) => [k, v.label]));
+      document.getElementById('notesFilters').innerHTML = filters.map(([k, l]) =>
+        `<button class="${notesFilter === k ? 'active' : ''}" onclick="setNotesFilter('${k}')">${l}</button>`
+      ).join('');
+
+      const notes = db.stickyNotes
+        .filter(n => notesFilter === 'all' || n.type === notesFilter)
+        .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || b.id - a.id);
+
+      const grid = document.getElementById('notesGrid');
+      if (notes.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:30px; color:#94a3b8;">אין פתקים כאן עדיין. כתוב למעלה את הראשון.</div>';
+        return;
+      }
+
+      grid.innerHTML = notes.map(n => {
+        const t = noteTypes[n.type] || noteTypes.free;
+        return `
+          <div class="sticky-note" style="background:${t.bg};">
+            <div class="sticky-note-top">
+              <span class="sticky-note-type">${t.label}</span>
+              <span>
+                <button onclick="toggleNotePin(${n.id})" title="הצמד לראש הרשימה">${n.pinned ? '📌' : '📍'}</button>
+                <button onclick="deleteStickyNote(${n.id})" title="מחק פתק">✕</button>
+              </span>
+            </div>
+            <div class="sticky-note-text" contenteditable="true" spellcheck="false" onblur="saveNoteText(${n.id}, this.innerText)">${escapeHtml(n.text)}</div>
+            <div class="sticky-note-date">${escapeHtml(n.date || '')}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function setNotesFilter(type) {
+      notesFilter = type;
+      renderNotesView();
+    }
+
+    function addStickyNote() {
+      const input = document.getElementById('noteInput');
+      const text = input.value.trim();
+      if (!text) return;
+      if (!Array.isArray(db.stickyNotes)) db.stickyNotes = [];
+      const now = new Date();
+      db.stickyNotes.push({
+        id: Date.now(),
+        type: document.getElementById('noteTypeSelect').value,
+        text,
+        pinned: false,
+        date: `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`
+      });
+      input.value = '';
+      saveDB();
+      renderNotesView();
+    }
+
+    function saveNoteText(id, text) {
+      const note = (db.stickyNotes || []).find(n => n.id === id);
+      if (!note) return;
+      if (text.trim()) {
+        note.text = text.trim();
+        saveDB();
+      } else {
+        renderNotesView(); // פתק ריק לא נשמר - מחזיר את הטקסט הקודם
+      }
+    }
+
+    function toggleNotePin(id) {
+      const note = (db.stickyNotes || []).find(n => n.id === id);
+      if (!note) return;
+      note.pinned = !note.pinned;
+      saveDB();
+      renderNotesView();
+    }
+
+    function deleteStickyNote(id) {
+      showCustomConfirm("מחיקת פתק", "האם למחוק את הפתק?", () => {
+        db.stickyNotes = (db.stickyNotes || []).filter(n => n.id !== id);
+        saveDB();
+        renderNotesView();
+      });
+    }
+
+    function saveNotesCredo(text) {
+      db.notesCredo = text.trim() || 'לחיות כל רגע ורגע';
+      saveDB();
     }
 
     const savedBg = localStorage.getItem('journal_bg_v8');
