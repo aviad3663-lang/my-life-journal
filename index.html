@@ -1462,6 +1462,30 @@
     }
     .sticky-note-text:focus { background: rgba(255, 255, 255, 0.45); }
     .sticky-note-date { font-size: 0.7rem; opacity: 0.6; }
+  
+    /* ===== שלב 2: סרגל נקי, חיבורים, תחומי התפתחות, מובייל ===== */
+    .header-controls:not(.tools-open) .secondary-tools-row,
+    .header-controls:not(.tools-open) .primary-auth-row > .btn-tool:not(#btnToolsToggle) { display: none; }
+    .sem-day-cell-num { height: auto; min-height: 58px; }
+    #growthGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 16px; }
+    .preview-item-row.done { opacity: .6; }
+    @media (max-width: 700px) {
+      body { padding: 6px; }
+      .app-container { padding: 12px; border-radius: 14px; }
+      .header-controls { align-items: stretch; width: 100%; }
+      .nav-toolbar { padding: 8px; }
+      .view-switcher { overflow-x: auto; max-width: 100%; }
+      .view-switcher button { white-space: nowrap; }
+      .current-focus-title { min-width: 0; font-size: 1rem; }
+      .month-day-cell { min-height: 64px; padding: 3px; }
+      .cell-entries-list, .cell-holiday, .cell-shabbat { display: none; }
+      .weekly-timeline-wrapper { overflow-x: auto; }
+      .weekly-timeline-header-row, .weekly-timeline-scroll { min-width: 720px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      #btnSemesterGoalsToggle { top: auto; bottom: 76px; }
+      #semesterGoalsDrawer { top: 60px; }
+      .time-quote-banner { font-size: .8rem; }
+    }
   </style>
 </head>
 <body>
@@ -1492,6 +1516,7 @@
             🔄 שחזור מקוד
           </button>
 
+          <button id="btnToolsToggle" class="btn-tool" onclick="toggleToolsRow()" title="גיבוי, ייצוא וכלים">⚙️ כלים</button>
           <span id="authContainer">
             <button class="btn-google" onclick="openAuthModal()">
               👤 כניסה / הרשמה
@@ -1503,6 +1528,7 @@
           <button class="btn-tool" onclick="exportWeeklyMemoriesPDF()">📖 ספר PDF</button>
           <button class="btn-tool" onclick="exportGoogleCalendarICS()">📅 ייצוא ליומן</button>
           <button class="btn-tool" onclick="changeBackground()">🎨 רקע</button>
+          <button class="btn-tool" onclick="exportTodayWallpaper()">📱 תמונת נעילה</button>
           <button class="btn-tool" onclick="restoreLastBackup()">↩️ גיבוי אחרון</button>
           <button class="btn-tool" onclick="document.getElementById('importFile').click()">📂 שחזור מקובץ</button>
           <input type="file" id="importFile" style="display:none" onchange="importData(event)">
@@ -1541,6 +1567,7 @@
       <div style="display:flex; gap:8px;">
         <button id="btnProjects" class="btn-primary" style="background:#8b5cf6;" onclick="switchView('projects')">🚀 פרויקטים</button>
         <button id="btnNotes" class="btn-primary" style="background:#eab308; color:#1c1917;" onclick="switchView('notes')">📌 פתקים</button>
+        <button id="btnGrowth" class="btn-primary" style="background:#10b981; color:#052e16;" onclick="switchView('growth')">🌱 התפתחות</button>
         <button class="btn-primary" onclick="openAddEntryModal()">+ רשומה חדשה</button>
       </div>
     </div>
@@ -1738,6 +1765,20 @@
         <div class="notes-filters" id="notesFilters"></div>
         <div class="notes-grid" id="notesGrid"></div>
       </div>
+    </div>
+
+    <!-- תחומי התפתחות -->
+    <div id="viewGrowth" class="view-container">
+      <div class="projects-dashboard" style="border-color:#10b981;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h2 style="font-size:1.35rem; color:#34d399; margin:0;">🌱 תחומי התפתחות</h2>
+            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:3px;">תחומים שאתה רוצה להתקדם בהם: מה לברר, איפה ללמוד, מה הצעד הבא</div>
+          </div>
+          <button onclick="addGrowthArea()" style="background:#10b981; color:#052e16; border:none; border-radius:8px; padding:7px 14px; font-weight:bold; cursor:pointer;">+ תחום חדש</button>
+        </div>
+      </div>
+      <div class="panel"><div id="growthGrid"></div></div>
     </div>
 
     <!-- 6. תצוגה שנתית - 12/13 חודשי השנה העברית המלאה -->
@@ -2333,6 +2374,7 @@
       else if (activeView === 'projects') renderProjectsBoard();
       else if (activeView === 'notes') renderNotesView();
       else if (activeView === 'yearly') renderYearlyView();
+      else if (activeView === 'growth') renderGrowthView();
     }
 
     /* 1. תצוגה יומית */
@@ -2968,6 +3010,7 @@
                     ${eventLabel ? `<span class="sem-special-event-label">${eventLabel}</span>` : ''}
                     ${shabbatName ? `<span class="sem-shabbat-label">${shabbatName}</span>` : ''}
                     ${examName ? `<span class="sem-day-exam-tag">${examName}</span>` : ''}
+                    ${semDayEvents(dateStr)}
                   </div>
                 </td>
               `;
@@ -3261,7 +3304,7 @@
                 ${hasReward ? `<span class="reward-tag-celebration" title="הגעת ל-5 צעדים ביעד זה! מגיע לך צ'ופר!">🎁 צ'ופר! (${goalRewards})</span>` : ''}
               </div>
               <div style="display:flex; align-items:center; gap:4px;">
-                <button class="btn-dot-to-project" onclick="addGoalAsProject(${catIdx}, ${itemIdx})" title="הפוך לפרויקט פעיל בלשונית הפרויקטים">●</button>
+                ${projBadge(item, catIdx, itemIdx)}
                 <button class="btn-step-plus" style="background:${cat.color};" onclick="promptAddStepToGoal(${catIdx}, ${itemIdx})" title="רשום צעד או הישג ביניים">+ צעד</button>
                 ${stepsCount > 0 ? `<span class="steps-pill" onclick="openStepsModal(${catIdx}, ${itemIdx})" title="לחץ לפתיחת יומן הצעדים המפורט">🏆 ${stepsCount} צעדים</span>` : ''}
                 <button onclick="deleteGoalFromCat(${catIdx}, ${itemIdx})" style="background:none; border:none; color:#71717a; font-size:0.82rem; cursor:pointer; padding:0 3px;" title="מחק יעד">✕</button>
@@ -4436,6 +4479,126 @@ function computeLanes(evs){
   });
   flush(); return res;
 }
+
+    
+/* ===== שלב 2 ===== */
+function pad(n){return String(n).padStart(2,'0');}
+function toggleToolsRow(){document.querySelector('.header-controls').classList.toggle('tools-open');}
+
+/* --- יעדים <-> פרויקטים: זירה אחת --- */
+function findProjectByGoal(item){
+  return (db.projects||[]).find(function(p){return (p.goalId&&p.goalId===item.id)||(!p.goalId&&p.title===item.text);});
+}
+function projBadge(item,ci,ii){
+  var p=findProjectByGoal(item);
+  if(!p) return '<button class="btn-dot-to-project" onclick="addGoalAsProject('+ci+','+ii+')" title="הפוך לפרויקט פעיל">●</button>';
+  var tk=p.tasks||[], d=tk.filter(function(t){return t.done;}).length;
+  return '<span class="steps-pill" style="background:rgba(139,92,246,.25);color:#c4b5fd;border-color:rgba(139,92,246,.5)" onclick="switchView(\'projects\')" title="עבור לפרויקט. כל משימה שתסומן שם נספרת כצעד ביעד">🚀 '+d+'/'+tk.length+'</span>';
+}
+function addGoalAsProject(ci,ii){
+  var cat=db.semesterGoals[ci], item=cat.items[ii];
+  if(!item.id) item.id='g_'+Date.now();
+  if(!Array.isArray(db.projects)) db.projects=[];
+  if(!findProjectByGoal(item)){
+    db.projects.unshift({id:'proj_'+Date.now(),goalId:item.id,title:item.text,catTitle:cat.title,color:cat.color,
+      tasks:(item.subtasks||[]).map(function(s,k){return {text:s.text,done:false,id:Date.now()+k};})});
+    saveDB(); renderSemesterGoals();
+  }
+  switchView('projects');
+}
+function toggleProjectTask(pi,ti){
+  var p=db.projects[pi], t=p.tasks[ti], goal=null;
+  t.done=!t.done;
+  (db.semesterGoals||[]).forEach(function(c){(c.items||[]).forEach(function(it){if(findProjectByGoal(it)===p)goal=it;});});
+  if(goal){
+    if(!Array.isArray(goal.steps)) goal.steps=[];
+    if(t.done){
+      var n=new Date(); t.stepId=Date.now();
+      goal.steps.push({text:'🚀 '+t.text,date:pad(n.getDate())+'/'+pad(n.getMonth()+1)+'/'+n.getFullYear(),time:pad(n.getHours())+':'+pad(n.getMinutes()),id:t.stepId});
+    } else if(t.stepId){
+      goal.steps=goal.steps.filter(function(s){return s.id!==t.stepId;}); delete t.stepId;
+    }
+  }
+  saveDB(); renderProjectsBoard(); renderSemesterGoals();
+  if(goal&&t.done) checkAndNotifyGoalReward(goal);
+}
+
+/* --- אירועי הלוח החודשי/שבועי בתצוגת הסמסטר --- */
+function semDayEvents(dk){
+  var cc={plan:'#2563eb',insight:'#d97706',memory:'#059669'}, a=[];
+  (db.entries[dk]||[]).forEach(function(e){a.push({t:e.title,c:cc[e.cat]||'#2563eb'});});
+  ((db.weeklyTimelineEvents||{})[dk]||[]).forEach(function(e){a.push({t:e.startTime+' '+e.title,c:e.color||'#0284c7'});});
+  var h=a.slice(0,2).map(function(x){return '<span class="sem-day-exam-tag" style="background:'+x.c+'">'+escapeHtml(x.t)+'</span>';}).join('');
+  return h+(a.length>2?'<span class="sem-day-exam-tag" style="background:#475569">+'+(a.length-2)+'</span>':'');
+}
+
+/* --- תחומי התפתחות --- */
+var GROWTH_STAGES=[['🔍','בירור'],['📖','למידה'],['🛠️','יישום']];
+var GROWTH_TYPES={q:'❓ לברר',r:'📚 משאב',n:'🎯 צעד הבא'};
+function renderGrowthView(){
+  document.getElementById('currentFocusTitle').innerText='🌱 תחומי התפתחות';
+  if(!Array.isArray(db.growth)) db.growth=[];
+  var box=document.getElementById('growthGrid');
+  if(!db.growth.length){box.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:#94a3b8">עדיין אין תחומים. לחץ "+ תחום חדש".</div>';return;}
+  box.innerHTML=db.growth.map(function(a,ai){
+    var st=GROWTH_STAGES[a.stage||0], items=a.items||[], done=items.filter(function(i){return i.done;}).length;
+    return '<div class="project-card" style="border-top-color:'+a.color+'">'
+      +'<div class="project-card-header"><div class="project-card-title">'+escapeHtml(a.title)+'</div><button onclick="deleteGrowthArea('+ai+')" style="background:none;border:none;color:#ef4444;cursor:pointer">✕</button></div>'
+      +'<div style="display:flex;gap:8px;align-items:center;font-size:.8rem;color:#cbd5e1"><button class="btn-tool" onclick="cycleGrowthStage('+ai+')" title="לחץ להתקדם לשלב הבא">'+st[0]+' '+st[1]+'</button><span>'+done+'/'+items.length+' טופלו</span></div>'
+      +'<div class="project-tasks-list">'+items.map(function(it,ii){
+        return '<div class="project-task-item '+(it.done?'done':'')+'"><label style="display:flex;align-items:center;gap:8px;flex:1;cursor:pointer"><input type="checkbox" '+(it.done?'checked':'')+' onchange="toggleGrowthItem('+ai+','+ii+')"><span>'+GROWTH_TYPES[it.type||'q'].split(' ')[0]+' '+escapeHtml(it.text)+'</span></label><button onclick="deleteGrowthItem('+ai+','+ii+')" style="background:none;border:none;color:#ef4444;font-size:.75rem;cursor:pointer">✕</button></div>';
+      }).join('')+'</div>'
+      +'<div style="display:flex;gap:6px"><select id="gType_'+ai+'" class="reflection-rating-select" style="color:#f1f5f9">'+Object.keys(GROWTH_TYPES).map(function(k){return '<option value="'+k+'">'+GROWTH_TYPES[k]+'</option>';}).join('')+'</select>'
+      +'<input type="text" id="gInput_'+ai+'" class="project-task-input" placeholder="+ מה לברר / איפה ללמוד / מה הצעד הבא (Enter)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();addGrowthItem('+ai+');}"></div>'
+      +'<button class="btn-tool" onclick="growthToProject('+ai+')">🚀 הפוך לפרויקט (הפתוחים בלבד)</button></div>';
+  }).join('');
+}
+function addGrowthArea(){
+  showCustomPrompt('תחום התפתחות חדש','לדוגמה: אנגלית, תכנות, השקעות, הנהגה...','',function(t){
+    if(!t||!t.trim())return;
+    if(!Array.isArray(db.growth))db.growth=[];
+    db.growth.unshift({id:'gr_'+Date.now(),title:t.trim(),color:availableCategoryColors[Math.floor(Math.random()*availableCategoryColors.length)].code,stage:0,items:[]});
+    saveDB(); renderGrowthView();
+  });
+}
+function addGrowthItem(ai){
+  var inp=document.getElementById('gInput_'+ai), tp=document.getElementById('gType_'+ai).value, t=inp.value.trim();
+  if(!t)return;
+  db.growth[ai].items.push({id:Date.now(),text:t,type:tp,done:false});
+  saveDB(); renderGrowthView();
+  setTimeout(function(){var n=document.getElementById('gInput_'+ai);if(n)n.focus();},0);
+}
+function toggleGrowthItem(ai,ii){var it=db.growth[ai].items[ii];it.done=!it.done;saveDB();renderGrowthView();}
+function deleteGrowthItem(ai,ii){db.growth[ai].items.splice(ii,1);saveDB();renderGrowthView();}
+function cycleGrowthStage(ai){db.growth[ai].stage=((db.growth[ai].stage||0)+1)%3;saveDB();renderGrowthView();}
+function deleteGrowthArea(ai){showCustomConfirm('מחיקת תחום','למחוק את "'+escapeHtml(db.growth[ai].title)+'" וכל מה שבו?',function(){db.growth.splice(ai,1);saveDB();renderGrowthView();});}
+function growthToProject(ai){
+  var a=db.growth[ai], open=a.items.filter(function(i){return !i.done;});
+  if(!Array.isArray(db.projects))db.projects=[];
+  db.projects.unshift({id:'proj_'+Date.now(),title:a.title,catTitle:'🌱 התפתחות',color:a.color,tasks:open.map(function(i){return{text:i.text,done:false,id:i.id};})});
+  saveDB(); switchView('projects');
+}
+
+/* --- מטלות על מסך הנעילה בטלפון --- */
+function exportTodayWallpaper(){
+  var W=1170,H=2532,c=document.createElement('canvas');c.width=W;c.height=H;
+  var x=c.getContext('2d'), g=x.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#0b0f19');g.addColorStop(1,'#1e293b');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.direction='rtl';x.textAlign='right';
+  var now=new Date(), heb=getHebrewDateInfo(now), dk=formatDateKey(now), list=[];
+  x.fillStyle='#38bdf8';x.font='bold 56px sans-serif';
+  x.fillText(new Intl.DateTimeFormat('he-IL',{weekday:'long',day:'numeric',month:'long'}).format(now),1090,820);
+  x.fillStyle='#cbd5e1';x.font='40px sans-serif';x.fillText(heb.hebrewStr+(heb.holiday?' • '+heb.holiday:''),1090,885);
+  (db.dailyGoals[dk]||[]).forEach(function(t){if(!t.done)list.push('◻ '+t.text);});
+  (db.quickTasks||[]).forEach(function(t){if(!t.done)list.push('• '+t.text);});
+  var y=1010;x.fillStyle='#f8fafc';x.font='bold 46px sans-serif';x.fillText('המטלות להיום',1090,y);
+  x.font='42px sans-serif';x.fillStyle='#e2e8f0';
+  list.slice(0,10).forEach(function(s){y+=84;while(s.length>2&&x.measureText(s).width>980)s=s.slice(0,-2);x.fillText(s,1090,y);});
+  if(!list.length){y+=84;x.fillText('אין מטלות פתוחות 🎉',1090,y);}
+  var a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='today-'+dk+'.png';a.click();
+  showCustomAlert('נוצרה תמונת נעילה','התמונה ירדה. הגדר אותה כרקע מסך הנעילה בטלפון והמטלות יהיו מול העיניים. לעדכון, צור אותה מחדש.','📱');
+}
+(function(){var h=location.hash.replace('#','');if(['daily','weekly','monthly','semester','projects','notes','growth','yearly'].indexOf(h)>-1)switchView(h);})();
 
     const savedBg = localStorage.getItem('journal_bg_v8');
     if (savedBg) document.body.style.backgroundImage = `url('${savedBg}')`;
