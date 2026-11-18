@@ -10,7 +10,7 @@
   "shortcuts": [
     { "name": "המטלות להיום", "url": "./index.html#daily" },
     { "name": "פרויקטים", "url": "./index.html#projects" },
-    { "name": "תחומי התפתחות", "url": "./index.html#growth" }
+    { "name": "פתקים", "url": "./index.html#notes" }
   ],
   "icons": [
     {
