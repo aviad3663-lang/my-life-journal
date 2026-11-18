@@ -1486,6 +1486,14 @@
       #semesterGoalsDrawer { top: 60px; }
       .time-quote-banner { font-size: .8rem; }
     }
+  
+    /* ===== שלב 3 ===== */
+    .nav-toolbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+    .nav-toolbar > :first-child { justify-self: start; }
+    .nav-toolbar > :last-child { justify-self: end; }
+    @media (max-width: 900px) { .nav-toolbar { display: flex; } }
+    #noteTypeSelect { display: none; }
+    #noteTypeChips { display: flex; gap: 6px; flex-wrap: wrap; width: 100%; }
   </style>
 </head>
 <body>
@@ -1506,9 +1514,7 @@
       <!-- כפתורי סרגל עליון צמודים כרגיל לצד שמאל -->
       <div class="header-controls">
         <div class="primary-auth-row">
-          <button class="btn-tool" style="background:#0284c7; color:#fff; font-weight:700; padding:5px 10px; font-size:0.8rem;" onclick="copyBackupToDocs()" title="העתק קוד גיבוי מלא ללוח להדבקה במסמך Google Docs">
-            📋 גיבוי ל-Docs
-          </button>
+          
           <button class="btn-tool" style="background:#475569; color:#fff; font-weight:700; padding:5px 10px; font-size:0.8rem;" onclick="saveToFixedFile()" title="שמור ועדכן קובץ גיבוי קבוע במחשב">
             💾 עדכן קובץ קבוע
           </button>
@@ -1526,9 +1532,9 @@
 
         <div class="secondary-tools-row">
           <button class="btn-tool" onclick="exportWeeklyMemoriesPDF()">📖 ספר PDF</button>
-          <button class="btn-tool" onclick="exportGoogleCalendarICS()">📅 ייצוא ליומן</button>
+          
           <button class="btn-tool" onclick="changeBackground()">🎨 רקע</button>
-          <button class="btn-tool" onclick="exportTodayWallpaper()">📱 תמונת נעילה</button>
+          <button class="btn-tool" onclick="sendToPhone()">📲 שלח לטלפון</button>
           <button class="btn-tool" onclick="restoreLastBackup()">↩️ גיבוי אחרון</button>
           <button class="btn-tool" onclick="document.getElementById('importFile').click()">📂 שחזור מקובץ</button>
           <input type="file" id="importFile" style="display:none" onchange="importData(event)">
@@ -1567,7 +1573,6 @@
       <div style="display:flex; gap:8px;">
         <button id="btnProjects" class="btn-primary" style="background:#8b5cf6;" onclick="switchView('projects')">🚀 פרויקטים</button>
         <button id="btnNotes" class="btn-primary" style="background:#eab308; color:#1c1917;" onclick="switchView('notes')">📌 פתקים</button>
-        <button id="btnGrowth" class="btn-primary" style="background:#10b981; color:#052e16;" onclick="switchView('growth')">🌱 התפתחות</button>
         <button class="btn-primary" onclick="openAddEntryModal()">+ רשומה חדשה</button>
       </div>
     </div>
@@ -1758,27 +1763,15 @@
             <option value="ideal">🌟 אידיאל</option>
             <option value="free">✍️ כתיבה חופשית</option>
           </select>
+          <div id="noteTypeChips"></div>
           <textarea id="noteInput" class="fast-textarea" rows="2" placeholder="כתוב לעצמך משהו... (Enter להוספה | Shift+Enter שורה חדשה)"
                     onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); addStickyNote(); }"></textarea>
           <button class="btn-primary" onclick="addStickyNote()">הוסף פתק</button>
+          <button onclick="sendToPhone()">📲 שלח לטלפון</button>
         </div>
         <div class="notes-filters" id="notesFilters"></div>
         <div class="notes-grid" id="notesGrid"></div>
       </div>
-    </div>
-
-    <!-- תחומי התפתחות -->
-    <div id="viewGrowth" class="view-container">
-      <div class="projects-dashboard" style="border-color:#10b981;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-          <div>
-            <h2 style="font-size:1.35rem; color:#34d399; margin:0;">🌱 תחומי התפתחות</h2>
-            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:3px;">תחומים שאתה רוצה להתקדם בהם: מה לברר, איפה ללמוד, מה הצעד הבא</div>
-          </div>
-          <button onclick="addGrowthArea()" style="background:#10b981; color:#052e16; border:none; border-radius:8px; padding:7px 14px; font-weight:bold; cursor:pointer;">+ תחום חדש</button>
-        </div>
-      </div>
-      <div class="panel"><div id="growthGrid"></div></div>
     </div>
 
     <!-- 6. תצוגה שנתית - 12/13 חודשי השנה העברית המלאה -->
@@ -2258,6 +2251,7 @@
         else if (dayNum === 15) { holiday = 'שושן פורים 🎭'; holidayType = 'celebration'; }
       }
 
+      if (!holiday) { var _lh = laterHoliday(monthName, dayNum, date); if (_lh) { holiday = _lh[0]; holidayType = _lh[1]; } }
       let shabbat = '';
       if (date.getDay() === 6) {
         const dKey = formatDateKey(date);
@@ -4282,7 +4276,7 @@
     }
 
     function renderNotesView() {
-      document.getElementById('currentFocusTitle').innerText = '📌 הפתקים שלי';
+      document.getElementById('currentFocusTitle').innerText = '📌 הפתקים שלי'; renderNoteChips();
       if (!Array.isArray(db.stickyNotes)) db.stickyNotes = [];
 
       const credoEl = document.getElementById('notesCredoText');
@@ -4598,7 +4592,160 @@ function exportTodayWallpaper(){
   var a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='today-'+dk+'.png';a.click();
   showCustomAlert('נוצרה תמונת נעילה','התמונה ירדה. הגדר אותה כרקע מסך הנעילה בטלפון והמטלות יהיו מול העיניים. לעדכון, צור אותה מחדש.','📱');
 }
-(function(){var h=location.hash.replace('#','');if(['daily','weekly','monthly','semester','projects','notes','growth','yearly'].indexOf(h)>-1)switchView(h);})();
+(function(){var h=location.hash.replace('#','');if(['daily','weekly','monthly','semester','projects','notes','yearly'].indexOf(h)>-1)switchView(h);})();
+
+    
+/* ===== שלב 3 ===== */
+/* חגים אחרי פורים */
+function laterHoliday(m,dn,date){
+  var dow=date.getDay();
+  if(m.indexOf('ניסן')>-1){
+    if(dn===14)return['ערב פסח','holiday']; if(dn===15)return['פסח 🍷','holiday'];
+    if(dn>=16&&dn<=20)return['חוה״מ פסח','holiday']; if(dn===21)return['שביעי של פסח','holiday'];
+  } else if(m.indexOf('אייר')>-1){ if(dn===18)return['ל״ג בעומר 🔥','celebration'];
+  } else if(m.indexOf('סיוון')>-1){ if(dn===5)return['ערב שבועות','holiday']; if(dn===6)return['שבועות 🌾','holiday'];
+  } else if(m.indexOf('תמוז')>-1){ if((dn===17&&dow!==6)||(dn===18&&dow===0))return['צום י״ז בתמוז','fast'];
+  } else if(m.indexOf('אב')===0){
+    if((dn===9&&dow!==6)||(dn===10&&dow===0))return['תשעה באב','fast']; if(dn===15)return['ט״ו באב 💕','celebration'];
+  } else if(m.indexOf('אלול')>-1){ if(dn===29)return['ערב ראש השנה','holiday']; }
+  var hc=(db.parshiotCache||{})['h_'+formatDateKey(date)];
+  return hc?[hc.t,hc.k]:null;
+}
+var _hcInflight={};
+async function fetchParshiotForYear(y){
+  if(!db.parshiotCache)db.parshiotCache={};
+  if(db.parshiotCache['yearv2_'+y]||_hcInflight[y])return;
+  _hcInflight[y]=1;
+  try{
+    var res=await fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year='+y+'&month=x&ss=on&s=on&i=on&lg=h');
+    if(!res.ok)return;
+    var data=await res.json();
+    (data.items||[]).forEach(function(it){
+      if(it.category==='parashat'&&it.date)db.parshiotCache[it.date]=it.hebrew.replace('פרשת ','');
+      else if(it.category==='holiday'&&it.subcat==='modern'&&it.date)db.parshiotCache['h_'+it.date]={t:it.hebrew||it.title,k:/זיכרון|שואה/.test(it.hebrew||'')?'memorial':'celebration'};
+    });
+    db.parshiotCache['yearv2_'+y]=true; saveDB(); renderCurrentView();
+  }catch(e){}finally{delete _hcInflight[y];}
+}
+
+/* תצוגת סמסטר: רק אירועי "תכנון" (כחולים) */
+function semDayEvents(dk){
+  var a=(db.entries[dk]||[]).filter(function(e){return e.cat==='plan';});
+  var h=a.slice(0,2).map(function(e){return '<span class="sem-day-exam-tag" style="background:#2563eb">'+escapeHtml(e.title)+'</span>';}).join('');
+  return h+(a.length>2?'<span class="sem-day-exam-tag" style="background:#475569">+'+(a.length-2)+'</span>':'');
+}
+
+/* פתקים: בחירת סוג במהירות */
+function renderNoteChips(){
+  var el=document.getElementById('noteTypeChips'); if(!el)return;
+  var cur=document.getElementById('noteTypeSelect').value;
+  el.innerHTML=Object.keys(noteTypes).map(function(k){
+    var on=k===cur;
+    return '<button type="button" style="'+(on?'background:'+noteTypes[k].bg+';color:#1c1917;border-color:'+noteTypes[k].bg+';font-weight:700':'')+'" onclick="pickNoteType(\''+k+'\')">'+noteTypes[k].label+'</button>';
+  }).join('');
+  var i=document.getElementById('noteInput'), ae=document.activeElement;
+  if(window.innerWidth>700&&i&&ae!==i&&!(ae&&ae.isContentEditable))i.focus();
+}
+function pickNoteType(k){document.getElementById('noteTypeSelect').value=k;renderNoteChips();document.getElementById('noteInput').focus();}
+document.addEventListener('keydown',function(e){
+  if(e.key!=='n'&&e.key!=='נ')return;
+  var t=e.target; if(/INPUT|TEXTAREA|SELECT/.test(t.tagName)||t.isContentEditable||e.ctrlKey||e.metaKey||e.altKey)return;
+  e.preventDefault(); switchView('notes');
+});
+
+/* שליחה לטלפון (Keep / Notes / וואטסאפ) */
+var phoneText='';
+function buildPhoneText(){
+  var now=new Date(), heb=getHebrewDateInfo(now), dk=formatDateKey(now), L=[];
+  L.push('📅 '+new Intl.DateTimeFormat('he-IL',{weekday:'long',day:'numeric',month:'long'}).format(now)+' • '+heb.hebrewDayAndMonth+(heb.holiday?' • '+heb.holiday:''));
+  var tasks=(db.dailyGoals[dk]||[]).filter(function(t){return !t.done;}).map(function(t){return t.text;})
+    .concat((db.quickTasks||[]).filter(function(t){return !t.done;}).map(function(t){return t.text;}));
+  if(tasks.length){L.push('','🎯 מטלות להיום');tasks.forEach(function(s){L.push('☐ '+s);});}
+  var notes=(db.stickyNotes||[]).slice().sort(function(a,b){return (b.pinned?1:0)-(a.pinned?1:0)||b.id-a.id;});
+  Object.keys(noteTypes).forEach(function(k){
+    var ns=notes.filter(function(n){return n.type===k;});
+    if(ns.length){L.push('',noteTypes[k].label);ns.forEach(function(n){L.push((n.pinned?'📌 ':'• ')+n.text);});}
+  });
+  if(db.notesCredo)L.push('','✨ '+db.notesCredo);
+  return L.join('\n');
+}
+function sendToPhone(){
+  phoneText=buildPhoneText();
+  document.getElementById('customPopupIcon').textContent='📲';
+  document.getElementById('customPopupTitle').textContent='שלח לטלפון';
+  document.getElementById('customPopupBody').innerHTML='<div style="font-size:.85rem;color:#cbd5e1;margin-bottom:8px">הטקסט מוכן. שתף אותו ל-Google Keep או Apple Notes (שם אפשר להציג אותו כווידג׳ט על מסך הבית), או שלח לעצמך בוואטסאפ.</div><pre style="max-height:220px;overflow:auto;background:rgba(0,0,0,.35);border-radius:8px;padding:10px;white-space:pre-wrap;font-family:inherit;font-size:.82rem">'+escapeHtml(phoneText)+'</pre>';
+  document.getElementById('customPopupInputContainer').style.display='none';
+  document.getElementById('customPopupActions').innerHTML='<button onclick="phoneCopy()">📋 העתק</button><button onclick="phoneWhatsapp()">💬 וואטסאפ</button><button class="btn-primary" onclick="phoneShare()">📲 שתף</button><button onclick="closeCustomPopup(null)">סגור</button>';
+  document.getElementById('customPopupBackdrop').style.display='flex';
+}
+function phoneShare(){if(navigator.share){navigator.share({title:'מטלות ופתקים',text:phoneText}).catch(function(){});}else phoneCopy();}
+function phoneCopy(){navigator.clipboard.writeText(phoneText).then(function(){showCustomAlert('הועתק','הטקסט הועתק. הדבק אותו בפתק או בהודעה לעצמך בטלפון.','📋');});}
+function phoneWhatsapp(){window.open('https://wa.me/?text='+encodeURIComponent(phoneText),'_blank');}
+
+/* ספר זכרונות מעוצב */
+var BOOK_CSS='@page{size:A4;margin:1.4cm}*{box-sizing:border-box}'
++'body{margin:0;background:#e7e1d6;font-family:Heebo,system-ui,sans-serif;color:#2b2623;line-height:1.7;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
++'.bar{position:sticky;top:0;z-index:5;background:#2b2623;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:10px 20px}'
++'.bar button{background:#c9a24b;border:0;border-radius:8px;padding:8px 16px;font-weight:700;cursor:pointer;font-size:.95rem}'
++'.book{max-width:820px;margin:24px auto;padding:0 12px}'
++'section{background:#fffdf8;border-radius:6px;box-shadow:0 6px 24px rgba(0,0,0,.15);padding:48px 44px;margin-bottom:24px}'
++'h1,h2,h3,.dname,.daynum{font-family:"Frank Ruhl Libre",Georgia,serif}'
++'.cover{text-align:center;min-height:900px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(160deg,#1e293b,#3b2a1a);color:#f5e9c8}'
++'.cover h1{font-size:3.4rem;font-weight:900;margin:.3em 0}.cover .orn{font-size:2rem;color:#c9a24b}.cover p{margin:.2em 0;opacity:.9}'
++'.stats{display:flex;gap:30px;margin-top:40px}.stats b{display:block;font-size:2rem;color:#c9a24b}.stats span{font-size:.85rem}'
++'.toc h2{text-align:center;font-size:2rem}.toc ol{list-style:none;padding:0}.toc li{display:flex;justify-content:space-between;border-bottom:1px dotted #bbb;padding:8px 0}.toc a{color:inherit;text-decoration:none;font-weight:600}'
++'.mt{text-align:center;border-bottom:3px double #c9a24b;padding-bottom:14px;margin-bottom:26px}.mt span{color:#8a7440;letter-spacing:3px}.mt h2{font-size:2.4rem;margin:.1em 0}'
++'.day{margin-bottom:30px}.day>header{display:flex;align-items:center;gap:14px;border-bottom:1px solid #e4d9bd;padding-bottom:8px;margin-bottom:12px;break-after:avoid}'
++'.daynum{background:#1e293b;color:#f5e9c8;border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.1rem;flex-shrink:0}'
++'.dname{font-size:1.2rem;font-weight:700}.dgreg{font-size:.82rem;color:#8b8478}.rate{margin-right:auto;font-weight:700;color:#b7791f}'
++'.card{border-right:5px solid #999;background:#faf6ea;border-radius:8px;padding:12px 16px;margin-bottom:12px;break-inside:avoid}'
++'.card.memory{border-color:#059669}.card.insight{border-color:#d97706}.card.plan{border-color:#2563eb}'
++'.tag{font-size:.74rem;font-weight:700;color:#6b6358}.card h3{margin:.15em 0;font-size:1.15rem}.card p{margin:.3em 0;white-space:pre-wrap}'
++'.card img{display:block;width:100%;max-height:9cm;object-fit:cover;border-radius:8px;margin-top:10px}.card a{font-size:.85rem;color:#2563eb}'
++'.refl{background:#f1ecdc;border-radius:8px;padding:10px 14px;font-size:.9rem;break-inside:avoid}.refl div{margin:2px 0}'
++'@media print{body{background:#fff}.bar{display:none}.book{margin:0;max-width:none;padding:0}section{box-shadow:none;border-radius:0;padding:0;margin:0}.cover{min-height:24cm;padding:2cm}.cover,.toc,.month{break-after:page}}';
+
+function exportWeeklyMemoriesPDF(){
+  var map={};
+  Object.keys(db.entries||{}).forEach(function(k){if((db.entries[k]||[]).length)(map[k]=map[k]||{}).e=db.entries[k];});
+  Object.keys(db.dailyReflections||{}).forEach(function(k){var r=db.dailyReflections[k];if(r&&(r.rating||r.worked||r.challenges||r.improve))(map[k]=map[k]||{}).r=r;});
+  var keys=Object.keys(map).sort();
+  if(!keys.length){showCustomAlert('ספר זכרונות','עדיין אין רשומות או סיכומי ימים. הוסף רשומה ואז צור את הספר.','ℹ️');return;}
+  var months=[], cur=null, nE=0, rs=[], first=null, last=null;
+  keys.forEach(function(k){
+    var p=k.split('-').map(Number), d=new Date(p[0],p[1]-1,p[2]), h=getHebrewDateInfo(d), mk=h.monthName+' '+h.yearStr;
+    if(!first)first=h; last=h;
+    if(!cur||cur.name!==mk){cur={name:mk,days:[]};months.push(cur);}
+    cur.days.push({d:d,h:h,e:map[k].e||[],r:map[k].r}); nE+=(map[k].e||[]).length;
+    if(map[k].r&&map[k].r.rating)rs.push(Number(map[k].r.rating));
+  });
+  var avg=rs.length?(rs.reduce(function(a,b){return a+b;},0)/rs.length).toFixed(1):'-';
+  var cat={plan:'📅 תכנון',insight:'💡 תובנה וחידוש',memory:'🌿 חוויה וזיכרון'}, E=escapeHtml, H=[];
+  H.push('<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><title>ספר החיים שלי</title><link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700;900&family=Heebo:wght@400;600&display=swap" rel="stylesheet"><style>'+BOOK_CSS+'</style></head><body>');
+  H.push('<div class="bar"><b>📖 ספר החיים שלי</b><button onclick="window.print()">🖨️ שמור כ-PDF / הדפס</button></div><div class="book">');
+  H.push('<section class="cover"><div class="orn">✦</div><h1>ספר החיים שלי</h1><p>זכרונות, חוויות ותובנות</p><p>'+E(first.hebrewStr)+' – '+E(last.hebrewStr)+'</p>'
+    +'<div class="stats"><div><b>'+keys.length+'</b><span>ימים</span></div><div><b>'+nE+'</b><span>רשומות</span></div><div><b>'+avg+'</b><span>ציון ממוצע</span></div></div></section>');
+  H.push('<section class="toc"><h2>תוכן העניינים</h2><ol>'+months.map(function(m,i){return '<li><a href="#m'+i+'">'+E(m.name)+'</a><span>'+m.days.length+' ימים</span></li>';}).join('')+'</ol></section>');
+  months.forEach(function(m,i){
+    H.push('<section class="month" id="m'+i+'"><div class="mt"><span>חודש</span><h2>'+E(m.name)+'</h2></div>');
+    m.days.forEach(function(day){
+      var wd=new Intl.DateTimeFormat('he-IL',{weekday:'long'}).format(day.d), x=day.h.holiday||day.h.shabbat||'';
+      H.push('<article class="day"><header><div class="daynum">'+E(day.h.hebrewDay)+'</div><div><div class="dname">'+E(wd)+' • '+E(day.h.hebrewDayAndMonth)+'</div><div class="dgreg">'+day.d.getDate()+'/'+(day.d.getMonth()+1)+'/'+day.d.getFullYear()+(x?' • '+E(x):'')+'</div></div>'
+        +(day.r&&day.r.rating?'<div class="rate">⭐ '+E(day.r.rating)+'/10</div>':'')+'</header>');
+      day.e.forEach(function(e){
+        H.push('<div class="card '+E(e.cat)+'"><span class="tag">'+(cat[e.cat]||'')+'</span><h3>'+E(e.title)+'</h3>'+(e.text?'<p>'+E(e.text)+'</p>':'')
+          +(e.img?'<img src="'+e.img+'">':'')+(/^https?:/.test(e.externalUrl||'')?'<a href="'+E(e.externalUrl)+'">🔗 מסמך מורחב</a>':'')+'</div>');
+      });
+      if(day.r){var r=day.r;H.push('<div class="refl">'+(r.worked?'<div>✅ <b>עבד:</b> '+E(r.worked)+'</div>':'')+(r.challenges?'<div>⚡ <b>אתגר:</b> '+E(r.challenges)+'</div>':'')+(r.improve?'<div>🌱 <b>מחר:</b> '+E(r.improve)+'</div>':'')+'</div>');}
+      H.push('</article>');
+    });
+    H.push('</section>');
+  });
+  H.push('</div></body></html>');
+  var w=window.open('','_blank');
+  if(!w){showCustomAlert('החלון נחסם','אשר חלונות קופצים לאתר זה ונסה שוב.','⚠️');return;}
+  w.document.write(H.join('')); w.document.close();
+}
 
     const savedBg = localStorage.getItem('journal_bg_v8');
     if (savedBg) document.body.style.backgroundImage = `url('${savedBg}')`;
