@@ -1494,6 +1494,22 @@
     @media (max-width: 900px) { .nav-toolbar { display: flex; } }
     #noteTypeSelect { display: none; }
     #noteTypeChips { display: flex; gap: 6px; flex-wrap: wrap; width: 100%; }
+  
+    /* ===== שלב 4: סרגל ניווט מסודר ===== */
+    .nav-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); grid-template-areas: "views nav ." "acts . ."; gap: 8px 10px; align-items: center; }
+    .nav-toolbar > .view-switcher { grid-area: views; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; width: 100%; justify-self: stretch; overflow: visible; }
+    .nav-toolbar > .date-navigator { grid-area: nav; justify-self: center; flex-wrap: wrap; justify-content: center; }
+    .nav-toolbar > :last-child { grid-area: acts; display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; justify-self: stretch; }
+    .view-switcher button, .nav-toolbar > :last-child button { white-space: nowrap; padding: 7px 4px; font-size: 0.8rem; text-align: center; overflow: hidden; text-overflow: ellipsis; }
+    @media (max-width: 900px) {
+      .nav-toolbar { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "views" "acts" "nav"; }
+    }
+    .today-strip { font-size: 0.78rem; color: #fbbf24; font-weight: 700; cursor: pointer; margin-top: 2px; text-align: center; }
+    /* הדגשת היום בתצוגה החודשית */
+    .month-day-cell { position: relative; }
+    .month-day-cell.today { border: 2px solid #38bdf8 !important; box-shadow: 0 0 0 2px rgba(56,189,248,.3), 0 0 14px rgba(56,189,248,.5); }
+    .month-day-cell.today .heb-num-main { color: #38bdf8; }
+    .month-day-cell.today::after { content: 'היום'; position: absolute; bottom: 3px; left: 5px; font-size: .62rem; font-weight: 800; background: #0284c7; color: #fff; padding: 0 5px; border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -1555,17 +1571,17 @@
 
     <div class="nav-toolbar">
       <div class="view-switcher">
-        <button id="btnDaily" onclick="switchView('daily')">יומית</button>
-        <button id="btnWeekly" onclick="switchView('weekly')">שבועית 🗓️</button>
-        <button id="btnMonthly" class="active" onclick="switchView('monthly')">חודשית</button>
-        <button id="btnSemester" onclick="switchView('semester')">סמסטר 🎓</button>
-        <button id="btnYearly" onclick="switchView('yearly')">שנתית</button>
+        <button id="btnDaily" onclick="openViewToday('daily')">יומית</button>
+        <button id="btnWeekly" onclick="openViewToday('weekly')">שבועית 🗓️</button>
+        <button id="btnMonthly" class="active" onclick="openViewToday('monthly')">חודשית</button>
+        <button id="btnSemester" onclick="openViewToday('semester')">סמסטר 🎓</button>
+        <button id="btnYearly" onclick="openViewToday('yearly')">שנתית</button>
       </div>
 
       <div class="date-navigator">
         <button onclick="navigateDate(-1)">‹ הקודם</button>
         <button onclick="goToToday()">היום</button>
-        <div class="current-focus-title" id="currentFocusTitle">--</div>
+        <div style="display:flex; flex-direction:column; align-items:center;"><div class="current-focus-title" id="currentFocusTitle">--</div><div id="todayStrip" class="today-strip"></div></div>
         <button onclick="navigateDate(1)">הבא ›</button>
       </div>
 
@@ -4609,7 +4625,7 @@ function laterHoliday(m,dn,date){
     if((dn===9&&dow!==6)||(dn===10&&dow===0))return['תשעה באב','fast']; if(dn===15)return['ט״ו באב 💕','celebration'];
   } else if(m.indexOf('אלול')>-1){ if(dn===29)return['ערב ראש השנה','holiday']; }
   var hc=(db.parshiotCache||{})['h_'+formatDateKey(date)];
-  return hc?[hc.t,hc.k]:null;
+  return null;
 }
 var _hcInflight={};
 async function fetchParshiotForYear(y){
@@ -4746,6 +4762,22 @@ function exportWeeklyMemoriesPDF(){
   if(!w){showCustomAlert('החלון נחסם','אשר חלונות קופצים לאתר זה ונסה שוב.','⚠️');return;}
   w.document.write(H.join('')); w.document.close();
 }
+
+    
+/* ===== שלב 4 ===== */
+function openViewToday(v){anchorDate=new Date();selectedPreviewDate=new Date();switchView(v);}
+function goToToday(){anchorDate=new Date();selectedPreviewDate=new Date();renderCurrentView();}
+function renderTodayStrip(){
+  var el=document.getElementById('todayStrip'); if(!el)return;
+  var n=new Date(), h=getHebrewDateInfo(n);
+  el.textContent='היום • '+new Intl.DateTimeFormat('he-IL',{weekday:'long'}).format(n)+' • '+h.hebrewDayAndMonth+' • '+n.getDate()+'/'+(n.getMonth()+1);
+  el.title='חזרה להיום';
+}
+(function(){
+  selectedPreviewDate=new Date();
+  renderTodayStrip(); setInterval(renderTodayStrip,60000);
+  var s=document.getElementById('todayStrip'); if(s)s.onclick=goToToday;
+})();
 
     const savedBg = localStorage.getItem('journal_bg_v8');
     if (savedBg) document.body.style.backgroundImage = `url('${savedBg}')`;
