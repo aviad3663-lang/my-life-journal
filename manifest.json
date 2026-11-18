@@ -1,10 +1,17 @@
 {
   "name": "מרחב אישי עברי",
   "short_name": "יומן חיים",
+  "lang": "he",
+  "dir": "rtl",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0b0f19",
   "theme_color": "#0b0f19",
+  "shortcuts": [
+    { "name": "המטלות להיום", "url": "./index.html#daily" },
+    { "name": "פרויקטים", "url": "./index.html#projects" },
+    { "name": "תחומי התפתחות", "url": "./index.html#growth" }
+  ],
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/3652/3652191.png",
